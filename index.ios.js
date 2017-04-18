@@ -4,7 +4,7 @@
  * @flow
  */
 
- import {
+import {
   AppRegistry,
 } from 'react-native';
 
