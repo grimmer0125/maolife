@@ -7,6 +7,7 @@ import {
   Button,
   Text,
   View,
+  ScrollView,
 } from 'react-native';
 
 import {
@@ -59,25 +60,6 @@ class MyHomeScreen extends Component {
   }
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#F5FCFF',
-//   },
-//   welcome: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     margin: 10,
-//   },
-//   instructions: {
-//     textAlign: 'center',
-//     color: '#333333',
-//     marginBottom: 5,
-//   },
-// });
-
 class MyNotificationsScreen extends React.Component {
   // static navigationOptions = {
   //   tabBarLabel: 'Notifications',
@@ -99,6 +81,42 @@ class MyNotificationsScreen extends React.Component {
   }
 }
 
+const MySettingsScreen = ({ navigation }) => (
+    <ScrollView>
+      <Button
+        onPress={() => navigation.navigate('NotifSettings')}
+        title="Go to notification settings"
+      />
+      <Button
+        onPress={() => navigation.goBack(null)}
+        title="In Setting, Go back"
+      />
+    </ScrollView>
+);
+
+/* <MyNavScreen
+  banner="Settings"
+  navigation={navigation}
+/> */
+
+const SettingsTab = StackNavigator({
+  Settings: {
+    screen: MySettingsScreen,
+    // path: '/',
+    // wired, :()
+    navigationOptions: () => ({
+      title: 'Settings',
+    }),
+  },
+  NotifSettings: {
+    screen: MyNotificationsScreen, // MyNotificationsSettingsScreen,
+    navigationOptions: {
+      title: 'Notification Settings',
+    },
+  },
+});
+
+
 const App = TabNavigator({
   Home: {
     screen: MyHomeScreen,
@@ -113,8 +131,8 @@ const App = TabNavigator({
       ),
     },
   },
-  Notifications: {
-    screen: MyNotificationsScreen,
+  SettingsTab: {
+    screen: SettingsTab, //MyNotificationsScreen,
     navigationOptions: {
       tabBarLabel: 'Settings',
       tabBarIcon: ({ tintColor, focused }) => (
