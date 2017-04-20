@@ -25,8 +25,6 @@ class MyHomeScreen extends Component {
   // Initialize the hardcoded data
   constructor(props) {
     super(props);
-    // test();
-    // console.log("abc");
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       dataSource: ds.cloneWithRows([
@@ -36,7 +34,6 @@ class MyHomeScreen extends Component {
   }
 
   render() {
-    // console.log("abcd");
     return (
       <View style={{flex: 1, paddingTop: 22}}>
         <ListView
@@ -81,6 +78,10 @@ class MyNotificationsScreen extends React.Component {
   }
 }
 
+/* <MyNavScreen
+  banner="Settings"
+  navigation={navigation}
+/> */
 const MySettingsScreen = ({ navigation }) => (
     <ScrollView>
       <Button
@@ -94,22 +95,17 @@ const MySettingsScreen = ({ navigation }) => (
     </ScrollView>
 );
 
-/* <MyNavScreen
-  banner="Settings"
-  navigation={navigation}
-/> */
-
 const SettingsTab = StackNavigator({
   Settings: {
     screen: MySettingsScreen,
     // path: '/',
-    // wired, :()
+    // wired, is function, not {}
     navigationOptions: () => ({
       title: 'Settings',
     }),
   },
   NotifSettings: {
-    screen: MyNotificationsScreen, // MyNotificationsSettingsScreen,
+    screen: MyNotificationsScreen,
     navigationOptions: {
       title: 'Notification Settings',
     },
@@ -132,7 +128,7 @@ const App = TabNavigator({
     },
   },
   SettingsTab: {
-    screen: SettingsTab, //MyNotificationsScreen,
+    screen: SettingsTab,
     navigationOptions: {
       tabBarLabel: 'Settings',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -148,42 +144,9 @@ const App = TabNavigator({
   tabBarOptions: {
     activeTintColor: '#e91e63',
   },
+  //   tabBarPosition: 'bottom',
+  //   animationEnabled: false,
+  //   swipeEnabled: false,
 });
 
 export default App;
-
-
-// const StacksInTabs = TabNavigator({
-//   MainTab: {
-//     screen: MainTab,
-//     path: '/',
-//     navigationOptions: {
-//       tabBarLabel: 'Home',
-//       tabBarIcon: ({ tintColor, focused }) => (
-//         <Ionicons
-//           name={focused ? 'ios-home' : 'ios-home-outline'}
-//           size={26}
-//           style={{ color: tintColor }}
-//         />
-//       ),
-//     },
-//   },
-//   SettingsTab: {
-//     screen: SettingsTab,
-//     path: '/settings',
-//     navigationOptions: {
-//       tabBarLabel: 'Settings',
-//       tabBarIcon: ({ tintColor, focused }) => (
-//         <Ionicons
-//           name={focused ? 'ios-settings' : 'ios-settings-outline'}
-//           size={26}
-//           style={{ color: tintColor }}
-//         />
-//       ),
-//     },
-//   },
-// }, {
-//   tabBarPosition: 'bottom',
-//   animationEnabled: false,
-//   swipeEnabled: false,
-// });
