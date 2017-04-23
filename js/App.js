@@ -10,6 +10,43 @@ import {
   ScrollView,
 } from 'react-native';
 
+import * as firebase from 'firebase';
+import firebaseConfig from '../firebaseConfig';
+
+console.log("grimmer test firebase");
+
+// Initialize Firebase
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+// this.itemsRef = firebaseApp.database().ref();
+
+let test1 = firebaseApp.database().ref().child('items');
+console.log("test1:", test1);
+
+test1.on('value', (snap) => {
+
+    const t2 = snap.val();
+    console.log("t2:", t2); //now snap is object {title:grimmer}, not
+
+    // get children as an array
+    let tmp_items = [];
+
+//     snap.forEach((child) => {
+//   items.push({
+//     title: child.val().title,
+//     _key: child.key
+//   });
+// });
+
+    // if snap is array,
+    // snap.forEach((child) => {
+    //     tmp_items.push({title: child.val().title, _key: child.key});
+    // });
+
+    console.log("grimmer data:", tmp_items);
+    // this.setState({dataSource: this.state.dataSource.cloneWithRows(items)});
+
+});
+
 import {
   StackNavigator,
   TabNavigator,
@@ -25,12 +62,17 @@ class MyHomeScreen extends Component {
   // Initialize the hardcoded data
   constructor(props) {
     super(props);
+    console.log("grimmer init MyHomeScreen");
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       dataSource: ds.cloneWithRows([
         'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
       ])
     };
+  }
+
+  getRef() {
+    return firebaseApp.database().ref();
   }
 
   render() {
