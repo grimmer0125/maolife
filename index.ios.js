@@ -37,6 +37,11 @@ import * as firebase from 'firebase';
 import firebaseConfig from './firebaseConfig';
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
+//https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
+// firebase.auth().onAuthStateChanged((user)=> {
+//   console.log("got user:", user);
+// });
+
 // let test1 = firebaseApp.database().ref().child('items');
 // console.log("test1:", test1);
 //
@@ -52,8 +57,17 @@ function facebookToFirebase(token){
   // https://firebase.google.com/docs/auth/web/custom-auth??
     firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token))
     .then(result=>{
-      console.log("grimmer result2:", result);
+      console.log("grimmer login result:", result);
+      console.log("grimmer result property:", result.displayName,";",result.email,";",result.uid  );
+
+      if(result.displayName){
+        alert("welcome! " + result.displayName);
+      }
+      //null, null, KdyxdxZjvhuUFo4VLBm4U1m1iy2
+      // but U.displayName: "Teng-Chieh Kang"
+
       //u or xe/displayName "Teng-Chieh Kang
+      //uid:SKdyxdxZjvhuUFo4VLBm4U1m1iy2" ???
     }).catch(function(error) {
       console.log("grimmer error:", error);
     });
@@ -116,11 +130,13 @@ class HelloFacebook extends Component {
               } else if (result.isCancelled) {
                 alert("login is cancelled.");
               } else {
+                console.log("grimmer login ok, result:", result);//not much info
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
-                    console.log("grimmer data:", data);
+                    console.log("grimmer access token data:", data);
+                    //userID 10208940635412999"
                     facebookToFirebase(data.accessToken.toString());
-                    alert(data.accessToken.toString());
+                    // alert(data.accessToken.toString());
                   }
                 )
               }
