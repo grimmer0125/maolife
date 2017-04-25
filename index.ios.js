@@ -44,7 +44,10 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // let test1 = firebaseApp.database().ref().child('items');
 // console.log("test1:", test1);
-//
+
+// 這樣寫login後不會得到, 但下次launch 就得到, 且不會明顯的login process+facebookToFirebase
+// 可能firebase那邊有token cache跟我這裡送給firebase的比對, 又加上login button下次就變logout
+// 所以fb sdk api, firebase api 可能都有偷偷存token
 // test1.on('value', (snap) => {
 //
 //     const t2 = snap.val();
@@ -63,11 +66,24 @@ function facebookToFirebase(token){
       if(result.displayName){
         alert("welcome! " + result.displayName);
       }
+
       //null, null, KdyxdxZjvhuUFo4VLBm4U1m1iy2
       // but U.displayName: "Teng-Chieh Kang"
 
       //u or xe/displayName "Teng-Chieh Kang
       //uid:SKdyxdxZjvhuUFo4VLBm4U1m1iy2" ???
+
+      let itmes = firebaseApp.database().ref().child('items');
+      console.log("itmes:", test1);
+
+      // ok了
+      itmes.on('value', (snap) => {
+
+          const itmes2 = snap.val();
+          console.log("itmes2:", itmes2);
+
+      });
+
     }).catch(function(error) {
       console.log("grimmer error:", error);
     });
