@@ -1,7 +1,7 @@
 # maolife
 
-## On Mac
-We use the latest React Native 0.43 and it is only supported on Mac 10.12.
+## iOS + Mac
+We use the latest React Native 0.43. To build its iOS version, it requires Mac 10.12.
 
 ### Installation
 
@@ -23,3 +23,7 @@ Add your firebase setting in firebaseConfig.js.
 
 ### How to run it
 1. in project folder, `npm run ios` or `react-native run-ios`.
+
+## Android + Mac
+
+Mac 10.12 is OK. And Android version needes to be checked if it can run Mac 10.11 or not. 
