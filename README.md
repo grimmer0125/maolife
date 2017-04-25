@@ -55,7 +55,7 @@ Keypoint:
 ### How to run it
 1. in project folder, `npm run ios` or `react-native run-ios`.
 
-## Android + Mac
+## Android + Mac (will complement later)
 
 Mac 10.12 is OK. And Android version needes to be checked if it can run Mac 10.11 or not.
 
@@ -63,3 +63,11 @@ Keypoint to setup Facebook:
 1. Follow https://developers.facebook.com/docs/android/getting-started
 2. Need *a development key hash for the development environment of each person who works on your app.* (cover in 1.)
 3. Enable single sign https://developers.facebook.com/docs/facebook-login/android/#expresslogin
+
+### Tips on Android
+
+You need to launch your Android emulator (Android Virtual Device) first, then `npm run android` to install and run. The default React Native command will not launch Android emulator automatically.
+
+You can use the following ways to launch emulators
+1. Android Studio
+2. In terminal, type `emulator @YOUR_VIRTUAL_DEIVCE` & or change the VIRTUAL_DEIVCE name in `npm script (qemu)`` then you can type `npm run qemu` in start your emuator..

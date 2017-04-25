@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "ios": "react-native run-ios",
+    "qemu": "emulator @Nexus_5X_API_23 &",
     "android": "react-native run-android"
   },
   "dependencies": {
