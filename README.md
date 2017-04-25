@@ -1,9 +1,9 @@
 # maolife
 
-** only tested on Mac. But Android on Windows and Linux should work.
+**only tested on Mac. But Android on Windows and Linux should work**
 
 ## iOS + Mac
-We use the latest React Native 0.43. To build its iOS version, it requires Mac 10.12.
+We use the latest React Native 0.43. To build its iOS version, it requires Xcode 8 which only works on Mac 10.12.
 
 ### Installation
 
