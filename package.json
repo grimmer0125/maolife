@@ -17,7 +17,9 @@
     "react-native": "0.43.3",
     "react-native-fbsdk": "^0.5.0",
     "react-native-vector-icons": "^4.0.1",
-    "react-navigation": "git+https://github.com/react-community/react-navigation.git"
+    "react-navigation": "git+https://github.com/react-community/react-navigation.git",
+    "react-redux": "^5.0.4",
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
