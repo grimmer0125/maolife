@@ -1,7 +1,7 @@
 // import * as types from '../actions/actionTypes';
 
 const initialState = {
-  name: apple
+  name: "apple",
 };
 
 export default function robot(state = initialState, action = {}) {
