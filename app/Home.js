@@ -51,6 +51,8 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 //
 // });
 
+//TODO: 
+
 function facebookToFirebase(token){
 
   // https://firebase.google.com/docs/auth/web/custom-auth??
