@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
+  // StyleSheet,
   Text,
   View,
 } from 'react-native';
@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 
 import { initLoginChecker } from './actions/userAction';
 
-import Login from 'Login';
-import MainScreen from 'MainScreen';
+import Login from './Login';
+import MainScreen from './MainScreen';
 
 
 //** test Firebase ** //
@@ -74,7 +74,7 @@ import MainScreen from 'MainScreen';
 // const App2 =
 // export default connect(mapStateToProps)(MainScreen);
 
-export default class Home extends Component {
+class Home extends Component {
 
   constructor(props) {
      super(props);
@@ -100,9 +100,9 @@ export default class Home extends Component {
     }
 
     if (user && user.maoID){
-      return MainScreen;
+      return <MainScreen/>;
     } else {
-      return Login;
+      return <Login/>;
     }
 
   }

@@ -22,7 +22,7 @@ export const ActionTypes = {
 };
 
 import * as firebase from 'firebase';
-import firebaseConfig from '../firebaseConfig';
+import firebaseConfig from '../../firebaseConfig';
 
 // https://github.com/acdlite/redux-actions
 export function fetchLoginData(result, maoID) {
@@ -155,6 +155,8 @@ export function handleFBLogin(error, result) {
 export function initLoginChecker() {
   return (dispatch) => {
 
+    console.log("init checker");
+    
     const firebaseApp = firebase.initializeApp(firebaseConfig);
 
     firebase.auth().onAuthStateChanged((user)=> {
@@ -172,13 +174,14 @@ export function initLoginChecker() {
           const maoIDInfo = snap.val();
 
           if (maoIDInfo) {
-            console.log("no maoID for:", user.uid);
-          } else {
             console.log("maoID for:", user.uid, ";maoid:", maoIDInfo);
+          } else {
+            console.log("no maoID for:", user.uid);
           }
-        }
 
-        dispatch(fetchLoginData(true, maoIDInfo));
+          dispatch(fetchLoginData(true, maoIDInfo));
+        });
+
 
 
         // let userData = await firebase.auth().currentUser;
@@ -194,7 +197,7 @@ export function initLoginChecker() {
       } else {
         // userChecking=false, 直接回到loing 第一頁
 
-        dispatch(fetchLoginData(false));
+        dispatch(fetchLoginData(false, null));
       }
     });
 

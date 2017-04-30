@@ -81,18 +81,19 @@ class Login extends Component {
 
   handleFBLoginResult(error, result) {
 
-    this.props.dispatch(handleFBLogi(error, result));
+    this.props.dispatch(handleFBLogin(error, result));
   }
 
 //EAAEfFlGaTZBUBAKYMHyPZCZBKBsAqetF3ML6ZAMUMyk1VZAY9…H1FPHeyiqr1NmI2sy9eGKQIe3G8vF86CRWpyKHlvGQbD42RnY
   render() {
     // const name = this.props.name;
     const {user} = this.props;
-
+    console.log("user1:", user);
+    const name = user?user.displayName:"";
     return (
         <View style={styles.container}>
           <Text style={styles.welcome}>
-            {user.displayName}
+            {name}
           </Text>
           <LoginButton
             onLoginFinished={this.handleFBLoginResult}
