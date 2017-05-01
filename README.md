@@ -52,8 +52,17 @@ Follow this guide: https://developers.facebook.com/docs/ios/getting-started/
 Keypoint:
 1. After add **Facebook login** in your Facebook Application, need to setup OAuth Redirect URI gotten from **Firebase**.
 
-### How to run it
+### How to run in on iDevice simulator
 1. in project folder, `npm run ios` or `react-native run-ios`.
+
+### How to run on read iPhone
+
+Steps:
+https://facebook.github.io/react-native/docs/running-on-device.html
+
+Start from xcode 7, no need paid developer account to run on real device !! Guide: 
+http://blog.ionic.io/deploying-to-a-device-without-an-apple-developer-account/
+
 
 ## Android + Mac (will complement later)
 
@@ -70,4 +79,4 @@ You need to launch your Android emulator (Android Virtual Device) first, then `n
 
 You can use the following ways to launch emulators
 1. Android Studio
-2. In terminal, type `emulator @YOUR_VIRTUAL_DEIVCE` & or change the VIRTUAL_DEIVCE name in `npm script (qemu)`` then you can type `npm run qemu` in start your emuator..
+2. In terminal, type `emulator @YOUR_VIRTUAL_DEIVCE` & or change the VIRTUAL_DEIVCE name in `npm script (qemu)` then you can type `npm run qemu` in start your emuator..
