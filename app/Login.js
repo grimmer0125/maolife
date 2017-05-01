@@ -88,7 +88,7 @@ class Login extends Component {
   render() {
     // const name = this.props.name;
     const {user} = this.props;
-    console.log("user1:", user);
+    // console.log("user1:", user);
     const name = user?user.displayName:"";
     return (
         <View style={styles.container}>

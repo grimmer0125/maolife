@@ -13,24 +13,26 @@ const {
 } = FBSDK;
 
 const LOGIN_DATA = 'LOGIN_DATA';
+const USER_DATA = 'USER_DATA';
 const LOGIN_SUCCESS = `LOGIN_SUCCESS`;
 const LOGIN_FAIL = `LOGIN_SUCCESS`;
 
 export const ActionTypes = {
   LOGIN_DATA,
   LOGIN_SUCCESS,
+  USER_DATA,
 };
 
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
 
 // https://github.com/acdlite/redux-actions
-export function fetchLoginData(result, maoID) {
+export function fetchUserData(result, userData) {
   return {
-    type: LOGIN_DATA,
+    type: USER_DATA,
     payload: {
       result,
-      maoID,
+      userData,
     }
   };
 }
@@ -67,12 +69,21 @@ export function handleFBLogin(error, result) {
           firebase.auth.FacebookAuthProvider.credential(token))
           // alert(data.accessToken.toString());
       }).then(result=>{
-        console.log("grimmer login FB result:", result);
+        console.log("grimmer login FB from Firebae result:", result);
         console.log("grimmer result property:", result.displayName,";",result.email,";",result.uid  );
 
         if(result.displayName){
           console.log("welcome! " + result.displayName);
           // alert("welcome! " + result.displayName);
+
+          const dataPath = "/user/" + result.uid;
+
+          // https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
+          // oncomplete: use callback or promise
+          firebase.database().ref(dataPath).update({
+            displayName: result.displayName
+          });
+
         }
 
 
@@ -152,34 +163,40 @@ export function handleFBLogin(error, result) {
 // }
 
 
-export function initLoginChecker() {
+export function connectDBtoCheckUser() {
   return (dispatch) => {
 
     console.log("init checker");
-    
+
     const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-    firebase.auth().onAuthStateChanged((user)=> {
-      console.log("got auth user change:", user);
+    firebase.auth().onAuthStateChanged((authUser)=> {
+      console.log("got auth user change in DB:", authUser);
 
-      if (user) {
+      if (authUser) {
 
         // user.
-        const dataPath = "/user/" + user.uid +"/maoID";
+        const dataPath = "/user/" + authUser.uid;// +"/maoID";
 
-        let maoID  = firebaseApp.database().ref(dataPath).child('items');
+//        let maoID  = firebaseApp.database().ref(dataPath).child('items');
+        // let userData  = firebaseApp.database().ref(dataPath);
 
-        maoID.on('value', (snap) => {
+        // value
+        // child_added
+        // child_changed
+        // child_removed
+        // child_moved
+        firebase.database().ref(dataPath).on('value', (snap) => {
 
-          const maoIDInfo = snap.val();
+          const userValue = snap.val();
 
-          if (maoIDInfo) {
-            console.log("maoID for:", user.uid, ";maoid:", maoIDInfo);
+          if (userValue && userValue.maoID) {
+            console.log("maoID for:", authUser.uid, ";maoid:", userValue.maoID);
           } else {
-            console.log("no maoID for:", user.uid);
+            console.log("no maoID for:", authUser.uid);
           }
 
-          dispatch(fetchLoginData(true, maoIDInfo));
+          dispatch(fetchUserData(true, userValue));
         });
 
 
@@ -197,7 +214,7 @@ export function initLoginChecker() {
       } else {
         // userChecking=false, 直接回到loing 第一頁
 
-        dispatch(fetchLoginData(false, null));
+        dispatch(fetchUserData(false, null));
       }
     });
 

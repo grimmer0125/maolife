@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import { initLoginChecker } from './actions/userAction';
+import { connectDBtoCheckUser } from './actions/userAction';
 
 import Login from './Login';
 import MainScreen from './MainScreen';
@@ -79,7 +79,7 @@ class Home extends Component {
   constructor(props) {
      super(props);
 
-     this.props.dispatch(initLoginChecker());
+     this.props.dispatch(connectDBtoCheckUser());
      //bind action
      //map dispatch
      // directly use dispatch
@@ -89,6 +89,7 @@ class Home extends Component {
 
   render() {
     const {userChecking, user} = this.props;
+    console.log("user,checking:",this.props);
     if (userChecking) {
       return (
         <View>
@@ -108,10 +109,15 @@ class Home extends Component {
   }
 }
 
+function test(state){
+
+  console.log("state:", state);
+  return state.user
+}
 
 const mapStateToProps = (state) => ({
     // devices: getVisibleItems(state.devices.items),
-  user: state.user,
+  user: test(state),//state.user,
   userChecking: state.userChecking,
 });
 
