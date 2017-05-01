@@ -19,19 +19,25 @@ const {
 
 import { connect } from 'react-redux';
 
-import { handleFBLogin } from './actions/userAction';
-
+import { handleFBLogin, handleFBLogout } from './actions/userAction';
 
 class Login extends Component {
   constructor(props) {
     super(props);
 
     this.handleFBLoginResult = this.handleFBLoginResult.bind(this);
+    this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
   }
 
   handleFBLoginResult(error, result) {
-
+    console.log("login action in login")
     this.props.dispatch(handleFBLogin(error, result));
+  }
+
+  handleFBLogoutResult() {
+
+    console.log("logout action in login:");
+    this.props.dispatch(handleFBLogout());
   }
 
   render() {
@@ -44,6 +50,7 @@ class Login extends Component {
           </Text>
           <LoginButton
             onLoginFinished={this.handleFBLoginResult}
+            onLogoutFinished={this.handleFBLogoutResult}
           />
         </View>
     );

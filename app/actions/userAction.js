@@ -1,21 +1,26 @@
+import { createAction } from 'redux-actions';
+
 const FBSDK = require('react-native-fbsdk');
 const {
   AccessToken,
 } = FBSDK;
 
+import * as firebase from 'firebase';
+import firebaseConfig from '../../firebaseConfig';
+
 const LOGIN_DATA = 'LOGIN_DATA';
 const USER_DATA = 'USER_DATA';
-const LOGIN_SUCCESS = `LOGIN_SUCCESS`;
-const LOGIN_FAIL = `LOGIN_SUCCESS`;
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const LOGIN_FAIL = 'LOGIN_SUCCESS';
+const LOGOUT = 'LOGOUT';
 
 export const ActionTypes = {
   LOGIN_DATA,
   LOGIN_SUCCESS,
   USER_DATA,
+  LOGOUT,
 };
 
-import * as firebase from 'firebase';
-import firebaseConfig from '../../firebaseConfig';
 
 // may use https://github.com/acdlite/redux-actions
 export function fetchUserData(result, userData) {
@@ -28,12 +33,26 @@ export function fetchUserData(result, userData) {
   };
 }
 
+export const LogoutAction = createAction(LOGOUT);
+
 export function LoginSuccess(displayName) {
   return {
     type: LOGIN_SUCCESS,
     payload:{
       displayName,
     }
+  };
+}
+
+export function handleFBLogout(error, result) {
+
+  return (dispatch) => {
+    //https://firebase.google.com/docs/reference/node/firebase.auth.Auth#signOut
+    firebase.auth().signOut()
+    .then(()=>{
+      console.log("firebase logout");
+      dispatch(LogoutAction());
+    });
   };
 }
 
@@ -101,7 +120,7 @@ export function connectDBtoCheckUser() {
 
     console.log("init checker");
 
-    const firebaseApp = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 
     // https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
     // https://github.com/JamesMarino/Firebase-ReactNative/blob/master/index.ios.js

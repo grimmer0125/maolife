@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 const initialState = {
   maoID: null,
   displayName: "bb8",
+  isLogin: false,
 };
 
 export function userChecking(state = true, action ={}) {
@@ -19,6 +20,7 @@ export function userChecking(state = true, action ={}) {
 }
 
 export function user(state = initialState, action = {}) {
+  console.log("got action");
   switch (action.type) {
     case ActionTypes.USER_DATA:
       return {
@@ -35,6 +37,9 @@ export function user(state = initialState, action = {}) {
         // displayName: action.payload.displayName //就算成功第二次也不會show name,
         // use 1. set/update to firebase 2. get user_data value change (the below action)
       };
+    case ActionTypes.LOGOUT:
+      console.log("got logout action in reducer")
+      return initialState;
     default:
       return state;
     }
