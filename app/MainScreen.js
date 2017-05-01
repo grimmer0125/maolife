@@ -1,3 +1,8 @@
+// Tab:
+// 1. List
+// 2. Wall
+// 3. Record
+
 import React, { Component } from 'react';
 import {
   AppRegistry,

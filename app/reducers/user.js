@@ -7,7 +7,6 @@ const initialState = {
   displayName: "bb8",
 };
 
-
 export function userChecking(state = true, action ={}) {
   console.log("in userChecking reducer3:", action)
   switch (action.type) {
@@ -48,5 +47,3 @@ export function user(state = initialState, action = {}) {
 export const userRoot = {
   user, userChecking,
 }
-
-// export default userRoot;

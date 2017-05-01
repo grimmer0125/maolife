@@ -1,12 +1,3 @@
-// export function selectTab(tabValue) {
-//   return {
-//     type: SELECT_TAB,
-//     payload: {
-//       tabValue,
-//     },
-//   };
-// }
-
 const FBSDK = require('react-native-fbsdk');
 const {
   AccessToken,
@@ -26,7 +17,7 @@ export const ActionTypes = {
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
 
-// https://github.com/acdlite/redux-actions
+// may use https://github.com/acdlite/redux-actions
 export function fetchUserData(result, userData) {
   return {
     type: USER_DATA,
@@ -65,6 +56,8 @@ export function handleFBLogin(error, result) {
 
         const token = data.accessToken.toString();
 
+        // third payty: https://github.com/fullstackreact/react-native-firestack
+        // now use official https://firebase.google.com/docs/auth/web/custom-auth
         return firebase.auth().signInWithCredential(
           firebase.auth.FacebookAuthProvider.credential(token))
           // alert(data.accessToken.toString());
@@ -86,28 +79,12 @@ export function handleFBLogin(error, result) {
 
         }
 
-
-
-        //null, null, KdyxdxZjvhuUFo4VLBm4U1m1iy2
         // but U.displayName: "Teng-Chieh Kang"
-
-        //u or xe/displayName "Teng-Chieh Kang
         //uid:SKdyxdxZjvhuUFo4VLBm4U1m1iy2" ???
 
         dispatch(LoginSuccess(result.displayName));
         // 寫入uid/某狀態值v/state.user?,
         // 然後user.uid會影響到這個 input id 可不可以寫or show input txt之類的
-
-        // let itmes = firebaseApp.database().ref().child('items');
-        // console.log("itmes:", itmes);
-        //
-        // // ok了
-        // itmes.on('value', (snap) => {
-        //
-        //     const itmes2 = snap.val();
-        //     console.log("itmes2:", itmes2);
-        //
-        // });
 
       }).catch(function(error) {
         //TODO handle FB + firebase login fail or
@@ -119,50 +96,6 @@ export function handleFBLogin(error, result) {
   };
 }
 
-// function facebookToFirebase(token){
-//
-//   // https://firebase.google.com/docs/auth/web/custom-auth??
-//     firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token))
-//     .then(result=>{
-//       console.log("grimmer login result:", result);
-//       console.log("grimmer result property:", result.displayName,";",result.email,";",result.uid  );
-//
-//       if(result.displayName){
-//         alert("welcome! " + result.displayName);
-//       }
-//
-//       //null, null, KdyxdxZjvhuUFo4VLBm4U1m1iy2
-//       // but U.displayName: "Teng-Chieh Kang"
-//
-//       //u or xe/displayName "Teng-Chieh Kang
-//       //uid:SKdyxdxZjvhuUFo4VLBm4U1m1iy2" ???
-//
-//       let itmes = firebaseApp.database().ref().child('items');
-//       console.log("itmes:", itmes);
-//
-//       // ok了
-//       itmes.on('value', (snap) => {
-//
-//           const itmes2 = snap.val();
-//           console.log("itmes2:", itmes2);
-//
-//       });
-//
-//     }).catch(function(error) {
-//       console.log("grimmer error:", error);
-//     });
-//
-//     // https://github.com/fullstackreact/react-native-firestack, ios/android firebase wrapper, not node.js
-//     //firestack.auth.signInWithProvider('facebook', data.accessToken, '') // facebook will need only access token.
-// //     .then((user)=>{
-// //       console.log("Inside ");
-// //       console.log(user); 
-// //     })
-//
-//     //firebase.auth().signInWithCustomToken(token)
-// }
-
-
 export function connectDBtoCheckUser() {
   return (dispatch) => {
 
@@ -170,6 +103,8 @@ export function connectDBtoCheckUser() {
 
     const firebaseApp = firebase.initializeApp(firebaseConfig);
 
+    // https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
+    // https://github.com/JamesMarino/Firebase-ReactNative/blob/master/index.ios.js
     firebase.auth().onAuthStateChanged((authUser)=> {
       console.log("got auth user change in DB:", authUser);
 
@@ -188,7 +123,10 @@ export function connectDBtoCheckUser() {
         // child_moved
         firebase.database().ref(dataPath).on('value', (snap) => {
 
+          console.log("userdata from firebase:", snap);
           const userValue = snap.val();
+
+          console.log("userdata from firebase2:", userValue);
 
           if (userValue && userValue.maoID) {
             console.log("maoID for:", authUser.uid, ";maoid:", userValue.maoID);
@@ -199,12 +137,9 @@ export function connectDBtoCheckUser() {
           dispatch(fetchUserData(true, userValue));
         });
 
-
-
         // let userData = await firebase.auth().currentUser;
-        //user.uid
-//        let userMobilePath = "/user/" + userId + "/details";
-
+        // user.uid
+        // let userMobilePath = "/user/" + userId + "/details";
 
         // login
         // 檢查 database裡的值
@@ -212,35 +147,10 @@ export function connectDBtoCheckUser() {
         //    b. 已login 有id
 
       } else {
-        // userChecking=false, 直接回到loing 第一頁
+        // userChecking=false, 直接回到login 第一頁
 
         dispatch(fetchUserData(false, null));
       }
     });
-
-
-    // // step 1. read app setting value, e.g. product api url
-    //
-    // // step 2. to get product id
-    // productID = AppManager.instance().getProductID();
-    // dispatch(getProductIDAction(productID));
-    //
-    // // step 3. use this product id to get product name
-    // queryProductInformation()
-    // .then(data => {
-    //   if (data === '{"statusCode":404,"error":"Not Found"}') {
-    //     AppManager.instance().redirectToLogin();
-    //   }
-    //
-    //   rlog(`get product information:${data}`);
-    //   const json = JSON.parse(data);
-    //   dispatch(getOkamiProductInfo(json));
-    //
-    //   dispatch(breadcrumbsExtraAlias('ProductName', json.label));
-    //
-    //   const url = AppManager.instance().getItemURL(UrlItem.PRODUCTS);
-    //   dispatch(breadcrumbsExtraURL('Product', url));
-    // });
-
   };
 }
