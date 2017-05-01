@@ -6,8 +6,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
+import CommonStyles from './styles/common'
 import { connectDBtoCheckUser } from './actions/userAction';
-
 import Login from './Login';
 import MainScreen from './MainScreen';
 
@@ -33,8 +33,8 @@ class Home extends Component {
     console.log("user,checking:",this.props);
     if (userChecking) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.welcome}>
+        <View style={CommonStyles.container}>
+          <Text style={CommonStyles.welcome}>
             Loading...
           </Text>
         </View>
@@ -49,20 +49,6 @@ class Home extends Component {
 
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
 
 function debugState(state){
 

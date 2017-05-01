@@ -19,6 +19,7 @@ const {
 
 import { connect } from 'react-redux';
 
+import CommonStyles from './styles/common'
 import { handleFBLogin, handleFBLogout } from './actions/userAction';
 
 class Login extends Component {
@@ -44,8 +45,8 @@ class Login extends Component {
     const {user} = this.props;
     const name = user?user.displayName:"";
     return (
-        <View style={styles.container}>
-          <Text style={styles.welcome}>
+        <View style={CommonStyles.container}>
+          <Text style={CommonStyles.welcome}>
             {name}
           </Text>
           <LoginButton
@@ -56,24 +57,6 @@ class Login extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  shareText: {
-    fontSize: 20,
-    margin: 10,
-  },
-});
 
 const mapStateToProps = (state) => ({
   user: state.user,
