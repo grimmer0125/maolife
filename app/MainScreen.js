@@ -120,7 +120,6 @@ const SettingsTab = StackNavigator({
   },
 });
 
-
 const MainScreen = TabNavigator({
   Home: {
     screen: MyHomeScreen,
@@ -156,3 +155,5 @@ const MainScreen = TabNavigator({
   //   animationEnabled: false,
   //   swipeEnabled: false,
 });
+
+export default MainScreen;

@@ -13,6 +13,7 @@ const USER_DATA = 'USER_DATA';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_SUCCESS';
 const LOGOUT = 'LOGOUT';
+const INVALID_REGISTERID = 'INVALID_REGISTERID';
 
 export const ActionTypes = {
   LOGIN_DATA,
@@ -21,6 +22,7 @@ export const ActionTypes = {
   LOGOUT,
 };
 
+export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 
 // may use https://github.com/acdlite/redux-actions
 export function fetchUserData(result, userData) {
@@ -29,6 +31,63 @@ export function fetchUserData(result, userData) {
     payload: {
       result,
       userData,
+    }
+  };
+}
+
+export function registerMaoID(registerID) {
+
+  return (dispatch) => {
+    console.log("grimmer !!");
+    if (!registerID || registerID.indexOf(' ') >= 0) {
+      console.log("GG invalid id:", registerID);
+      invalidRegisterIDAction();
+    } else {
+      console.log("GG try registring id:", registerID);
+
+      // const dataPath = "/user/" + result.uid;
+      //
+      // const usersRef = new Firebase(USERS_LOCATION);
+      // usersRef.child(userId).once('value', function(snapshot) {
+      //   var exists = (snapshot.val() !== null);
+      //   userExistsCallback(userId, exists);
+      // });
+
+      const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(registerID);
+      query.once("value", function(snapshot) {
+        const userData = snapshot.val();
+        if (userData){
+          console.log("exists!", registerID);
+        } else {
+          const dataPath = "/users/" + firebase.auth().currentUser.uid;
+          console.log("current user:", dataPath);
+          firebase.database().ref(dataPath).update({
+            maoID: registerID,
+            likeNumber: [1,3,7],
+          }).then(()=>{
+            console.log("register maoID ok !!!:", registerID);
+          });
+        }
+      });
+
+      // firebase.database().ref(dataPath).update({
+      //   displayName: result.displayName
+      // });
+      //
+      // ref.child('users').orderByChild('name').equalTo('Alex').on('child_added',  ...)
+      // query.on("value", function(snapshot) {
+
+
+      // if (snapshot.hasChildren()) {
+      //
+      //     console
+      // .log("Yes the object with the key exists !");
+      // var thisVerificationVarisSetToTrueIndicatingThatTheObjectExists = true ;
+      //
+      //
+      // }
+
+
     }
   };
 }
@@ -85,18 +144,22 @@ export function handleFBLogin(error, result) {
         console.log("grimmer result property:", result.displayName,";",result.email,";",result.uid  );
 
         if(result.displayName){
-          console.log("welcome! " + result.displayName);
+          console.log("try saving displayName " + result.displayName);
           // alert("welcome! " + result.displayName);
 
-          const dataPath = "/user/" + result.uid;
+          const dataPath = "/users/" + result.uid;
 
           // https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
           // oncomplete: use callback or promise
           firebase.database().ref(dataPath).update({
             displayName: result.displayName
+          }).then(()=>{
+            console.log("register displayName ok",)
           });
 
         }
+
+
 
         // but U.displayName: "Teng-Chieh Kang"
         //uid:SKdyxdxZjvhuUFo4VLBm4U1m1iy2" ???
@@ -130,7 +193,7 @@ export function connectDBtoCheckUser() {
       if (authUser) {
 
         // user.
-        const dataPath = "/user/" + authUser.uid;// +"/maoID";
+        const dataPath = "/users/" + authUser.uid;// +"/maoID";
 
 //        let maoID  = firebaseApp.database().ref(dataPath).child('items');
         // let userData  = firebaseApp.database().ref(dataPath);

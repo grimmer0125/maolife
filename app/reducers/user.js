@@ -8,6 +8,7 @@ const initialState = {
   isLogin: false,
 };
 
+// may move to user 
 export function userChecking(state = true, action ={}) {
   console.log("in userChecking reducer3:", action)
   switch (action.type) {
@@ -17,6 +18,15 @@ export function userChecking(state = true, action ={}) {
     default:
       return state;
     }
+}
+
+export function registerStatus(state = "", action) {
+  switch (action.type) {
+    case ActionTypes.INVALID_REGISTERID:
+      return 'invalid id';
+    default:
+      return state;
+  }
 }
 
 export function user(state = initialState, action = {}) {

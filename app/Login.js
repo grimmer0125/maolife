@@ -11,7 +11,9 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
+  TextInput,
   View,
+  Button,
 } from 'react-native';
 const {
   LoginButton,
@@ -20,7 +22,7 @@ const {
 import { connect } from 'react-redux';
 
 import CommonStyles from './styles/common'
-import { handleFBLogin, handleFBLogout } from './actions/userAction';
+import { handleFBLogin, handleFBLogout, registerMaoID } from './actions/userAction';
 
 class Login extends Component {
   constructor(props) {
@@ -28,6 +30,9 @@ class Login extends Component {
 
     this.handleFBLoginResult = this.handleFBLoginResult.bind(this);
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
+    this.onButtonPress = this.onButtonPress.bind(this);
+
+    this.state = {registerText: ''};
   }
 
   handleFBLoginResult(error, result) {
@@ -41,17 +46,52 @@ class Login extends Component {
     this.props.dispatch(handleFBLogout());
   }
 
+  onButtonPress() {
+    this.props.dispatch(registerMaoID(this.state.registerText));
+  }
+
+  //TODO: use https://github.com/halilb/react-native-textinput-effects instead of using native TextInput
+  // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
+
   render() {
     const {user} = this.props;
     const name = user?user.displayName:"";
+    let registerUI = null;
+
+//    {this.props.registerStatus}
+
+    console.log("user in login:", user)
+    //TODO improve <View style={{width: 150}}> width part later
+    if (user.isLogin) {
+      registerUI = (
+        <View style={{width: 150}}>
+          <Text>
+            hihih
+          </Text>
+          <TextInput
+            style={{height: 40}}
+            placeholder="Please Type here to register ID for this app!"
+            onChangeText={(registerText) => this.setState({registerText})}
+          />
+        </View>
+      );
+    }
+
     return (
         <View style={CommonStyles.container}>
-          <Text style={CommonStyles.welcome}>
-            {name}
-          </Text>
           <LoginButton
             onLoginFinished={this.handleFBLoginResult}
             onLogoutFinished={this.handleFBLogoutResult}
+          />
+          <Text style={CommonStyles.welcome}>
+            {name}
+          </Text>
+          {registerUI}
+          <Button
+            onPress={this.onButtonPress}
+            title="Click to register"
+            color="#841584"
+            accessibilityLabel="Learn more about purple"
           />
         </View>
     );
@@ -60,6 +100,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  registerStatus: state.registerStatus,
 });
 
 export default connect(mapStateToProps)(Login);

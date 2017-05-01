@@ -40,7 +40,7 @@ class Home extends Component {
         </View>
       );
     }
-
+    // user should not be null due to the current default value
     if (user && user.maoID){
       return <MainScreen/>;
     } else {
