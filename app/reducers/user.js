@@ -8,7 +8,7 @@ const initialState = {
   isLogin: false,
 };
 
-// may move to user 
+// may move to user
 export function userChecking(state = true, action ={}) {
   console.log("in userChecking reducer3:", action)
   switch (action.type) {

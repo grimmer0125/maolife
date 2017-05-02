@@ -1,3 +1,7 @@
+
+import { Platform } from 'react-native';
+import devTools from 'remote-redux-devtools';
+
 import { createStore, applyMiddleware, compose } from 'redux';
 // import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
@@ -17,7 +21,12 @@ export default function configureStore(initialState) {
     initialState,
     compose(
       // applyMiddleware(sagaMiddleware, thunk)
-      applyMiddleware(thunk)
+      applyMiddleware(thunk),
+      devTools({
+        name: Platform.OS,
+        hostname: 'localhost',
+        port: 5678
+      })
       // ,window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );

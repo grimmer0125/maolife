@@ -7,7 +7,8 @@
     "test": "jest",
     "ios": "react-native run-ios",
     "qemu": "emulator @Nexus_5X_API_23 &",
-    "android": "react-native run-android"
+    "android": "react-native run-android",
+    "postinstall": "remotedev-debugger --hostname localhost --port 5678 --injectserver"
   },
   "dependencies": {
     "eslint": "^3.19.0",
@@ -28,7 +29,9 @@
     "babel-jest": "19.0.0",
     "babel-preset-react-native": "1.9.1",
     "jest": "19.0.2",
-    "react-test-renderer": "16.0.0-alpha.6"
+    "react-test-renderer": "16.0.0-alpha.6",
+    "remote-redux-devtools": "^0.5.7",
+    "remote-redux-devtools-on-debugger": "^0.7.0"
   },
   "jest": {
     "preset": "react-native"
