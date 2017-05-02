@@ -5,13 +5,7 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  ListView,
-  Alert,
   Button,
-  Text,
-  View,
   ScrollView,
 } from 'react-native';
 
@@ -23,108 +17,14 @@ import {
 } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const onButtonPress = () => {
-  Alert.alert('Button has been pressed!');
-};
-
-class MyHomeScreen extends Component {
-
-  // Initialize the hardcoded data
-  constructor(props) {
-    super(props);
-    console.log("grimmer init MyHomeScreen");
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows([
-        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-      ])
-    };
-  }
-
-  render() {
-    return (
-      <View style={{flex: 1, paddingTop: 22}}>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={(rowData) => {
-            return (
-              <View>
-                <Text>{rowData}</Text>
-                <Button
-                  onPress={onButtonPress}
-                  title="Press Me"
-                  accessibilityLabel="See an informative alert"
-                />
-              </View>
-            )
-            }
-          }
-        />
-      </View>
-    );
-  }
-}
-
-class MyNotificationsScreen extends React.Component {
-  // static navigationOptions = {
-  //   tabBarLabel: 'Notifications',
-  //   tabBarIcon: ({ tintColor }) => (
-  //     <Image
-  //       source={require('./notif-icon.png')}
-  //       style={[styles.icon, {tintColor: tintColor}]}
-  //     />
-  //   ),
-  // };
-
-  render() {
-    return (
-      <Button
-        onPress={() => this.props.navigation.goBack()}
-        title="Go back home"
-      />
-    );
-  }
-}
-
-/* <MyNavScreen
-  banner="Settings"
-  navigation={navigation}
-/> */
-const MySettingsScreen = ({ navigation }) => (
-    <ScrollView>
-      <Button
-        onPress={() => navigation.navigate('NotifSettings')}
-        title="Go to notification settings"
-      />
-      <Button
-        onPress={() => navigation.goBack(null)}
-        title="In Setting, Go back"
-      />
-    </ScrollView>
-);
-
-const SettingsTab = StackNavigator({
-  Settings: {
-    screen: MySettingsScreen,
-    // path: '/',
-    // wired, is function, not {}
-    navigationOptions: () => ({
-      title: 'Settings',
-    }),
-  },
-  NotifSettings: {
-    screen: MyNotificationsScreen,
-    navigationOptions: {
-      title: 'Notification Settings',
-    },
-  },
-});
+import ListPage from './ListPage'
+import SettingPage from './SettingPage'
 
 const MainScreen = TabNavigator({
   Home: {
-    screen: MyHomeScreen,
+    screen: ListPage,
     navigationOptions: {
-      tabBarLabel: 'Home',
+      tabBarLabel: 'List',
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
         name={focused ? 'ios-home' : 'ios-home-outline'}
@@ -135,7 +35,7 @@ const MainScreen = TabNavigator({
     },
   },
   SettingsTab: {
-    screen: SettingsTab,
+    screen: SettingPage,
     navigationOptions: {
       tabBarLabel: 'Settings',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -157,3 +57,10 @@ const MainScreen = TabNavigator({
 });
 
 export default MainScreen;
+
+// tab:
+// 1. List (如果記的是在那一個cat, 那統計就不會太多層)
+// 2. wall ? 之後做
+// 3. setting
+// 4. 統計要放那?
+//5. 本來record要在在tab之一, 但要三個步驟好像也差不多

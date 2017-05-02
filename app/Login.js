@@ -64,14 +64,20 @@ class Login extends Component {
     //TODO improve <View style={{width: 150}}> width part later
     if (user.isLogin) {
       registerUI = (
-        <View style={{width: 150}}>
+        <View>
           <Text>
             hihih
           </Text>
           <TextInput
-            style={{height: 40}}
+            style={{height: 40, width: 150}}
             placeholder="Please Type here to register ID for this app!"
             onChangeText={(registerText) => this.setState({registerText})}
+          />
+          <Button
+            onPress={this.onButtonPress}
+            title="Click to register"
+            color="#841584"
+            accessibilityLabel="Learn more about purple"
           />
         </View>
       );
@@ -87,12 +93,6 @@ class Login extends Component {
             {name}
           </Text>
           {registerUI}
-          <Button
-            onPress={this.onButtonPress}
-            title="Click to register"
-            color="#841584"
-            accessibilityLabel="Learn more about purple"
-          />
         </View>
     );
   }
