@@ -87,10 +87,16 @@ Follow https://facebook.github.io/react-native/docs/debugging.html to have remot
 
 ### Debug React Widget
 1. Use Nuclide's "React Native Inspector".
-2. or use https://github.com/jhen0409/react-native-debugger. (which introduces it integrates its redux-devtools but not tried successfully)
+2. or use https://github.com/jhen0409/react-native-debugger. (which introduces it integrates its redux-devtools but not tried successfully). And you can not use it to debut react widget and use http://localhost:8081/debugger-ui to see JavaScript logs at the same time. 
 
 ### Debug Redux
 
-1. Use https://github.com/zalmoxisus/remote-redux-devtools to modify your codes to enable redux remote debugging. Then use one of the tools listed here, https://github.com/zalmoxisus/remote-redux-devtools#monitoring. You can just open http://localhost:8000 to debug redux and use official way, http://localhost:8081/debugger-ui to debug React logs.  
+https://github.com/zalmoxisus/remote-redux-devtools supplies a way to use redux server to get redux'store. It needs
 
-2. or use https://github.com/jhen0409/remote-redux-devtools-on-debugger to hack react native packager's server and just use http://localhost:8081/debugger-ui to see React's log and Redux's store at the same time.  
+1. modify your code. follow https://github.com/zalmoxisus/remote-redux-devtools  or  https://github.com/jhen0409/remote-redux-devtools-on-debugger to setup. I try the latter's `remote-redux-devtools`'s setting and use its local redux server and integrated react debugging for react native.
+2. prepare a local redux server (localhost) or a WAN remote server.
+3. Then just use browser to see the redux'store (http://localhost:8000) or use specific web page/app to Redux's store.
+
+You can use `remote-redux-devtools`' guide to prepare your own local server.
+
+Or follow https://github.com/jhen0409/remote-redux-devtools-on-debugger to cover the below 1~3. It comes with a local redux server and also integrates redux with react debugger page. So just use http://localhost:8081/debugger-ui to see React's log and Redux's store at the same time.
