@@ -60,7 +60,7 @@ Keypoint:
 Steps:
 https://facebook.github.io/react-native/docs/running-on-device.html
 
-Start from xcode 7, no need paid developer account to run on real device !! Guide: 
+Start from xcode 7, no need paid developer account to run on real device !! Guide:
 http://blog.ionic.io/deploying-to-a-device-without-an-apple-developer-account/
 
 
@@ -80,3 +80,17 @@ You need to launch your Android emulator (Android Virtual Device) first, then `n
 You can use the following ways to launch emulators
 1. Android Studio
 2. In terminal, type `emulator @YOUR_VIRTUAL_DEIVCE` & or change the VIRTUAL_DEIVCE name in `npm script (qemu)` then you can type `npm run qemu` in start your emuator..
+
+### How to debug
+
+Follow https://facebook.github.io/react-native/docs/debugging.html to have remote JS debugging.
+
+### Debug React Widget
+1. Use Nuclide's "React Native Inspector".
+2. or use https://github.com/jhen0409/react-native-debugger. (which introduces it integrates its redux-devtools but not tried successfully)
+
+### Debug Redux
+
+1. Use https://github.com/zalmoxisus/remote-redux-devtools to modify your codes to enable redux remote debugging. Then use one of the tools listed here, https://github.com/zalmoxisus/remote-redux-devtools#monitoring. You can just open http://localhost:8000 to debug redux and use official way, http://localhost:8081/debugger-ui to debug React logs.  
+
+2. or use https://github.com/jhen0409/remote-redux-devtools-on-debugger to hack react native packager's server and just use http://localhost:8081/debugger-ui to see React's log and Redux's store at the same time.  
