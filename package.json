@@ -8,7 +8,7 @@
     "ios": "react-native run-ios",
     "qemu": "emulator @Nexus_5X_API_23 &",
     "android": "react-native run-android",
-    "postinstall": "remotedev-debugger --hostname localhost --port 5678 --injectserver"
+    "postinstall": "remotedev-debugger --hostname localhost --port 8000 --injectserver"
   },
   "dependencies": {
     "eslint": "^3.19.0",

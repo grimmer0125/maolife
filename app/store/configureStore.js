@@ -25,7 +25,7 @@ export default function configureStore(initialState) {
       devTools({
         name: Platform.OS,
         hostname: 'localhost',
-        port: 5678
+        port: 8000
       })
       // ,window.devToolsExtension ? window.devToolsExtension() : f => f
     )
