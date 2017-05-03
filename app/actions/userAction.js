@@ -14,15 +14,20 @@ const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_SUCCESS';
 const LOGOUT = 'LOGOUT';
 const INVALID_REGISTERID = 'INVALID_REGISTERID';
+const EXISTING_REGISTERID = 'EXISTING_REGISTERID';
+
 
 export const ActionTypes = {
   LOGIN_DATA,
   LOGIN_SUCCESS,
   USER_DATA,
   LOGOUT,
+  INVALID_REGISTERID,
+  EXISTING_REGISTERID,
 };
 
 export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
+export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
 
 // may use https://github.com/acdlite/redux-actions
 export function fetchUserData(result, userData) {
@@ -41,7 +46,7 @@ export function registerMaoID(registerID) {
     console.log("grimmer !!");
     if (!registerID || registerID.indexOf(' ') >= 0) {
       console.log("GG invalid id:", registerID);
-      invalidRegisterIDAction();
+      dispatch(invalidRegisterIDAction());
     } else {
       console.log("GG try registring id:", registerID);
 
@@ -57,7 +62,8 @@ export function registerMaoID(registerID) {
       query.once("value", function(snapshot) {
         const userData = snapshot.val();
         if (userData){
-          console.log("exists!", registerID);
+          console.log("exists!!!", registerID);
+          dispatch(registerExistingIDAction());
         } else {
           const dataPath = "/users/" + firebase.auth().currentUser.uid;
           console.log("current user:", dataPath);

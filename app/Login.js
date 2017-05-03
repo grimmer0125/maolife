@@ -54,7 +54,7 @@ class Login extends Component {
   // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
 
   render() {
-    const {user} = this.props;
+    const {user, registerStatus} = this.props;
     const name = user?user.displayName:"";
     let registerUI = null;
 
@@ -66,7 +66,7 @@ class Login extends Component {
       registerUI = (
         <View>
           <Text>
-            hihih
+            {registerStatus}
           </Text>
           <TextInput
             style={{height: 40, width: 150}}

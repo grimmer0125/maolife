@@ -83,11 +83,11 @@ You can use the following ways to launch emulators
 
 ### How to debug
 
-Follow https://facebook.github.io/react-native/docs/debugging.html to have remote JS debugging.
+Follow https://facebook.github.io/react-native/docs/debugging.html to have remote JS debugging. You can setup breakpoint on Nuclide or chrome debugger. 
 
 ### Debug React Widget
 1. Use Nuclide's "React Native Inspector".
-2. or use https://github.com/jhen0409/react-native-debugger. (which introduces it integrates its redux-devtools but not tried successfully). And you can not use it to debut react widget and use http://localhost:8081/debugger-ui to see JavaScript logs at the same time. 
+2. or use https://github.com/jhen0409/react-native-debugger. (which introduces it integrates its redux-devtools but not tried successfully). And you can not use it to debut react widget and use http://localhost:8081/debugger-ui to see JavaScript logs at the same time.
 
 ### Debug Redux
 

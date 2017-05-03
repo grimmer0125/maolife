@@ -21,9 +21,14 @@ export function userChecking(state = true, action ={}) {
 }
 
 export function registerStatus(state = "", action) {
+  console.log("INVALID_REGISTERID:", action);
   switch (action.type) {
     case ActionTypes.INVALID_REGISTERID:
+      console.log("INVALID_REGISTERID2");
       return 'invalid id';
+    case ActionTypes.EXISTING_REGISTERID:
+      console.log("EXISTING_REGISTERID !!!");
+      return 'existing id';
     default:
       return state;
   }
@@ -60,5 +65,5 @@ export function user(state = initialState, action = {}) {
 // });
 
 export const userRoot = {
-  user, userChecking,
+  user, userChecking, registerStatus,
 }
