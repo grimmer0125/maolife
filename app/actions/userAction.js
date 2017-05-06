@@ -226,7 +226,7 @@ export function fetchOwnCats() {
 
         // query.once("value", function(snapshot) {
 
-        firebase.database().ref('cats').child(catID).once('value', (snapshot) => {
+        firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
 
           const catInfo = snapshot.val();
           //owners: firebase not real array already ->JS realy array

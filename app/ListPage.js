@@ -35,6 +35,18 @@ class ListPage extends Component {
 
   }
 
+  componentWillReceiveProps(newProps) {
+    const cats = newProps.cats;
+
+    //let {data, sectionIds} = this._getListViewData(nextProps.patients);
+
+
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(cats)
+    });
+
+  }
+
 // 其實有這些??
 // https://facebook.github.io/react-native/docs/listview.html
 //   _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
@@ -47,7 +59,7 @@ class ListPage extends Component {
           renderRow={(rowData) => {
             return (
               <View>
-                <Text>{rowData}</Text>
+                <Text>{rowData.name}</Text>
                 <Button
                   onPress={onButtonPress}
                   title="Press Me"
