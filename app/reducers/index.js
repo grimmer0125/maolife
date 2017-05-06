@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import {userRoot} from './user';
+import {catsRoot} from './cats';
 
 // import reducers, differnt ways
 // 1. import * as reducers from '../reducers'; combineReducers(reducers);
@@ -10,7 +11,8 @@ import {userRoot} from './user';
 
 
 const rootReducer = combineReducers({
-  ...userRoot
+  ...userRoot,
+  ...catsRoot
 });
 
 export default rootReducer;

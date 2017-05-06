@@ -9,19 +9,19 @@ const initialState = {
 };
 
 // may move to user
-export function userChecking(state = true, action ={}) {
-  console.log("in userChecking reducer3:", action)
+export function userChecking(state = true, action = {}) {
+  // console.log("in userChecking reducer3:", action)
   switch (action.type) {
     case ActionTypes.USER_DATA:
       console.log("in userChecking reducer2:", action)
       return false;
     default:
       return state;
-    }
+  }
 }
 
 export function registerStatus(state = "", action) {
-  console.log("INVALID_REGISTERID:", action);
+  // console.log("INVALID_REGISTERID:", action);
   switch (action.type) {
     case ActionTypes.INVALID_REGISTERID:
       console.log("INVALID_REGISTERID2");
