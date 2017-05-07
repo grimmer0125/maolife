@@ -16,6 +16,8 @@ const LOGOUT = 'LOGOUT';
 const INVALID_REGISTERID = 'INVALID_REGISTERID';
 const EXISTING_REGISTERID = 'EXISTING_REGISTERID';
 const UPDATE_CAT_INFO = 'UPDATE_CAT_INFO';
+const NAVI_TO_CAT = 'NAVI_TO_CAT';
+const LEAVE_CAT_DETAIL = `LEAVE_CAT_DETAIL`;
 
 export const ActionTypes = {
   LOGIN_DATA,
@@ -25,10 +27,22 @@ export const ActionTypes = {
   INVALID_REGISTERID,
   EXISTING_REGISTERID,
   UPDATE_CAT_INFO,
+  NAVI_TO_CAT,
+  LEAVE_CAT_DETAIL,
 };
 
 export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
+export const leaveCatDetail = createAction(LEAVE_CAT_DETAIL);
+
+export function naviToCat(catID) {
+  return {
+    type: NAVI_TO_CAT,
+    payload: {
+      catID,
+    }
+  }
+}
 
 export function updateCatInfo(catID, catInfo) {
   return {
