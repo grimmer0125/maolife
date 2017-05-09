@@ -2,6 +2,15 @@
 
 **only tested on Mac. But Android on Windows and Linux should work**
 
+## TODO
+
+Try UI libraries 
+1. https://github.com/react-native-training/react-native-elements
+2. https://nativebase.io/ including sketch template 
+3. https://github.com/xinthink/react-native-material-kit  
+4. https://github.com/halilb/react-native-textinput-effects which is used by https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
+
+
 ## iOS + Mac
 We use the latest React Native 0.43. To build its iOS version, it requires Xcode 8 which only works on Mac 10.12.
 
