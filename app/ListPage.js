@@ -26,7 +26,31 @@ import { naviToCat } from './actions/userAction';
 //   navigation.navigate('NotifSettings')
 // };
 
+class AddCat extends Component {
+  static navigationOptions = {
+   title: 'New Cat',
+ };
+  render() {
+    return (
+      <View>
+        <Text> test </Text>
+      </View>
+
+    )
+  }
+}
+
 class ListMain extends Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    //  title: `Chat with ${navigation.state.params.user}`,
+    title: 'Cat List',
+    headerRight: (
+      <Button title="Add"
+        onPress={() => navigation.navigate('AddCat')}
+      />
+    ),
+   });
 
   // Initialize the hardcoded data
   constructor(props) {
@@ -44,6 +68,10 @@ class ListMain extends Component {
     this.props.dispatch(fetchOwnCats());
 
     this.onButtonPress = this.onButtonPress.bind(this);
+
+    // if (testtest) {
+    //   testtest();
+    // }
   }
 
   onButtonPress(data) {
@@ -87,15 +115,19 @@ class ListMain extends Component {
     // console.log("cats in list:", this.state.dataSource);
     return (
       <View style={{flex: 1, paddingTop: 22}}>
+
         <ListView
           dataSource={this.state.dataSource}
           renderRow={(rowData) => {
+            // console.log("name:",rowData.name);
+            // console.log(typeof rowData.name);
+
             return (
               <View>
-                <Text>{rowData.name}</Text>
+                {/* <Text>{rowData.name}</Text> */}
                 <Button
                   onPress={()=>this.onButtonPress(rowData.catID)}
-                  title="Press Me"
+                  title={rowData.name?rowData.name:""}
                   accessibilityLabel="See an informative alert"
                 />
               </View>
@@ -130,9 +162,9 @@ const ListPage = StackNavigator({
     screen: ListMain2 ,
     // path: '/',
     // wired, is function, not {}
-    navigationOptions: () => ({
-      title: 'List',
-    }),
+    // navigationOptions: () => ({
+    //   title: 'Cat List',
+    // }),
   },
   CatDetail: {
     screen: CatDetail,
@@ -140,6 +172,10 @@ const ListPage = StackNavigator({
       title: 'CatDetail',
     },
   },
+
+  AddCat: {
+    screen: AddCat,
+  }
 });
 
 export default ListPage;

@@ -48,6 +48,9 @@ class MySettingsScreen extends Component {
   constructor(props) {
     super(props);
 
+
+    console.log("grimmer init Setting Page");
+
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
 
   }

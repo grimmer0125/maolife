@@ -72,7 +72,7 @@ function extractCatInfo(state) {
     return {catID:state.selectedCat.id, ...state.cats[state.selectedCat.id]};
   }
 
-  return null;
+  return {};
 
   //catid:
   //name:

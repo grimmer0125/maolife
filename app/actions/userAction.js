@@ -137,6 +137,19 @@ export function LoginSuccess(displayName) {
 export function handleFBLogout(error, result) {
 
   return (dispatch) => {
+
+    // 加上其他的off
+
+    // 可能也會收到, 阿都沒收到, 是因為現在設定成登入才可以有firebase data
+    // firebase.database().ref(dataPath).child("catids").on('value', (snapshot) => {
+    //
+    // // 可能也會收到
+    // firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
+    //
+    // const dataPath = "/users/" + authUser.uid;// +"/maoID";
+    // firebase.database().ref(dataPath).on('value', (snap) => { //可能會收到
+
+
     //https://firebase.google.com/docs/reference/node/firebase.auth.Auth#signOut
     firebase.auth().signOut()
     .then(()=>{
@@ -285,6 +298,7 @@ export function connectDBtoCheckUser() {
 
       if (authUser) {
 
+        console.log("auth becomes non null");
         // user.
         const dataPath = "/users/" + authUser.uid;// +"/maoID";
 
@@ -296,6 +310,8 @@ export function connectDBtoCheckUser() {
         // child_changed
         // child_removed
         // child_moved
+
+        // will not trigger two times !!! if on(xx) two times
         firebase.database().ref(dataPath).on('value', (snap) => {
 
           console.log("userdata from firebase:", snap);
@@ -322,6 +338,9 @@ export function connectDBtoCheckUser() {
         //    b. 已login 有id
 
       } else {
+
+        console.log("auth becomes null");
+
         // userChecking=false, 直接回到login 第一頁
 
         dispatch(fetchUserData(false, null));
