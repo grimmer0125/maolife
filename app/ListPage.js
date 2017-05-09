@@ -15,7 +15,7 @@ import {
 } from 'react-navigation';
 
 import CatDetail from './CatDetail';
-
+import AddCat from './AddCat';
 import { connect } from 'react-redux';
 import { fetchOwnCats } from './actions/userAction';
 
@@ -26,19 +26,19 @@ import { naviToCat } from './actions/userAction';
 //   navigation.navigate('NotifSettings')
 // };
 
-class AddCat extends Component {
-  static navigationOptions = {
-   title: 'New Cat',
- };
-  render() {
-    return (
-      <View>
-        <Text> test </Text>
-      </View>
-
-    )
-  }
-}
+// class AddCat2 extends Component {
+//   static navigationOptions = {
+//    title: 'New Cat',
+//  };
+//   render() {
+//     return (
+//       <View>
+//         <Text> test </Text>
+//       </View>
+//
+//     )
+//   }
+// }
 
 class ListMain extends Component {
 
