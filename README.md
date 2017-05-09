@@ -10,6 +10,8 @@ Try UI libraries
 3. https://github.com/xinthink/react-native-material-kit  
 4. https://github.com/halilb/react-native-textinput-effects which is used by https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
 
+Try CodePush
+https://github.com/Microsoft/react-native-code-push
 
 ## iOS + Mac
 We use the latest React Native 0.43. To build its iOS version, it requires Xcode 8 which only works on Mac 10.12.
