@@ -35,6 +35,86 @@ export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
 export const leaveCatDetail = createAction(LEAVE_CAT_DETAIL);
 
+export function addNewCat(name, age) {
+
+
+  return (dispatch) => {
+
+    // As a result, all writes to the database will trigger local events immediately,
+    // before any data has even been written to the database.
+
+    //還要加上owner:[selfid]
+
+    const newCatRef = firebase.database().ref('cats').push();
+    const newCatId = newCatRef.key;
+    console.log("newCat:", newCatId)
+
+    // firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
+    newCatRef.set({
+      name,
+      age,
+      owners:[firebase.auth().currentUser.uid],
+    })
+    .then(function() {
+      console.log('set add cat succeeded');
+
+      const dataPath = "/users/" + firebase.auth().currentUser.uid;
+
+      firebase.database().ref(dataPath).child("catids").once('value', (snapshot)=>{
+
+         let data = snapshot.val();
+         let catids = Object.values(data);
+         catids.push(newCatId);
+         console.log("in new page, catids:", catids)
+
+         firebase.database().ref(dataPath).child("catids").set(catids).then(()=>{
+             console.log("reset catids ok !!!:");
+          });
+
+        // const userData = snapshot.val();
+        // if (userData){
+        //   console.log("exists!!!", registerID);
+        //   dispatch(registerExistingIDAction());
+        // } else {
+        //   const dataPath = "/users/" + firebase.auth().currentUser.uid;
+        //   console.log("current user:", dataPath);
+        //   firebase.database().ref(dataPath).update({
+        //     maoID: registerID,
+        //     // likeNumber: [1,3,7],
+        //   }).then(()=>{
+        //     console.log("register maoID ok !!!:", registerID);
+        //   });
+        // }
+      });
+        //array
+
+      // console.log("grimmer array1:", snapshot);
+      //
+      //  const data = snapshot.val();
+      //  const values = Object.values(data);
+
+      // firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
+
+      // const dataPath = "/users/" + firebase.auth().currentUser.uid;
+      // firebase.database().ref(dataPath).child("catids").update({
+      //   maoID: registerID,
+      //   // likeNumber: [1,3,7],
+      // }).then(()=>{
+      //   console.log("register maoID ok !!!:", registerID);
+      // });
+
+
+    })
+    .catch(function(error) {
+      console.log('set add cat failed');
+    });
+    // postsRef.push().set({
+    //   author: "alanisawesome",
+    //   title: "The Turing Machine"
+    // });
+  };
+}
+
 export function naviToCat(catID) {
   return {
     type: NAVI_TO_CAT,

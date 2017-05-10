@@ -3,11 +3,15 @@ import React, { Component } from 'react';
 
 import { Container, Content, Form, Item, Input, Button, Text } from 'native-base';
 
+
+import { addNewCat } from './actions/userAction';
+import { connect } from 'react-redux';
+
 import {
   StackNavigator,
 } from 'react-navigation';
 
-export default class AddCat extends Component {
+class AddCat extends Component {
 
  static navigationOptions = ({ navigation }) => ({
    //  title: `Chat with ${navigation.state.params.user}`,
@@ -38,7 +42,12 @@ export default class AddCat extends Component {
   }
 
   onSave = () =>{
-    console.log("this.state:", this.state);
+
+    console.log("in add cat page, state:", this.state);
+
+    this.props.dispatch(addNewCat(this.state.name, this.state.age));
+
+    // we can also chain the two calls together
 
     // const { username, password } = this.state
     this.props.navigation.goBack(null);
@@ -71,3 +80,5 @@ export default class AddCat extends Component {
         );
     }
 }
+
+export default connect()(AddCat);
