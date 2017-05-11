@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import { Container, Content, Form, Item, Input, Button, Text } from 'native-base';
 
-
 import { addNewCat } from './actions/userAction';
 import { connect } from 'react-redux';
 
@@ -52,6 +51,13 @@ class AddCat extends Component {
     // const { username, password } = this.state
     this.props.navigation.goBack(null);
   }
+
+// https://github.com/GeekyAnts/NativeBase/issues/483
+// username input:
+// onSubmitEditing={ (event) => {
+//               this.refs._root.Password.focus();
+//         }}
+// password input: onSubmit: this.onPressButton();
 
 // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
     render() {
