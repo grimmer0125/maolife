@@ -29,6 +29,9 @@ import { connect } from 'react-redux';
 
 import { leaveCatDetail } from './actions/userAction';
 
+import { addNewOwner } from './actions/userAction';
+
+
 class CatDetail extends React.Component {
 
   constructor(props) {
@@ -57,6 +60,8 @@ class CatDetail extends React.Component {
   }
 
   onSave = () =>{
+    this.props.dispatch(addNewOwner(this.state.authID));
+
     this.setState({ shareDialog: false});
   }
 

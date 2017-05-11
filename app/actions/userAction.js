@@ -35,15 +35,81 @@ export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
 export const leaveCatDetail = createAction(LEAVE_CAT_DETAIL);
 
+export function addNewOwner(ownerMaoID) {
+
+  return (dispatch, getState) => {
+
+    console.log("start to add owner:", ownerMaoID);
+
+    const state = getState();
+    const catID = state.selectedCat.id;
+
+    const dataPath = "cats/" + catID;
+    // http://stackoverflow.com/questions/38317248/how-to-chain-multiple-promises-into-a-single-transaction-in-firebase
+
+
+    // selectedCat.id
+    //1. 新增到那隻貓的owners裡
+    //2. 新增到那個人的catids裡
+
+    //TODO: 好像也可以從redux裡撈耶 !!!!!!!
+    firebase.database().ref(dataPath).child("owners").once('value', (snapshot)=>{
+
+      let data = snapshot.val();
+      let owners = Object.values(data);
+      owners.push(ownerMaoID);
+
+      firebase.database().ref(dataPath).child("owners").set(owners)
+      .then(()=>{
+        console.log("add ownerMaoID into owners ok !!!");
+
+        //要maoID -> ownerID !!!
+
+        const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(ownerMaoID);
+        query.once("value", function(snapshot) {
+          const userID = snapshot.key;
+          if (userID){
+            const userPath = "users/" + ownerID;
+            firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
+               let data = snapshot.val();
+               let catids = Object.values(data);
+               addCatToUserFireBaseData(catids, catID, userPath);
+            });
+          }
+        });
+
+
+        // });
+        //add to that owner's catids
+
+      })
+
+    });
+
+
+  };
+}
+
+function addCatToUserFireBaseData(catids, newCatId, ownerPath) {
+  catids.push(newCatId);
+  console.log("in new page, catids:", catids)
+
+  firebase.database().ref(ownerPath).child("catids").set(catids).then(()=>{
+      console.log("reset catids ok !!!:");
+   });
+}
+
 export function addNewCat(name, age) {
 
-
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
     // As a result, all writes to the database will trigger local events immediately,
     // before any data has even been written to the database.
 
     //還要加上owner:[selfid]
+
+    const state = getState();
+    const sefMaoID = state.user.maoID;
 
     const newCatRef = firebase.database().ref('cats').push();
     const newCatId = newCatRef.key;
@@ -53,40 +119,27 @@ export function addNewCat(name, age) {
     newCatRef.set({
       name,
       age,
-      owners:[firebase.auth().currentUser.uid],
+      owners:[sefMaoID],
     })
     .then(function() {
       console.log('set add cat succeeded');
 
-      const dataPath = "/users/" + firebase.auth().currentUser.uid;
-
-      firebase.database().ref(dataPath).child("catids").once('value', (snapshot)=>{
-
+      const userPath = "/users/" + firebase.auth().currentUser.uid;
+      //TODO: 應該也可以改成直接撈redux-state裡的 !!!catids, 應該比較好,
+      // 也可以上面set->update, 然後update用chain的方式
+      // http://stackoverflow.com/questions/38317248/how-to-chain-multiple-promises-into-a-single-transaction-in-firebase
+      firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
          let data = snapshot.val();
          let catids = Object.values(data);
-         catids.push(newCatId);
-         console.log("in new page, catids:", catids)
+         addCatToUserFireBaseData(catids, newCatId, userPath);
 
-         firebase.database().ref(dataPath).child("catids").set(catids).then(()=>{
-             console.log("reset catids ok !!!:");
-          });
-
-        // const userData = snapshot.val();
-        // if (userData){
-        //   console.log("exists!!!", registerID);
-        //   dispatch(registerExistingIDAction());
-        // } else {
-        //   const dataPath = "/users/" + firebase.auth().currentUser.uid;
-        //   console.log("current user:", dataPath);
-        //   firebase.database().ref(dataPath).update({
-        //     maoID: registerID,
-        //     // likeNumber: [1,3,7],
-        //   }).then(()=>{
-        //     console.log("register maoID ok !!!:", registerID);
+        //  catids.push(newCatId);
+        //  console.log("in new page, catids:", catids)
+         //
+        //  firebase.database().ref(dataPath).child("catids").set(catids).then(()=>{
+        //      console.log("reset catids ok !!!:");
         //   });
-        // }
       });
-        //array
 
       // console.log("grimmer array1:", snapshot);
       //
