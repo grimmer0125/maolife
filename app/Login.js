@@ -1,5 +1,5 @@
 // 1. login in FB
-// 2. At least people need to register a unique ID for sharing cats.
+// 2. At least people need to register a unique maoID for sharing cats. May change later, add "ignore"
 
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
@@ -9,7 +9,6 @@ const FBSDK = require('react-native-fbsdk');
 
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -58,10 +57,7 @@ class Login extends Component {
     const name = user?user.displayName:"";
     let registerUI = null;
 
-//    {this.props.registerStatus}
-
-    console.log("user in login:", user)
-    //TODO improve <View style={{width: 150}}> width part later
+    //TODO improve <TextInput style={{width: 150}}> width part later
     if (user.isLogin) {
       registerUI = (
         <View>

@@ -39,25 +39,15 @@ class MyNotificationsScreen extends React.Component {
   }
 }
 
-/* <MyNavScreen
-  banner="Settings"
-  navigation={navigation}
-/> */
-
 class MySettingsScreen extends Component {
   constructor(props) {
     super(props);
-
-
-    console.log("grimmer init Setting Page");
 
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
 
   }
 
   handleFBLogoutResult() {
-
-    console.log("logout action in login:");
     this.props.dispatch(handleFBLogout());
   }
 
@@ -87,22 +77,6 @@ class MySettingsScreen extends Component {
 }
 
 const MySettingsScreen2 = connect()(MySettingsScreen);
-
-// const MySettingsScreen = ({ navigation }) => (
-//     <ScrollView>
-//       <Button
-//         onPress={() => navigation.navigate('NotifSettings')}
-//         title="Go to notification settings"
-//       />
-//       <Button
-//         onPress={() => navigation.goBack(null)}
-//         title="In Setting, Go back"
-//       />
-//       <LoginButton
-//         onLogoutFinished={this.handleFBLogoutResult}
-//       />
-//     </ScrollView>
-// );
 
 const SettingPage = StackNavigator({
   Settings: {

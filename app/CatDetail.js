@@ -1,6 +1,7 @@
-// https://github.com/react-community/react-navigation/issues/51 back event,
+// Back event:
+// https://github.com/react-community/react-navigation/issues/51
 // https://github.com/react-community/react-navigation/issues/684
-// selected cat要變成null, 怎麼辦?? 用下面方法嗎?
+// selected cat要變成null, 怎麼辦?? 先不用back event, 先用下面方法嗎? 先用這個
 //   componentWillUnmount() {
     //this.props.leaveDeviceDetailPage();
   //}
@@ -12,6 +13,7 @@
 // 3. add cat's icon
 // 4. input完後時 直接點button, 要可以work
 // 5. fab有時pos會錯
+// 預設bottom-right位置不太對
 import React, { Component } from 'react';
 import { Container, Content, Button, Icon, Fab,  Card, CardItem, Body, Form, Item, Input, Right, Text } from 'native-base';
 
@@ -24,19 +26,13 @@ import {
 } from 'react-native';
 
 import CommonStyles from './styles/common'
-
 import { connect } from 'react-redux';
-
-import { leaveCatDetail } from './actions/userAction';
-
-import { addNewOwner } from './actions/userAction';
-
+import { leaveCatDetail, addNewOwner } from './actions/userAction';
 
 class CatDetail extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("grimmer init CatDetail");
 
     this.state = {
       active: false,
@@ -46,17 +42,13 @@ class CatDetail extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("grimmer unmount catDetail");
 
     //TODO not a good way, may use detecting navi change instead of using this
     this.props.dispatch(leaveCatDetail());
-
-    //this.props.leaveDeviceDetailPage();
   }
 
   handleChangeAuthID = (text) => {
     this.setState({authID: text});
-    console.log("change id:", text);
   }
 
   onSave = () =>{
@@ -71,23 +63,12 @@ class CatDetail extends React.Component {
 
   render() {
     const {cat} = this.props;
-    console.log("cat in detail:", cat);
-    // 預設bottom-right位置不太對
-    // <Content> 跟 <View> 的差別?
-    // 也可能直接ignore Body(<-header,footer, carditem, caritem-header裡, ListItem icon )
-//     Make use of Left, Body and Right components to align the content of your Card header.
+    // native-base: 1. <Content> 跟 <View> 的差別?
+    // 2. body相關: 也有也可ignore Body, 像下面. Body使用時機:<-header,footer, carditem, caritem-header裡, ListItem icon
+
+  //官網的note
+// Make use of Left, Body and Right components to align the content of your Card header.
 // To mixup Image with other NativeBase components in a single CardItem, include the content within Body component.
-    // let shareDialog = (
-    //   <Card>
-    //     <CardItem>
-    //       <Body>
-    //         <Text>
-    //           Your text here
-    //         </Text>
-    //       </Body>
-    //     </CardItem>
-    //   </Card>
-    // );
 
     if (this.state.shareDialog) {
       return (
@@ -165,41 +146,19 @@ class CatDetail extends React.Component {
       </Container>
 
     );
-
-    // return (
-    //   <View>
-    //     <Text style={CommonStyles.welcome}>
-    //       {cat.name}
-    //     </Text>
-    //     <Button
-    //       onPress={() => this.props.navigation.goBack()}
-    //       title="Go back"
-    //     />
-    //   </View>
-    //
-    // );
   }
 }
 
 
 
 function extractCatInfo(state) {
-  //state.selectedCat.id
-  //state.cats.
 
-  // let catsArray = [];
-  // for (const key of state.cats) {
-  //   if (state.selectedCat.id == )
-  //   catsArray.push({catID:key, ...cats[key]});
-  // }
   if (state.selectedCat && state.cats && state.cats.hasOwnProperty(state.selectedCat.id)){
     return {catID:state.selectedCat.id, ...state.cats[state.selectedCat.id]};
   }
 
   return {};
 
-  //catid:
-  //name:
 }
 
 const mapStateToProps = (state) => ({

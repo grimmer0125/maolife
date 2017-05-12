@@ -1,15 +1,14 @@
-// Tab:
-// 1. List
-// 2. Wall
-// 3. Record
+// Tabs:
+// 1. List (如果記的是在那一個cat, 那統計就不會太多層)
+// 2. wall ? 之後做
+// 3. setting
+// 4. 統計要放那?
+// 5. 本來record要在在tab之一, 但要三個步驟好像也差不多
 
 import React, { Component } from 'react';
 import {
   Button,
-  ScrollView,
 } from 'react-native';
-
-// import { connect } from 'react-redux';
 
 import {
   StackNavigator,
@@ -57,10 +56,3 @@ const MainScreen = TabNavigator({
 });
 
 export default MainScreen;
-
-// tab:
-// 1. List (如果記的是在那一個cat, 那統計就不會太多層)
-// 2. wall ? 之後做
-// 3. setting
-// 4. 統計要放那?
-//5. 本來record要在在tab之一, 但要三個步驟好像也差不多
