@@ -1,5 +1,7 @@
 // 1. add cat
 // 2. sharing cats for mananing together
+//TODO 把自己從owner刪掉時, ui要提示,
+//TODO 從detail出來又很快按進去, selectedCat會是null
 
 // note:
 // user下面有cat ids, 會用這些ids去要資料
@@ -13,7 +15,27 @@
 //TODO 未加 health info
 //4. health info
 
+// React:
 // listview就用willreceive
+
+// ********
+
+// FB:
+        // third payty: https://github.com/fullstackreact/react-native-firestack
+        // now use official https://firebase.google.com/docs/auth/web/custom-auth
+
+
+//sql: 就用 where + or
+// http://www.dofactory.com/sql/where-and-or-not mm
+// http://stackoverflow.com/questions/4047484/selecting-with-multiple-where-conditions-on-same-column <-特別的
+// http://stackoverflow.com/questions/8645773/sql-query-with-multiple-where-statements <-未深入看
+
+// Firebase:
+// value
+// child_added
+// child_changed
+// child_removed
+// child_moved
 
 // https://gist.github.com/christopherdro/89bc57a19ff02f061954
 // http://stackoverflow.com/questions/38186114/react-native-redux-and-listview
@@ -24,12 +46,10 @@
 
 //http://stackoverflow.com/questions/38028568/look-up-an-object-by-the-key-in-firebase
 
-//sql, 就用 where + or
-// http://www.dofactory.com/sql/where-and-or-not mm
+// update用chain的方式
+// http://stackoverflow.com/questions/38317248/how-to-chain-multiple-promises-into-a-single-transaction-in-firebase
 
-// http://stackoverflow.com/questions/4047484/selecting-with-multiple-where-conditions-on-same-column <-特別的
-
-// http://stackoverflow.com/questions/8645773/sql-query-with-multiple-where-statements <-未深入看
+// if (snapshot.hasChildren()) {
 
 //xTODO: 可能firebase的sync的, 要變成singleton or 只執行一次放在App.js. 先不用
 
@@ -40,6 +60,9 @@
 
 // Firebae indexOn, orderByChild ,orderByValue:
 // https://firebase.google.com/docs/database/security/indexing-data
+
+// As a result, all writes to the database will trigger local events immediately,
+// before any data has even been written to the database.
 
 console.log("load List Page.js !!!!!!!!!")
 
@@ -92,7 +115,7 @@ class ListMain extends Component {
   }
 
   onButtonPress(data) {
-    //Alert.alert('Button has been pressed!'); <- works only in browser
+    //Alert.alert('Button has been pressed!');
     this.props.dispatch(naviToCat(data));
     this.props.navigation.navigate('CatDetail')
   }

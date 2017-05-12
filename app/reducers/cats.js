@@ -2,6 +2,7 @@ import { ActionTypes } from '../actions/userAction';
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 
+// array way, now we use dict/object for cats
 // function updateCats(oldState, action){
 //   let newState = _.cloneDeep(oldState);
 //   let match = false;
@@ -21,20 +22,15 @@ import _ from 'lodash';
 // }
 
 export function cats(state = {}, action) {
-  // const catID = action.payload.catID;
-  console.log("in cats reducers");
   switch (action.type) {
     case ActionTypes.UPDATE_CAT_INFO:
-      //insertOrUpdate action.payload.cat
       if (action.payload.catID) {
         // return Object.assign({}, state, {
         //   visibilityFilter: action.filter
         // })
-        // assgin:one level shallow copy, so ... should be too?
+        // assgin:one level shallow copy, so can not use
 
         let newState = _.cloneDeep(state);
-
-        // let newState = {...state};
         newState[action.payload.catID] = action.payload.catInfo;
 
         return newState;//updateCats(state, action);
@@ -51,7 +47,7 @@ export function selectedCat(state = null, action) {
     case ActionTypes.NAVI_TO_CAT:
       return {id: action.payload.catID};
     case ActionTypes.LEAVE_CAT_DETAIL:
-      return null; 
+      return null;
     default:
       return state;
   }
