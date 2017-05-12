@@ -9,7 +9,6 @@ import {catsRoot} from './cats';
 // 3. const rootReducer = combineReducers({ ...devicesReducers,
 // 4. import { default as cart, getQuantity, getAddedIds } from './cart'
 
-
 const rootReducer = combineReducers({
   ...userRoot,
   ...catsRoot
