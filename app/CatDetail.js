@@ -115,18 +115,22 @@ class CatDetail extends React.Component {
       );
     }
 
+//https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/master/js/components/fab/basic.js
+//https://github.com/GeekyAnts/NativeBase/issues/372
+// fab should be outside content 
     return (
       <Container>
-        <Content>
-          <Text>
+        {/* <Content> */}
+          {/* <Text>
             {cat.name}
-          </Text>
+          </Text> */}
+           <View style={{ flex: 1 }}>
           <Fab
             active={this.state.active}
-            direction="left"
-            containerStyle={{ marginLeft: 10 }}
+            direction="up"
+            containerStyle={{}}
             style={{ backgroundColor: '#5067FF' }}
-            position="topRight"
+            position="bottomRight"
             onPress={() => {
               this.setState({ active: !this.state.active });
               this.setState({ shareDialog: true});
@@ -142,7 +146,8 @@ class CatDetail extends React.Component {
                 <Icon name="mail" />
             </Button> */}
           </Fab>
-        </Content>
+          </View>
+        {/* </Content> */}
       </Container>
 
     );
