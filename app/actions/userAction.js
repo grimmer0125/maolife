@@ -67,13 +67,29 @@ export function addNewOwner(ownerMaoID) {
 
         const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(ownerMaoID);
         query.once("value", function(snapshot) {
-          const userID = snapshot.key;
-          if (userID){
-            const userPath = "users/" + ownerID;
+          console.log("get match maoiddata:", snapshot.val());
+
+          const matchIDs = snapshot.val();
+          if (matchIDs) {
+            const matchIDKeys = Object.keys(matchIDs); //or use snapshot.foreach
+            const matchID = matchIDKeys[0];
+            console.log("get user key:", matchID); //users!!!
+
+          // }
+          // // const userID = snapshot.key;
+          // if (userID){
+            const userPath = "users/" + matchID;
             firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
-               let data = snapshot.val();
-               let catids = Object.values(data);
-               addCatToUserFireBaseData(catids, catID, userPath);
+              let data = snapshot.val();
+
+              let catids =[];
+              if (data) {
+                catids = Object.values(data);
+              }
+
+              //TODO avoid duplicate catids
+              addCatToUserFireBaseData(catids, catID, userPath);
+
             });
           }
         });
@@ -92,7 +108,7 @@ export function addNewOwner(ownerMaoID) {
 
 function addCatToUserFireBaseData(catids, newCatId, ownerPath) {
   catids.push(newCatId);
-  console.log("in new page, catids:", catids)
+  console.log("in new page, catids:", catids, ";ownerPath:", ownerPath)
 
   firebase.database().ref(ownerPath).child("catids").set(catids).then(()=>{
       console.log("reset catids ok !!!:");
