@@ -126,7 +126,7 @@ class CatDetail extends React.Component {
     if (this.state.shareDialog) {
       return (
         <Container>
-          <Content>
+          {/* <View> */}
             <Card>
               <CardItem>
                 <Body>
@@ -163,7 +163,7 @@ class CatDetail extends React.Component {
                 {/* <Text>11h ago</Text> */}
               </CardItem>
             </Card>
-          </Content>
+          {/* </View> */}
         </Container>
       );
     }

@@ -63,7 +63,7 @@ class AddCat extends Component {
     render() {
         return (
             <Container>
-                <Content>
+                {/* <Content> */}
                     <Form>
                         <Item>
                             {/* <Label>Username</Label> */}
@@ -81,7 +81,7 @@ class AddCat extends Component {
                       onPress={this.onSave}>
                       <Text>Save</Text>
                     </Button>
-                </Content>
+                {/* </Content> */}
             </Container>
         );
     }
