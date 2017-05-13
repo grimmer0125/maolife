@@ -3,67 +3,6 @@
 //TODO 把自己從owner刪掉時, ui要提示,
 //TODO 從detail出來又很快按進去, selectedCat會是null
 
-// note:
-// user下面有cat ids, 會用這些ids去要資料
-// id1, value on
-// id2, value on
-
-//cat:
-//1. name
-//2. id ? 使用push? yes
-//3. owners
-//TODO 未加 health info
-//4. health info
-
-// React:
-// listview就用willreceive
-
-// ********
-
-// FB:
-        // third payty: https://github.com/fullstackreact/react-native-firestack
-        // now use official https://firebase.google.com/docs/auth/web/custom-auth
-
-
-//sql: 就用 where + or
-// http://www.dofactory.com/sql/where-and-or-not mm
-// http://stackoverflow.com/questions/4047484/selecting-with-multiple-where-conditions-on-same-column <-特別的
-// http://stackoverflow.com/questions/8645773/sql-query-with-multiple-where-statements <-未深入看
-
-// Firebase:
-// value
-// child_added
-// child_changed
-// child_removed
-// child_moved
-
-// https://gist.github.com/christopherdro/89bc57a19ff02f061954
-// http://stackoverflow.com/questions/38186114/react-native-redux-and-listview
-
-//firebase的查尋: 就還是用loop
-//http://stackoverflow.com/questions/38192711/how-to-retrieve-multiple-keys-in-firebase mm
-// Yes, you are going in the right way. As written in this question firebase will pipeline your requests and you won't have to be concerned about performance and roundtrip time.
-
-//http://stackoverflow.com/questions/38028568/look-up-an-object-by-the-key-in-firebase
-
-// update用chain的方式
-// http://stackoverflow.com/questions/38317248/how-to-chain-multiple-promises-into-a-single-transaction-in-firebase
-
-// if (snapshot.hasChildren()) {
-
-//xTODO: 可能firebase的sync的, 要變成singleton or 只執行一次放在App.js. 先不用
-
-// Firebase: no native array. https://firebase.googleblog.com/2014/04/best-practices-arrays-in-firebase.html
-
-// Firebase: array, push
-//http://stackoverflow.com/questions/27124406/proper-way-to-store-values-array-like-in-firebase
-
-// Firebae indexOn, orderByChild ,orderByValue:
-// https://firebase.google.com/docs/database/security/indexing-data
-
-// As a result, all writes to the database will trigger local events immediately,
-// before any data has even been written to the database.
-
 console.log("load List Page.js !!!!!!!!!")
 
 import React, { Component } from 'react';
@@ -83,9 +22,13 @@ import CatDetail from './CatDetail';
 import AddCat from './AddCat';
 import { connect } from 'react-redux';
 import { fetchOwnCats, naviToCat } from './actions/userAction';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import { NavigationActions, addNavigationHelpers } from 'react-navigation';
 
 class ListMain extends Component {
 
+//https://github.com/react-community/react-navigation/issues/779
   static navigationOptions = ({ navigation }) => ({
     //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
     title: 'Cat List',
@@ -94,6 +37,8 @@ class ListMain extends Component {
         onPress={() => navigation.navigate('AddCat')}
       />
     ),
+
+
    });
 
   // Initialize the hardcoded data
@@ -114,10 +59,46 @@ class ListMain extends Component {
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 
-  onButtonPress(data) {
+  // not been called
+  // componentWillReceiveProps() {
+  //   console.log("grimme CatList will receive props");
+  // }
+
+  shouldComponentUpdate() {
+    console.log("grimme CatList shouldComponentUpdate");
+    return true;
+  }
+
+  componentWillUpdate() {
+    console.log("list will udpate");
+  }
+
+
+  onButtonPress(catID) {
     //Alert.alert('Button has been pressed!');
-    this.props.dispatch(naviToCat(data));
-    this.props.navigation.navigate('CatDetail')
+    console.log("grimmer button press, selecte:", catID);
+
+    // this.props.dispatch(naviToCat(catID));
+
+    //1. original
+    // this.props.navigation.navigate('CatDetail'); //也一樣,
+    // 所以可能沒有像 https://reactnavigation.org/docs/navigators/navigation-actions 說的像下面用2.2
+
+    // 原本的onPress={() => this.props.navigation.navigate('Profile', {name: 'Lucy'})}
+    // navigation.state.params.name
+
+    //2.
+    const naviAction = NavigationActions.navigate(
+      {
+        routeName: 'CatDetail',
+        params: { catID },
+    });
+
+    //2.1
+    // this.props.dispatch(naviAction); // 跟2.2 一樣!!
+
+    //2.2
+    this.props.navigation.dispatch(naviAction);
   }
 
   componentWillReceiveProps(newProps) {
@@ -143,6 +124,7 @@ class ListMain extends Component {
 //   _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
 // https://facebook.github.io/react-native/docs/listview.html#renderrow
   render() {
+    console.log("list navi info:", this.props.navigation); //.routeName
     return (
       <View style={{flex: 1, paddingTop: 22}}>
 
@@ -171,11 +153,11 @@ const mapStateToProps = (state) => ({
   cats: state.cats,
 });
 
-const ListMain2 = connect(mapStateToProps)(ListMain);
+const ListMainReduxState = connect(mapStateToProps)(ListMain);
 
-const ListPage = StackNavigator({
+export const ListPage = StackNavigator({
   List: {
-    screen: ListMain2 ,
+    screen: ListMainReduxState,
     // path: '/',
     // wired, is function, not {}
     // navigationOptions: () => ({
@@ -194,4 +176,15 @@ const ListPage = StackNavigator({
   }
 });
 
-export default ListPage;
+const ListPageWithNavState = ({ dispatch, nav }) => (
+  <ListPage  navigation={addNavigationHelpers({ dispatch, state: nav })} />
+);
+
+const mapStateToPropsListPage = state => ({
+  nav: state.listNav,
+});
+
+export default connect(mapStateToPropsListPage)(ListPageWithNavState);
+
+
+// export default ListPage;

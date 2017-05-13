@@ -306,20 +306,16 @@ export function fetchOwnCats() {
     //   //  firebase.database().ref('groups/' + keys[i]).on(...)
     //  }
 
-      console.log("grimmer get catids");
-
       snapshot.forEach(function(item) {
         const catID = item.val();
 
-        console.log("grimmer each cat id:", catID);
+        // console.log("grimmer each cat id:", catID);
 
         firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
 
           const catInfo = snapshot.val();
           //owners: firebase not real array already ->JS realy array
-          console.log("grimmer cat info:", catInfo);
-
-          console.log("grimmer cat catid:", catID);
+          // console.log("grimmer cat info:", catInfo);
 
           dispatch(updateCatInfo(catID, catInfo));
 
@@ -332,8 +328,6 @@ export function fetchOwnCats() {
 export function connectDBtoCheckUser() {
   return (dispatch) => {
 
-    console.log("init checker");
-
     firebase.initializeApp(firebaseConfig);
 
     // https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
@@ -343,16 +337,14 @@ export function connectDBtoCheckUser() {
 
       if (authUser) {
 
-        console.log("auth becomes non null");
         const dataPath = "/users/" + authUser.uid;// +"/maoID";
 
         // will not trigger two times !!! if on(xx) two times
         firebase.database().ref(dataPath).on('value', (snap) => {
 
-          console.log("userdata from firebase:", snap);
           const userValue = snap.val();
 
-          console.log("userdata from firebase2:", userValue);
+          console.log("userdata from firebase:", userValue);
 
           if (userValue && userValue.maoID) {
             console.log("maoID for:", authUser.uid, ";maoid:", userValue.maoID);

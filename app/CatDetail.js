@@ -1,6 +1,4 @@
-// Back event:
-// https://github.com/react-community/react-navigation/issues/51
-// https://github.com/react-community/react-navigation/issues/684
+
 // selected cat要變成null, 怎麼辦?? 先不用back event, 先用下面方法嗎? 先用這個
 //   componentWillUnmount() {
     //this.props.leaveDeviceDetailPage();
@@ -25,11 +23,52 @@ import {
   View,
 } from 'react-native';
 
+import { Button as Button2 } from "react-native";
+
+
 import CommonStyles from './styles/common'
 import { connect } from 'react-redux';
 import { leaveCatDetail, addNewOwner } from './actions/userAction';
 
+import {
+  StackNavigator,
+} from 'react-navigation';
+
+import Icon2 from 'react-native-vector-icons/FontAwesome';
+
+
+// const MenuButton = (
+// <View>
+
+// </View>
+// );
+
 class CatDetail extends React.Component {
+
+
+  // this.props.navigation.goBack()
+  //https://github.com/react-community/react-navigation/issues/1122
+  //https://github.com/react-community/react-navigation/pull/1492
+  // https://github.com/react-community/react-navigation/issues/779
+  //back event:
+  // https://github.com/react-community/react-navigation/issues/51
+  // https://github.com/react-community/react-navigation/issues/684
+
+
+  static navigationOptions = ({ navigation }) => ({
+    //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
+    title: 'Cat List',
+    // header: ({ goBack }) => ({
+    //   left: (  ),
+    // }),
+
+    // headerLeft: (
+    //   // <MenuButton/>
+    //   // <Icon2 name={'chevron-left'} onPress={ () => { navigation.goBack(); } }  />
+    //   <Button2 onPress={() => {console.log("back!!");navigation.goBack();} } title={"<"} >
+    //   </Button2>
+    // ),
+   });
 
   constructor(props) {
     super(props);
@@ -41,10 +80,21 @@ class CatDetail extends React.Component {
     };
   }
 
-  componentWillUnmount() {
 
+  componentWillUpdate() {
+    console.log("detail will udpate");
+  }
+  // not been called
+  // componentWillReceiveProps() {
+  //   console.log("CatDetail will receive props");
+  // }
+
+//1. back button(), button2 (但有點小) DeviveEventEmitter/callback 2. componentShouldUpdate.
+//3. route https://reactnavigation.org/docs/navigators/navigation-prop, 去收當前的props,結合?url參數, 有沒有用redux都無所謂
+  componentWillUnmount() {
+    console.log("grimmer unmount, selecte = null")
     //TODO not a good way, may use detecting navi change instead of using this
-    this.props.dispatch(leaveCatDetail());
+    // this.props.dispatch(leaveCatDetail());
   }
 
   handleChangeAuthID = (text) => {
@@ -117,14 +167,15 @@ class CatDetail extends React.Component {
 
 //https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/master/js/components/fab/basic.js
 //https://github.com/GeekyAnts/NativeBase/issues/372
-// fab should be outside content 
+// fab should be outside content
     return (
       <Container>
         {/* <Content> */}
-          {/* <Text>
-            {cat.name}
-          </Text> */}
+
            <View style={{ flex: 1 }}>
+             <Text>
+               {cat.name}
+             </Text>
           <Fab
             active={this.state.active}
             direction="up"
@@ -158,8 +209,16 @@ class CatDetail extends React.Component {
 
 function extractCatInfo(state) {
 
-  if (state.selectedCat && state.cats && state.cats.hasOwnProperty(state.selectedCat.id)){
-    return {catID:state.selectedCat.id, ...state.cats[state.selectedCat.id]};
+  //    state.routes[1].params.catID;
+  // or this.props.navigation.state.params.catID? YES 可以用
+  //     // console.log("this.props.navigation.state catdetail", this.props.navigation.state )
+
+  // if (state.selectedCat) {
+  if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
+    const catID = state.listNav.routes[1].params.catID;
+    if (state.cats && state.cats.hasOwnProperty(catID)) {
+      return {catID, ...state.cats[catID]};
+    }
   }
 
   return {};

@@ -28,7 +28,6 @@ class Home extends Component {
 
   render() {
     const {userChecking, user} = this.props;
-    console.log("user,checking:",this.props);
     if (userChecking) {
       return (
         <View style={CommonStyles.container}>

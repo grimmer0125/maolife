@@ -42,17 +42,23 @@ export function cats(state = {}, action) {
   }
 }
 
-export function selectedCat(state = null, action) {
-  switch (action.type) {
-    case ActionTypes.NAVI_TO_CAT:
-      return {id: action.payload.catID};
-    case ActionTypes.LEAVE_CAT_DETAIL:
-      return null;
-    default:
-      return state;
-  }
-}
+// http://redux.js.org/docs/faq/Reducers.html#reducers-share-state
+// export function selectedCat(state = null, action) {
+//   switch (action.type) {
+//     case ActionTypes.NAVI_TO_CAT:
+//       console.log("grimmer reducer, navi to cat");
+//       return {id: action.payload.catID};
+//     // case "Navigation/NAVIGATE":
+//     //   if (action.routeName == "List") {
+//     //     console.log("grimmer reducer, navi to cat back");
+//     //     return null;
+//     //   }
+//     //   break;
+//     default:
+//       return state;
+//   }
+// }
 
 export const catsRoot = {
-  cats, selectedCat,
+  cats,
 }
