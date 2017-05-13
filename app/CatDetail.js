@@ -102,7 +102,7 @@ class CatDetail extends React.Component {
   }
 
   onSave = () =>{
-    this.props.dispatch(addNewOwner(this.state.authID));
+    this.props.dispatch(addNewOwner(this.props.navigation.state.params.catID, this.state.authID));
 
     this.setState({ shareDialog: false});
   }
@@ -112,7 +112,10 @@ class CatDetail extends React.Component {
   }
 
   render() {
-    const {cat} = this.props;
+    const {cats, navigation} = this.props;
+
+    const cat = extractCatInfo(navigation.state.params.catID, cats);
+
     // native-base: 1. <Content> 跟 <View> 的差別?
     // 2. body相關: 也有也可ignore Body, 像下面. Body使用時機:<-header,footer, carditem, caritem-header裡, ListItem icon
 
@@ -207,26 +210,26 @@ class CatDetail extends React.Component {
 
 
 
-function extractCatInfo(state) {
+function extractCatInfo(catID, cats) {
 
   //    state.routes[1].params.catID;
   // or this.props.navigation.state.params.catID? YES 可以用
   //     // console.log("this.props.navigation.state catdetail", this.props.navigation.state )
 
   // if (state.selectedCat) {
-  if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
-    const catID = state.listNav.routes[1].params.catID;
-    if (state.cats && state.cats.hasOwnProperty(catID)) {
-      return {catID, ...state.cats[catID]};
+  // if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
+    // const catID = state.listNav.routes[1].params.catID;
+    if (catID && cats && cats.hasOwnProperty(catID)) {
+      return {catID, ...cats[catID]};
     }
-  }
+  // }
 
   return {};
 
 }
 
 const mapStateToProps = (state) => ({
-  cat: extractCatInfo(state),
+  cats: state.cats,
 });
 
 export default connect(mapStateToProps)(CatDetail);

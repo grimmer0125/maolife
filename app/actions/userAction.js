@@ -46,94 +46,51 @@ export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
 export const leaveCatDetail = createAction(LEAVE_CAT_DETAIL);
 export const LogoutAction = createAction(LOGOUT);
 
-export function addNewOwner(ownerMaoID) {
+//1. 新增到那隻貓的owners裡
+//2. 新增到那個人的catids裡
+export function addNewOwner(catID, ownerMaoID) {
 
   return (dispatch, getState) => {
 
-    console.log("start to add owner:", ownerMaoID);
+    console.log("start to add owner:", ownerMaoID, ";for cat:", catID);
 
-    const state = getState();
-    const catID = state.selectedCat.id;
+    const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(ownerMaoID);
+    query.once("value", function(snapshot) {
 
-    const dataPath = "cats/" + catID;
+      const matchIDs = snapshot.val();
+      if (matchIDs) {
+        const matchIDKeys = Object.keys(matchIDs); //or use snapshot.foreach
+        const matchID = matchIDKeys[0];
 
-    // selectedCat.id
-    //1. 新增到那隻貓的owners裡
-    //2. 新增到那個人的catids裡
+        console.log("get match maoid, userID:", matchID);
 
-    //TODO: 好像也可以從redux裡撈耶 !!!!!!!
-    firebase.database().ref(dataPath).child("owners").once('value', (snapshot)=>{
+        const state = getState();
 
-      let data = snapshot.val();
-      let owners = Object.values(data);
-      owners.push(ownerMaoID);
+        // let data = //snapshot.val();
+        let owners = Object.values(state.cats[catID].owners);
+        owners.push(matchID);
 
-      firebase.database().ref(dataPath).child("owners").set(owners)
-      .then(()=>{
-        console.log("add ownerMaoID into owners ok !!!");
+        const catPath = "cats/" + catID;
 
-        //要maoID -> ownerID !!!
+        firebase.database().ref(catPath).child("owners").set(owners)
+        .then(()=>{
+          console.log("add ownerID into owners ok !!!");
 
-        const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(ownerMaoID);
-        query.once("value", function(snapshot) {
-          console.log("get match maoiddata:", snapshot.val());
+          const userPath = "users/" + matchID;
+          firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
+            let data = snapshot.val();
 
-          const matchIDs = snapshot.val();
-          if (matchIDs) {
-            const matchIDKeys = Object.keys(matchIDs); //or use snapshot.foreach
-            const matchID = matchIDKeys[0];
-            console.log("get user key:", matchID);
+            let catids =[];
+            if (data) {
+              catids = Object.values(data);
+            }
 
-            const userPath = "users/" + matchID;
-            firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
-              let data = snapshot.val();
+            //TODO avoid duplicate catids
+            addCatToUserFireBaseData(catids, catID, userPath);
 
-              let catids =[];
-              if (data) {
-                catids = Object.values(data);
-              }
-
-              //TODO avoid duplicate catids
-              addCatToUserFireBaseData(catids, catID, userPath);
-
-            });
-          }
-        });
-      })
-    });
-  };
-}
-
-export function addNewCat(name, age) {
-
-  return (dispatch, getState) => {
-
-    const state = getState();
-    const sefMaoID = state.user.maoID;
-
-    const newCatRef = firebase.database().ref('cats').push();
-    const newCatId = newCatRef.key;
-    console.log("newCat:", newCatId)
-
-    newCatRef.set({
-      name,
-      age,
-      owners:[sefMaoID],
-    })
-    .then(function() {
-      console.log('set add cat succeeded');
-
-      const userPath = "/users/" + firebase.auth().currentUser.uid;
-      //TODO: 應該也可以改成直接撈redux-state裡的 !!!catids, 應該比較好,
-      // 也可以上面set->update, 然後update用chain的方式
-      firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
-         let data = snapshot.val();
-         let catids = Object.values(data);
-         addCatToUserFireBaseData(catids, newCatId, userPath);
-      });
-    })
-    .catch(function(error) {
-      console.log('set add cat failed');
+          });
+        })
+      }
     });
   };
 }
@@ -147,6 +104,42 @@ export function naviToCat(catID) {
   }
 }
 
+export function addNewCat(name, age) {
+
+  return (dispatch, getState) => {
+
+    const state = getState();
+    // const sefMaoID = state.user.maoID;
+
+    const newCatRef = firebase.database().ref('cats').push();
+    const newCatId = newCatRef.key;
+    console.log("newCat:", newCatId)
+
+    newCatRef.set({
+      name,
+      age,
+      owners:[firebase.auth().currentUser.uid],
+    })
+    .then(function() {
+      console.log('set add cat succeeded');
+
+      const userPath = "/users/" + firebase.auth().currentUser.uid;
+
+      //xTODO: 應該也可以改成直接撈redux-state裡的 !!!catids, 應該比較好,
+      // 也可以上面set->update, 然後update用chain的方式
+      // firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
+        //  let data = snapshot.val();
+      let catids = state.user.catids;// Object.values(data);
+      addCatToUserFireBaseData(catids, newCatId, userPath);
+      // });
+
+    })
+    .catch(function(error) {
+      console.log('add cat failed');
+    });
+  };
+}
+
 export function updateCatInfo(catID, catInfo) {
   return {
     type: UPDATE_CAT_INFO,
@@ -157,35 +150,63 @@ export function updateCatInfo(catID, catInfo) {
   }
 }
 
-export function fetchUserData(result, userData) {
-  return {
-    type: USER_DATA,
-    payload: {
-      result,
-      userData,
-    }
+// 但有可能不同手機上改貓名字, 所以還是要listen 貓的變化 .
+// 這樣不就沒有必要去把catids放在user下, 不, 不一樣,
+// 一個是listen 特定貓的變化 +撈貓貓的資料. <-還是先用這個好了˙
+// 一個是去找出 那些貓貓的owner有我, 再show其資訊. ->listen這個很奇怪, 且找不太到, orderByChild應該是只能針對單一的value,
+//
+export function fetchOwnCats() {
+  return (dispatch) => {
+
+    const dataPath = "/users/" + firebase.auth().currentUser.uid;
+
+    firebase.database().ref(dataPath).child("catids").on('value', (snapshot) => {
+
+      //array
+    //  const data = snapshot.val();
+    //  const values = Object.values(data);
+    //
+    //  for (var i = 0; i < values.length; i++) {
+    //    const value = values[i];
+    //    console.log("grimmer array2:", value); //hello, kitty
+    //   //  firebase.database().ref('groups/' + keys[i]).on(...)
+    //  }
+
+      snapshot.forEach(function(item) {
+        const catID = item.val();
+
+        // console.log("grimmer each cat id:", catID);
+
+        firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
+
+          const catInfo = snapshot.val();
+          //owners: firebase not real array already ->JS realy array
+          // console.log("grimmer cat info:", catInfo);
+
+          dispatch(updateCatInfo(catID, catInfo));
+
+        });
+      });
+    });
   };
 }
 
 export function registerMaoID(registerID) {
 
   return (dispatch) => {
-    console.log("grimmer !!");
     if (!registerID || registerID.indexOf(' ') >= 0) {
-      console.log("GG invalid id:", registerID);
+      console.log("invalid register id:", registerID);
       dispatch(invalidRegisterIDAction());
     } else {
-      console.log("GG try registring id:", registerID);
+      console.log("try registring id:", registerID);
 
       const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(registerID);
       query.once("value", function(snapshot) {
         const userData = snapshot.val();
         if (userData){
-          console.log("exists!!!", registerID);
           dispatch(registerExistingIDAction());
         } else {
           const dataPath = "/users/" + firebase.auth().currentUser.uid;
-          console.log("current user:", dataPath);
           firebase.database().ref(dataPath).update({
             maoID: registerID,
           }).then(()=>{
@@ -236,11 +257,11 @@ export function handleFBLogin(error, result) {
       console.log("login is cancelled.");
       // alert("login is cancelled.");
     } else {
-      console.log("grimmer login ok, result:", result);//not much info
+      console.log("login ok, result:", result);//not much info
       AccessToken.getCurrentAccessToken()
       .then(data => {
 
-        console.log("grimmer access token data:", data);
+        console.log("access token data:", data);
         //userID 10208940635412999"
 
         const token = data.accessToken.toString();
@@ -249,8 +270,8 @@ export function handleFBLogin(error, result) {
           firebase.auth.FacebookAuthProvider.credential(token))
           // alert(data.accessToken.toString());
       }).then(result=>{
-        console.log("grimmer login FB from Firebae result:", result);
-        console.log("grimmer result property:", result.displayName,";",result.email,";",result.uid  );
+        console.log("login FB from Firebae result:", result);
+        console.log("result property:", result.displayName,";",result.email,";",result.uid  );
 
         if(result.displayName){
           console.log("try saving displayName " + result.displayName);
@@ -283,45 +304,13 @@ export function handleFBLogin(error, result) {
   };
 }
 
-
-// 但有可能不同手機上改貓名字, 所以還是要listen 貓的變化 .
-// 這樣不就沒有必要去把catids放在user下, 不, 不一樣,
-// 一個是listen 特定貓的變化 +撈貓貓的資料. <-還是先用這個好了˙
-// 一個是去找出 那些貓貓的owner有我, 再show其資訊. ->listen這個很奇怪, 且找不太到, orderByChild應該是只能針對單一的value,
-//
-export function fetchOwnCats() {
-  return (dispatch) => {
-
-    const dataPath = "/users/" + firebase.auth().currentUser.uid;
-
-    firebase.database().ref(dataPath).child("catids").on('value', (snapshot) => {
-
-      //array
-    //  const data = snapshot.val();
-    //  const values = Object.values(data);
-    //
-    //  for (var i = 0; i < values.length; i++) {
-    //    const value = values[i];
-    //    console.log("grimmer array2:", value); //hello, kitty
-    //   //  firebase.database().ref('groups/' + keys[i]).on(...)
-    //  }
-
-      snapshot.forEach(function(item) {
-        const catID = item.val();
-
-        // console.log("grimmer each cat id:", catID);
-
-        firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
-
-          const catInfo = snapshot.val();
-          //owners: firebase not real array already ->JS realy array
-          // console.log("grimmer cat info:", catInfo);
-
-          dispatch(updateCatInfo(catID, catInfo));
-
-        });
-      });
-    });
+export function fetchUserData(result, userData) {
+  return {
+    type: USER_DATA,
+    payload: {
+      result,
+      userData,
+    }
   };
 }
 
