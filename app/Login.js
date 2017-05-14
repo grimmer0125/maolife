@@ -1,5 +1,5 @@
 // 1. login in FB
-// 2. At least people need to register a unique maoID for sharing cats. May change later, add "ignore"
+// 2. At least people need to register a unique KID for sharing cats. May change later, add "ignore"
 
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
@@ -21,7 +21,7 @@ const {
 import { connect } from 'react-redux';
 
 import CommonStyles from './styles/common'
-import { handleFBLogin, handleFBLogout, registerMaoID } from './actions/userAction';
+import { handleFBLogin, handleFBLogout, registerKID } from './actions/userAction';
 
 class Login extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class Login extends Component {
   }
 
   onButtonPress() {
-    this.props.dispatch(registerMaoID(this.state.registerText));
+    this.props.dispatch(registerKID(this.state.registerText));
   }
 
   //TODO: use https://github.com/halilb/react-native-textinput-effects instead of using native TextInput
@@ -65,8 +65,8 @@ class Login extends Component {
             {registerStatus}
           </Text>
           <TextInput
-            style={{height: 40, width: 150}}
-            placeholder="Please Type here to register ID for this app!"
+            style={{height: 40, width: 300, textAlign: 'center'}}
+            placeholder="Please type an ID to register here!"
             onChangeText={(registerText) => this.setState({registerText})}
           />
           <Button
@@ -95,7 +95,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.user,
+  user: state.currentUser,
   registerStatus: state.registerStatus,
 });
 

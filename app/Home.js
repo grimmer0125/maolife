@@ -38,7 +38,7 @@ class Home extends Component {
       );
     }
     // user should not be null due to the current default value
-    if (user && user.maoID){
+    if (user && user.KID){
       return <MainScreen/>;
     } else {
       return <Login/>;
@@ -49,7 +49,7 @@ class Home extends Component {
 
 function debugState(state){
 
-  return state.user
+  return state.currentUser;
 }
 
 const mapStateToProps = (state) => ({

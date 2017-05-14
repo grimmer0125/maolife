@@ -3,7 +3,7 @@ import { ActionTypes } from '../actions/userAction';
 import { combineReducers } from 'redux';
 
 const initialState = {
-  maoID: null,
+  KID: null,
   displayName: "bb8",
   isLogin: false,
 };
@@ -18,7 +18,7 @@ export function userChecking(state = true, action = {}) {
   }
 }
 
-// maoID
+// KID
 export function registerStatus(state = "", action) {
   switch (action.type) {
     case ActionTypes.INVALID_REGISTERID:
@@ -32,7 +32,7 @@ export function registerStatus(state = "", action) {
   }
 }
 
-export function user(state = initialState, action = {}) {
+export function currentUser(state = initialState, action = {}) {
   switch (action.type) {
     case ActionTypes.USER_DATA:
       return {
@@ -70,5 +70,5 @@ export function selectedCat(state = null, action) {
 // });
 
 export const userRoot = {
-  user, userChecking, registerStatus,
+  currentUser, userChecking, registerStatus,
 }

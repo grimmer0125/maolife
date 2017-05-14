@@ -48,13 +48,13 @@ export const LogoutAction = createAction(LOGOUT);
 
 //1. 新增到那隻貓的owners裡
 //2. 新增到那個人的catids裡
-export function addNewOwner(catID, ownerMaoID) {
+export function addNewOwner(catID, ownerKID) {
 
   return (dispatch, getState) => {
 
-    console.log("start to add owner:", ownerMaoID, ";for cat:", catID);
+    console.log("start to add owner:", ownerKID, ";for cat:", catID);
 
-    const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(ownerMaoID);
+    const query = firebase.database().ref().child('users').orderByChild("KID").equalTo(ownerKID);
     query.once("value", function(snapshot) {
 
       const matchIDs = snapshot.val();
@@ -62,7 +62,7 @@ export function addNewOwner(catID, ownerMaoID) {
         const matchIDKeys = Object.keys(matchIDs); //or use snapshot.foreach
         const matchID = matchIDKeys[0];
 
-        console.log("get match maoid, userID:", matchID);
+        console.log("get match KID, userID:", matchID);
 
         const state = getState();
 
@@ -109,7 +109,7 @@ export function addNewCat(name, age) {
   return (dispatch, getState) => {
 
     const state = getState();
-    // const sefMaoID = state.user.maoID;
+    // const sefKID = state.user.KID;
 
     const newCatRef = firebase.database().ref('cats').push();
     const newCatId = newCatRef.key;
@@ -191,7 +191,7 @@ export function fetchOwnCats() {
   };
 }
 
-export function registerMaoID(registerID) {
+export function registerKID(registerID) {
 
   return (dispatch) => {
     if (!registerID || registerID.indexOf(' ') >= 0) {
@@ -200,7 +200,7 @@ export function registerMaoID(registerID) {
     } else {
       console.log("try registring id:", registerID);
 
-      const query = firebase.database().ref().child('users').orderByChild("maoID").equalTo(registerID);
+      const query = firebase.database().ref().child('users').orderByChild("KID").equalTo(registerID);
       query.once("value", function(snapshot) {
         const userData = snapshot.val();
         if (userData){
@@ -208,9 +208,9 @@ export function registerMaoID(registerID) {
         } else {
           const dataPath = "/users/" + firebase.auth().currentUser.uid;
           firebase.database().ref(dataPath).update({
-            maoID: registerID,
+            KID: registerID,
           }).then(()=>{
-            console.log("register maoID ok !!!:", registerID);
+            console.log("register KID ok !!!:", registerID);
           });
         }
       });
@@ -326,7 +326,7 @@ export function connectDBtoCheckUser() {
 
       if (authUser) {
 
-        const dataPath = "/users/" + authUser.uid;// +"/maoID";
+        const dataPath = "/users/" + authUser.uid;// +"/KID";
 
         // will not trigger two times !!! if on(xx) two times
         firebase.database().ref(dataPath).on('value', (snap) => {
@@ -335,10 +335,10 @@ export function connectDBtoCheckUser() {
 
           console.log("userdata from firebase:", userValue);
 
-          if (userValue && userValue.maoID) {
-            console.log("maoID for:", authUser.uid, ";maoid:", userValue.maoID);
+          if (userValue && userValue.KID) {
+            console.log("KID for:", authUser.uid, ";KID:", userValue.KID);
           } else {
-            console.log("no maoID for:", authUser.uid);
+            console.log("no KID for:", authUser.uid);
           }
 
           dispatch(fetchUserData(true, userValue));
@@ -350,7 +350,7 @@ export function connectDBtoCheckUser() {
 
         // login
         // 檢查 database裡的值
-        //  a. 已login 但無maoid
+        //  a. 已login 但無KID
         //  b. 已login 有id
 
       } else {

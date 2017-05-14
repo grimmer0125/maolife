@@ -5,6 +5,17 @@
   //}
   // or redux? selected/detail/xxxx
 
+  // this.props.navigation.goBack()
+  //https://github.com/react-community/react-navigation/issues/1122
+  //https://github.com/react-community/react-navigation/pull/1492
+  // https://github.com/react-community/react-navigation/issues/779
+  //back event:
+  // https://github.com/react-community/react-navigation/issues/51
+  // https://github.com/react-community/react-navigation/issues/684
+
+  //1. back button(), button2 (但有點小) DeviveEventEmitter/callback 2. componentShouldUpdate.
+  //3. route https://reactnavigation.org/docs/navigators/navigation-prop, 去收當前的props,結合?url參數, 有沒有用redux都無所謂
+
 // TODO:
 // 1. show logs
 // 2. add log
@@ -36,24 +47,7 @@ import {
 
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 
-
-// const MenuButton = (
-// <View>
-
-// </View>
-// );
-
 class CatDetail extends React.Component {
-
-
-  // this.props.navigation.goBack()
-  //https://github.com/react-community/react-navigation/issues/1122
-  //https://github.com/react-community/react-navigation/pull/1492
-  // https://github.com/react-community/react-navigation/issues/779
-  //back event:
-  // https://github.com/react-community/react-navigation/issues/51
-  // https://github.com/react-community/react-navigation/issues/684
-
 
   static navigationOptions = ({ navigation }) => ({
     //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
@@ -88,14 +82,11 @@ class CatDetail extends React.Component {
   // componentWillReceiveProps() {
   //   console.log("CatDetail will receive props");
   // }
-
-//1. back button(), button2 (但有點小) DeviveEventEmitter/callback 2. componentShouldUpdate.
-//3. route https://reactnavigation.org/docs/navigators/navigation-prop, 去收當前的props,結合?url參數, 有沒有用redux都無所謂
-  componentWillUnmount() {
-    console.log("grimmer unmount, selecte = null")
-    //TODO not a good way, may use detecting navi change instead of using this
-    // this.props.dispatch(leaveCatDetail());
-  }
+  // componentWillUnmount() {
+  //   console.log("grimmer unmount, selecte = null")
+  //   //xTODO not a good way, may use detecting navi change instead of using this
+  //   // this.props.dispatch(leaveCatDetail());
+  // }
 
   handleChangeAuthID = (text) => {
     this.setState({authID: text});
@@ -115,13 +106,6 @@ class CatDetail extends React.Component {
     const {cats, navigation} = this.props;
 
     const cat = extractCatInfo(navigation.state.params.catID, cats);
-
-    // native-base: 1. <Content> 跟 <View> 的差別?
-    // 2. body相關: 也有也可ignore Body, 像下面. Body使用時機:<-header,footer, carditem, caritem-header裡, ListItem icon
-
-  //官網的note
-// Make use of Left, Body and Right components to align the content of your Card header.
-// To mixup Image with other NativeBase components in a single CardItem, include the content within Body component.
 
     if (this.state.shareDialog) {
       return (
@@ -207,8 +191,6 @@ class CatDetail extends React.Component {
     );
   }
 }
-
-
 
 function extractCatInfo(catID, cats) {
 
