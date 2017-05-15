@@ -20,6 +20,7 @@ import {
 
 import CatDetail from './CatDetail';
 import AddCat from './AddCat';
+import Record from './Record';
 import { connect } from 'react-redux';
 import { fetchOwnCats, naviToCat } from './actions/userAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -158,21 +159,18 @@ const ListMainReduxState = connect(mapStateToProps)(ListMain);
 export const ListPage = StackNavigator({
   List: {
     screen: ListMainReduxState,
-    // path: '/',
-    // wired, is function, not {}
-    // navigationOptions: () => ({
-    //   title: 'Cat List',
-    // }),
+  },
+  AddCat: {
+    screen: AddCat,
   },
   CatDetail: {
     screen: CatDetail,
-    navigationOptions: {
-      title: 'CatDetail',
-    },
+    // navigationOptions: {
+    //   title: 'CatDetail',
+    // },
   },
-
-  AddCat: {
-    screen: AddCat,
+  NewRecord : {
+    screen: Record,
   }
 });
 

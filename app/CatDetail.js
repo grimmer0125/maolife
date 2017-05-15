@@ -1,21 +1,3 @@
-
-// selected cat要變成null, 怎麼辦?? 先不用back event, 先用下面方法嗎? 先用這個
-//   componentWillUnmount() {
-    //this.props.leaveDeviceDetailPage();
-  //}
-  // or redux? selected/detail/xxxx
-
-  // this.props.navigation.goBack()
-  //https://github.com/react-community/react-navigation/issues/1122
-  //https://github.com/react-community/react-navigation/pull/1492
-  // https://github.com/react-community/react-navigation/issues/779
-  //back event:
-  // https://github.com/react-community/react-navigation/issues/51
-  // https://github.com/react-community/react-navigation/issues/684
-
-  //1. back button(), button2 (但有點小) DeviveEventEmitter/callback 2. componentShouldUpdate.
-  //3. route https://reactnavigation.org/docs/navigators/navigation-prop, 去收當前的props,結合?url參數, 有沒有用redux都無所謂
-
 // TODO:
 // 1. show logs
 // 2. add log
@@ -36,7 +18,6 @@ import {
 
 import { Button as Button2 } from "react-native";
 
-
 import CommonStyles from './styles/common'
 import { connect } from 'react-redux';
 import { leaveCatDetail, addNewOwner } from './actions/userAction';
@@ -45,7 +26,7 @@ import {
   StackNavigator,
 } from 'react-navigation';
 
-import Icon2 from 'react-native-vector-icons/FontAwesome';
+// import Icon2 from 'react-native-vector-icons/FontAwesome';
 
 class CatDetail extends React.Component {
 
@@ -55,6 +36,12 @@ class CatDetail extends React.Component {
     // header: ({ goBack }) => ({
     //   left: (  ),
     // }),
+
+    headerRight: (
+      <Button2 title="NewRecord"
+        onPress={() => navigation.navigate('NewRecord')}
+      />
+    ),
 
     // headerLeft: (
     //   // <MenuButton/>
@@ -74,10 +61,10 @@ class CatDetail extends React.Component {
     };
   }
 
-
   componentWillUpdate() {
     console.log("detail will udpate");
   }
+
   // not been called
   // componentWillReceiveProps() {
   //   console.log("CatDetail will receive props");
@@ -194,17 +181,9 @@ class CatDetail extends React.Component {
 
 function extractCatInfo(catID, cats) {
 
-  //    state.routes[1].params.catID;
-  // or this.props.navigation.state.params.catID? YES 可以用
-  //     // console.log("this.props.navigation.state catdetail", this.props.navigation.state )
-
-  // if (state.selectedCat) {
-  // if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
-    // const catID = state.listNav.routes[1].params.catID;
-    if (catID && cats && cats.hasOwnProperty(catID)) {
-      return {catID, ...cats[catID]};
-    }
-  // }
+  if (catID && cats && cats.hasOwnProperty(catID)) {
+    return {catID, ...cats[catID]};
+  }
 
   return {};
 
