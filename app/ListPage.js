@@ -77,7 +77,7 @@ class ListMain extends Component {
 
   onButtonPress(catID) {
     //Alert.alert('Button has been pressed!');
-    console.log("grimmer button press, selecte:", catID);
+    console.log("grimmer button press, select:", catID);
 
     // this.props.dispatch(naviToCat(catID));
 

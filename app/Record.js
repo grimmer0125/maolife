@@ -27,6 +27,9 @@ import { Container,
 
 import { connect } from 'react-redux';
 
+import { extractCatInfo } from './store/stateHelper'
+import { newBreathRecord } from './actions/catAction'
+
 import {
   StackNavigator,
 } from 'react-navigation';
@@ -71,8 +74,7 @@ class Record extends React.Component {
   resetSeconds() {
 
     console.log("reset !!!!!!!!!!!!!!!")
-    this.setState({ ...initialState
-    });
+    this.setState({...initialState});
   }
 
   toggleRadio() {
@@ -88,6 +90,14 @@ class Record extends React.Component {
   onSave = () => {
 
     console.log("submit!!!:", this.state.numberOfBreath);
+
+    // this.props.currentCat
+    let mode = "sleep";
+    if (!this.state.sleepRadio) {
+      mode = "rest";
+    }    
+    this.props.dispatch(newBreathRecord(this.props.currentCat.catID, this.state.numberOfBreath, mode));
+
     this.resetSeconds();
   }
 
@@ -139,6 +149,7 @@ class Record extends React.Component {
   render() {
     // if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
 
+
     console.log("new record props:", this.props.navigation.state);
     console.log("current cat:", this.props.currentCat);
 
@@ -186,7 +197,7 @@ class Record extends React.Component {
           </ListItem>
           <ListItem onPress={() => this.toggleRadio()}>
               <Radio selected={!this.state.sleepRadio} onPress={() => this.toggleRadio()}/>
-              <Text>呼吸時</Text>
+              <Text>休息時</Text>
           </ListItem>
           <Button onPress={this.startCalibration}>
             <Text>{this.state.buttonStatus}</Text>
@@ -201,22 +212,22 @@ class Record extends React.Component {
   }
 }
 
-function extractCatInfo(state) {
-
-  //    state.routes[1].params.catID;
-
-  let cat = {};
-  if (state.listNav.routes.length > 1 && state.listNav.routes[1].params.catID) {
-    const catID = state.listNav.routes[1].params.catID;
-
-    if (state.cats && state.cats.hasOwnProperty(catID)) {
-      cat = {catID, ...state.cats[catID]};
-    }
-  }
-
-  return cat;
-
-}
+// function extractCatInfo(state) {
+//
+//   //    state.routes[1].params.catID;
+//
+//   let cat = {};
+//   if (state.listNav.routes.length > 1 && state.listNav.routes[1].params.catID) {
+//     const catID = state.listNav.routes[1].params.catID;
+//
+//     if (state.cats && state.cats.hasOwnProperty(catID)) {
+//       cat = {catID, ...state.cats[catID]};
+//     }
+//   }
+//
+//   return cat;
+//
+// }
 
 const mapStateToProps = (state) => ({
   currentCat: extractCatInfo(state),
