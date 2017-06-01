@@ -195,9 +195,10 @@ class CatDetail extends React.Component {
 // fab should be outside content
     return (
       <Container>
-        {/* <Content> */}
 
-          <View style={{ flex: 1 }}>
+        <Content>
+
+          {/* <View style={{ flex: 1 }}> */}
             {/* <Text>
                {cat.name}
             </Text> */}
@@ -209,13 +210,13 @@ class CatDetail extends React.Component {
 
               let prefixToday = "";
               if(moment(time * 1000).isSame(moment(), 'day')){
-                prefixToday = "Today, ";
+                prefixToday = ", Today";
               }
 
               return (
                 <Card key={time} style={{flex: 0}}>
                   <CardItem header>
-                    <Text>{prefixToday+moment(time * 1000).format("YYYY-MM-DD HH:mm")}</Text>
+                    <Text>{moment(time * 1000).format("YYYY-MM-DD HH:mm")+prefixToday}</Text>
                   </CardItem>
                   <CardItem>
                     <Body>
@@ -239,29 +240,31 @@ class CatDetail extends React.Component {
                 </Button>
               </CardItem>
             </Card> */}
-            <Fab
-              active={this.state.active}
-              direction="up"
-              containerStyle={{}}
-              style={{ backgroundColor: '#5067FF' }}
-              position="bottomRight"
-              onPress={() => {
-                this.setState({ active: !this.state.active });
-                this.setState({ shareDialog: true});
-              }}>
-              <Icon name="share" />
-              {/* <Button style={{ backgroundColor: '#34A34F' }}>
-                  <Icon name="logo-whatsapp" />
-              </Button>
-              <Button style={{ backgroundColor: '#3B5998' }}>
-                  <Icon name="logo-facebook" />
-              </Button>
-              <Button disabled style={{ backgroundColor: '#DD5144' }}>
-                  <Icon name="mail" />
-              </Button> */}
-            </Fab>
-          </View>
-        {/* </Content> */}
+
+          {/* </View> */}
+        </Content>
+
+        <Fab
+          active={this.state.active}
+          direction="up"
+          containerStyle={{}}
+          style={{ backgroundColor: '#5067FF' }}
+          position="bottomRight"
+          onPress={() => {
+            this.setState({ active: !this.state.active });
+            this.setState({ shareDialog: true});
+          }}>
+          <Icon name="share" />
+          {/* <Button style={{ backgroundColor: '#34A34F' }}>
+              <Icon name="logo-whatsapp" />
+          </Button>
+          <Button style={{ backgroundColor: '#3B5998' }}>
+              <Icon name="logo-facebook" />
+          </Button>
+          <Button disabled style={{ backgroundColor: '#DD5144' }}>
+              <Icon name="mail" />
+          </Button> */}
+        </Fab>
       </Container>
 
     );
