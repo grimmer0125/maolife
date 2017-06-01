@@ -22,6 +22,8 @@ import { Container,
     // Text,
     // TextInput,
     View,
+    Vibration,
+    Platform,
     // Button,
   } from 'react-native';
 
@@ -130,7 +132,15 @@ class Measure extends React.Component {
             buttonStatus: BUTTON_STATUS_END,
           });
 
-          //TODO make some vibration on phone for seconds
+          //make some vibration on phone for seconds
+          if (Platform.OS === 'android') {
+            let pattern = [0, 500, 200, 500];
+            Vibration.vibrate(pattern);
+            console.log("Vibration:", pattern);
+
+          } else {
+            Vibration.vibrate();
+          }
 
           //stop timer
           clearInterval(this.timerID);
