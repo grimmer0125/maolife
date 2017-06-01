@@ -169,15 +169,23 @@ class CatDetail extends React.Component {
     // }
 
     // let recordUI = null;
+    let timeList = null;
     if (cat.hasOwnProperty("breathRecord")) {
       const keys = Object.keys(cat.breathRecord);
-      for (const key of keys) {
-        // const time = cat.breathRecord[key].breathRate;
-        console.log("time2:", key)
-        console.log(moment(key * 1000).format("YYYY-MM-DD HH:mm"));
-        // const day = moment.unix(key); //object
-        // console.log("day:", day);
-      }
+
+      keys.sort(function(a, b) {
+        return b - a;
+      });
+
+      timeList = keys;
+
+      // for (const key of keys) {
+      //   // const time = cat.breathRecord[key].breathRate;
+      //   console.log("time2:", key)
+      //   console.log(moment(key * 1000).format("YYYY-MM-DD HH:mm"));
+      //   // const day = moment.unix(key); //object
+      //   // console.log("day:", day);
+      // }
     }
 //    const unixDate = moment(date).unix(); console.log(moment(unixDate * 1000).format('YYYY-MM-DD')); – Yura Zatsepin Feb 15 at 12:16
 
@@ -193,7 +201,11 @@ class CatDetail extends React.Component {
             {/* <Text>
                {cat.name}
             </Text> */}
-            { cat.breathRecord && Object.keys(cat.breathRecord).map((time) => {
+            { cat.breathRecord && timeList.map((time) => {
+
+              // 如果資料大的話就要拆開了, 方便query/sort/pagination
+              // breathData/catid1/
+              //                   time1
 
               let prefixToday = "";
               if(moment(time * 1000).isSame(moment(), 'day')){
