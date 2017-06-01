@@ -48,15 +48,15 @@ const initialState = {
   numberOfBreath: null,
 };
 
-class Record extends React.Component {
+class Measure extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'New Record',
+    title: 'Measure',
   });
 
   constructor(props) {
     super(props);
 
-    console.log("record init");
+    console.log("Measure init");
     this.state = {
       sleepRadio: true,
       // radio2: false,
@@ -95,7 +95,7 @@ class Record extends React.Component {
     let mode = "sleep";
     if (!this.state.sleepRadio) {
       mode = "rest";
-    }    
+    }
     this.props.dispatch(newBreathRecord(this.props.currentCat.catID, this.state.numberOfBreath, mode));
 
     this.resetSeconds();
@@ -150,7 +150,7 @@ class Record extends React.Component {
     // if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
 
 
-    console.log("new record props:", this.props.navigation.state);
+    console.log("new measure props:", this.props.navigation.state);
     console.log("current cat:", this.props.currentCat);
 
     let inputUI = null;
@@ -233,4 +233,4 @@ const mapStateToProps = (state) => ({
   currentCat: extractCatInfo(state),
 });
 
-export default connect(mapStateToProps)(Record);
+export default connect(mapStateToProps)(Measure);

@@ -20,7 +20,7 @@ import {
 
 import CatDetail from './CatDetail';
 import AddCat from './AddCat';
-import Record from './Record';
+import Measure from './Measure';
 import { connect } from 'react-redux';
 import { fetchOwnCats, naviToCat } from './actions/userAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -75,7 +75,9 @@ class ListMain extends Component {
   }
 
 
-  onButtonPress(catID) {
+  onButtonPress(rowData) {
+    const catID = rowData.catID;
+    const name = rowData.name;
     //Alert.alert('Button has been pressed!');
     console.log("grimmer button press, select:", catID);
 
@@ -92,7 +94,7 @@ class ListMain extends Component {
     const naviAction = NavigationActions.navigate(
       {
         routeName: 'CatDetail',
-        params: { catID },
+        params: { catID, name },
     });
 
     //2.1
@@ -136,7 +138,7 @@ class ListMain extends Component {
               <View>
                 {/* <Text>{rowData.name}</Text> */}
                 <Button
-                  onPress={()=>this.onButtonPress(rowData.catID)}
+                  onPress={()=>this.onButtonPress(rowData)}
                   title={rowData.name?rowData.name:""}
                   accessibilityLabel="See an informative alert"
                 />
@@ -169,8 +171,8 @@ export const ListPage = StackNavigator({
     //   title: 'CatDetail',
     // },
   },
-  NewRecord : {
-    screen: Record,
+  Measure : {
+    screen: Measure,
   }
 });
 
