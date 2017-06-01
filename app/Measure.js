@@ -40,7 +40,7 @@ const BUTTON_STATUS_INIT = "Click to Start";
 const BUTTON_STATUS_RUNNING = "Click to Cancel";
 const BUTTON_STATUS_END = "End";
 
-const TOTAL_SECONDS = 5;
+const TOTAL_SECONDS = 60;
 
 const initialState = {
   buttonStatus: BUTTON_STATUS_INIT,
