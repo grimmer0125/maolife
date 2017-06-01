@@ -193,24 +193,29 @@ class CatDetail extends React.Component {
             {/* <Text>
                {cat.name}
             </Text> */}
+            { cat.breathRecord && Object.keys(cat.breathRecord).map((time) => {
 
+              let prefixToday = "";
+              if(moment(time * 1000).isSame(moment(), 'day')){
+                prefixToday = "Today, ";
+              }
 
-
-            { cat.breathRecord && Object.keys(cat.breathRecord).map((time) =>
-              <Card key={time} style={{flex: 0}}>
-                <CardItem header>
-                  <Text>{moment(time * 1000).format("YYYY-MM-DD HH:mm")}</Text>
-                </CardItem>
-                <CardItem>
-                  <Body>
-                    <Text>
-                      {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
-                      {cat.breathRecord[time].breathRate+"/min, mode:"+cat.breathRecord[time].mode}
-                    </Text>
-                  </Body>
-                </CardItem>
-              </Card>
-            )}
+              return (
+                <Card key={time} style={{flex: 0}}>
+                  <CardItem header>
+                    <Text>{prefixToday+moment(time * 1000).format("YYYY-MM-DD HH:mm")}</Text>
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <Text>
+                        {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
+                        {cat.breathRecord[time].breathRate+"/min, mode:"+cat.breathRecord[time].mode}
+                      </Text>
+                    </Body>
+                  </CardItem>
+                </Card>
+              );
+            })}
             {/* <Card style={{flex: 0}}>
               <CardItem>
                 <Image style={{ resizeMode: 'cover', height: 200,flex: 1 }} source={{uri: 'https://assets-cdn.github.com/images/modules/logos_page/Octocat.png'}} />
