@@ -1,4 +1,4 @@
-# maolife
+# Kiteretsu (was called maolife)
 
 **only tested on Mac. But Android on Windows and Linux should work**
 
@@ -27,7 +27,7 @@ Summary Step:
 3. brew install watchman
 4. npm install -g react-native-cli
 5. install Xcode 8 and its command line tools, follow https://facebook.github.io/react-native/docs/getting-started.html#xcode
-6. git clone this project, https://github.com/grimmer0125/maolife
+6. git clone this project, https://github.com/grimmer0125/Kiteretsu
 7. cd into this project folder, `npm install`
 
 ### (optional) Create your Firebase project if you are not using this project's Firebase project
@@ -66,7 +66,7 @@ Keypoint:
 ### How to run in on iDevice simulator
 1. in project folder, `npm run ios` or `react-native run-ios`.
 
-### How to run on read iPhone
+### How to run on real iPhone
 
 Steps:
 https://facebook.github.io/react-native/docs/running-on-device.html
