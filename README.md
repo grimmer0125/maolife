@@ -1,4 +1,4 @@
-# Kiteretsu (was called maolife)
+# Kiteretsu (formerly maolife)
 
 **only tested on Mac. But Android on Windows and Linux should work**
 
