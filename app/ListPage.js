@@ -23,7 +23,7 @@ import AddCat from './AddCat';
 import Measure from './Measure';
 import { connect } from 'react-redux';
 import { fetchOwnCats, naviToCat } from './actions/userAction';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { NavigationActions, addNavigationHelpers } from 'react-navigation';
 
