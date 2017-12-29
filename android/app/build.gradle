@@ -139,9 +139,17 @@ android {
 dependencies {
     compile project(':react-native-vector-icons')
     compile project(':react-native-fbsdk')
+
+    //compile(project(':react-native-fbsdk')){
+    //  exclude(group: 'com.facebook.android', module: 'facebook-android-sdk')
+    //}
+    // compile "com.facebook.android:facebook-android-sdk:4.22.1"
+
+    // TODO: need to figure out more
+    // implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 
