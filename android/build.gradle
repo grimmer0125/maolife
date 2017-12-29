@@ -3,9 +3,18 @@
 buildscript {
     repositories {
         mavenCentral()
-        // mavenLocal()
         jcenter()
-        google() //add this
+
+        // add this
+        // maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        //  url "$rootDir/../node_modules/react-native/android"
+        // }
+        //add this
+        //maven { url 'https://maven.google.com' }
+
+        //add this
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
@@ -16,9 +25,31 @@ buildscript {
 }
 
 allprojects {
+
+    // AAPT: Error retrieving parent for item: No resource found that matches the given name 'android:TextAppearance.Material.Widget.Button.Borderless.Colored'.
+    // anotehr link:
+    // https://stackoverflow.com/questions/42144415/error-retrieving-parent-for-item-no-resource-found-that-matches-the-given-name/42144590
+    // https://stackoverflow.com/a/44242227/7354486, TODO: need to figure out more
+    configurations.all {
+        resolutionStrategy {
+          eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'com.facebook.react' && details.requested.name == 'react-native') {
+              details.useVersion "0.51.0" // Your real React Native version here
+            }
+          }
+          force 'com.facebook.android:facebook-android-sdk:4.22.1'
+        }
+    }
     repositories {
         mavenLocal()
         jcenter()
-        google() //add this
+
+        maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+          url "$rootDir/../node_modules/react-native/android"
+        }
+
+        //add this
+        google()
     }
 }
