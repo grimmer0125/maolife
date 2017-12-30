@@ -1,6 +1,6 @@
 # Kiteretsu (formerly maolife)
 
-** It has only been tested on Mac. However Windows and Linux should work**
+**It has only been tested on Mac. However Windows and Linux should work**
 
 ## UI components
 
@@ -123,7 +123,7 @@ Follow https://facebook.github.io/react-native/docs/debugging.html to have remot
 
 https://github.com/zalmoxisus/remote-redux-devtools supplies a way to use redux server to get redux'store. It needs
 
-** !! [update] remote-redux-devtools-on-debugger is not compatible with the latest React v0.51 and is removed from this project !!**
+**!! [update] remote-redux-devtools-on-debugger is not compatible with the latest React v0.51 and is removed from this project !!**
 
 1. modify your code. follow https://github.com/zalmoxisus/remote-redux-devtools  or  https://github.com/jhen0409/remote-redux-devtools-on-debugger to setup. I tried the latter's `remote-redux-devtools`'s setting and used its local redux server and integrated react debugging for react native.
 2. prepare a local redux server (localhost) or a WAN remote server.
