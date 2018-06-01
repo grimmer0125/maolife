@@ -117,18 +117,21 @@ Follow https://facebook.github.io/react-native/docs/debugging.html to have remot
 
 ### Debug React Widget
 1. Use Nuclide's "React Native Inspector".
-2. or use https://github.com/jhen0409/react-native-debugger. (which introduces it integrates its redux-devtools but not tried successfully). And you can not use it to debug react widget and use http://localhost:8081/debugger-ui to see JavaScript logs at the same time.
+2. Use https://github.com/jhen0409/react-native-debugger. (which also includes redux-devtoolsy). p.s. And you can not use it to debug react widget and use http://localhost:8081/debugger-ui to see JavaScript logs at the same time.
+3. Standalone [react-devtools](https://facebook.github.io/react-native/docs/debugging.html#react-developer-tools)
 
 ### Debug Redux
 
 https://github.com/zalmoxisus/remote-redux-devtools supplies a way to use redux server to get redux'store. It needs
 
-**!! [update] remote-redux-devtools-on-debugger is not compatible with the latest React v0.51 and is removed from this project !!**
+**!! [201806 update] Just use react-native-debugger and it works. The code already set up the according redux store part (same setting as remote-redux-devtools) !! **
 
-1. modify your code. follow https://github.com/zalmoxisus/remote-redux-devtools  or  https://github.com/jhen0409/remote-redux-devtools-on-debugger to setup. I tried the latter's `remote-redux-devtools`'s setting and used its local redux server and integrated react debugging for react native.
-2. prepare a local redux server (localhost) or a WAN remote server.
-3. Then just use browser to see the redux'store (http://localhost:8000) or use specific web page/app to Redux's store.
+**!! [201712 update] remote-redux-devtools-on-debugger is not compatible with the latest React v0.51 and is removed from this project !!**
 
-You can use `remote-redux-devtools`' guide to prepare your own local server.
+1. ~~modify your code. follow https://github.com/zalmoxisus/remote-redux-devtools  or  https://github.com/jhen0409/remote-redux-devtools-on-debugger to setup. I tried the latter's `remote-redux-devtools`'s setting and used its local redux server and integrated react debugging for react native.~~
+2. ~~prepare a local redux server (localhost) or a WAN remote server.~~
+3. ~~Then just use browser to see the redux'store (http://localhost:8000) or use specific web page/app to Redux's store.~~
 
-Or follow https://github.com/jhen0409/remote-redux-devtools-on-debugger to cover the below 1~3. It comes with a local redux server and also integrates redux with react debugger page. So just use http://localhost:8081/debugger-ui to see React's log and Redux's store at the same time.
+~~You can use `remote-redux-devtools`' guide to prepare your own local server.~~
+
+~~Or follow https://github.com/jhen0409/remote-redux-devtools-on-debugger to cover the above 1~3. It comes with a local redux server and also integrates redux with react debugger page. So just use http://localhost:8081/debugger-ui to see React's log and Redux's store at the same time.~~
