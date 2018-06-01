@@ -10,25 +10,34 @@ import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 
 // import rootSaga from '../sagas';
+//
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function configureStore(initialState) {
   // const sagaMiddleware = createSagaMiddleware();
+
+  const middleware = applyMiddleware(thunk);
+
+  const enhancer = composeEnhancers(
+    middleware,
+  );
 
   //TODO change to use if (__DEV__) {  later
 
   const store = createStore(
     rootReducer,
     initialState,
-    compose(
-      // applyMiddleware(sagaMiddleware, thunk)
-      applyMiddleware(thunk),
-      devTools({
-        name: Platform.OS,
-        hostname: 'localhost',
-        port: 8000
-      })
-      // ,window.devToolsExtension ? window.devToolsExtension() : f => f
-    )
+    enhancer
+    // compose(
+    //   // applyMiddleware(sagaMiddleware, thunk)
+    //   applyMiddleware(thunk),
+    //   devTools({
+    //     name: Platform.OS,
+    //     hostname: 'localhost',
+    //     port: 8000
+    //   })
+    //   // ,window.devToolsExtension ? window.devToolsExtension() : f => f
+    // )
   );
 
   // sagaMiddleware.run(rootSaga);
