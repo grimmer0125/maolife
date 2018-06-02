@@ -20,8 +20,8 @@ import { createBottomTabNavigator } from 'react-navigation';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import ListPage from './ListPage'
-import SettingPage from './SettingPage'
+import ListPage from './ListPage';
+import SettingPage from './SettingPage';
 
 class HomeScreen extends React.Component {
   render() {

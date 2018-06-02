@@ -26,12 +26,12 @@ import { ListPage } from '../ListPage';
 //     { key: 'InitB', routeName: 'Login' },
 //   ],
 // };
+//
+//
+
 const initialState = ListPage.router.getStateForAction(ListPage.router.getActionForPathAndParams('List'));
-
 const listNav = (state = initialState, action) => {
-
-
-  console.log("nav action:", action);
+  console.log('nav action:', action);
   let nextState;
   switch (action.type) {
     // 也可以外面發一般的action, 這裡再轉
@@ -53,7 +53,7 @@ const listNav = (state = initialState, action) => {
 const rootReducer = combineReducers({
   listNav,
   ...userRoot,
-  ...catsRoot
+  ...catsRoot,
 });
 
 export default rootReducer;

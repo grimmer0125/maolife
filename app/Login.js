@@ -3,10 +3,6 @@
 
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
-'use strict';
-
-const FBSDK = require('react-native-fbsdk');
-
 import React, { Component } from 'react';
 import {
   Text,
@@ -14,14 +10,19 @@ import {
   View,
   Button,
 } from 'react-native';
-const {
-  LoginButton,
-} = FBSDK;
 
 import { connect } from 'react-redux';
 
-import CommonStyles from './styles/common'
+import CommonStyles from './styles/common';
 import { handleFBLogin, handleFBLogout, registerKID } from './actions/userAction';
+
+'use strict';
+
+const FBSDK = require('react-native-fbsdk');
+
+const {
+  LoginButton,
+} = FBSDK;
 
 class Login extends Component {
   constructor(props) {
@@ -31,17 +32,16 @@ class Login extends Component {
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
     this.onButtonPress = this.onButtonPress.bind(this);
 
-    this.state = {registerText: ''};
+    this.state = { registerText: '' };
   }
 
   handleFBLoginResult(error, result) {
-    console.log("login action in login")
+    console.log('login action in login');
     this.props.dispatch(handleFBLogin(error, result));
   }
 
   handleFBLogoutResult() {
-
-    console.log("logout action in login:");
+    console.log('logout action in login:');
     this.props.dispatch(handleFBLogout());
   }
 
@@ -49,15 +49,15 @@ class Login extends Component {
     this.props.dispatch(registerKID(this.state.registerText));
   }
 
-  //TODO: use https://github.com/halilb/react-native-textinput-effects instead of using native TextInput
+  // TODO: use https://github.com/halilb/react-native-textinput-effects instead of using native TextInput
   // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
 
   render() {
-    const {user, registerStatus} = this.props;
-    const name = user?user.displayName:"";
+    const { user, registerStatus } = this.props;
+    const name = user ? user.displayName : '';
     let registerUI = null;
 
-    //TODO improve <TextInput style={{width: 150}}> width part later
+    // TODO improve <TextInput style={{width: 150}}> width part later
     if (user.isLogin) {
       registerUI = (
         <View>
@@ -65,9 +65,9 @@ class Login extends Component {
             {registerStatus}
           </Text>
           <TextInput
-            style={{height: 40, width: 300, textAlign: 'center'}}
+            style={{ height: 40, width: 300, textAlign: 'center' }}
             placeholder="Please type an ID to register here!"
-            onChangeText={(registerText) => this.setState({registerText})}
+            onChangeText={registerText => this.setState({ registerText })}
           />
           <Button
             onPress={this.onButtonPress}
@@ -80,21 +80,21 @@ class Login extends Component {
     }
 
     return (
-        <View style={CommonStyles.container}>
-          <LoginButton
-            onLoginFinished={this.handleFBLoginResult}
-            onLogoutFinished={this.handleFBLogoutResult}
-          />
-          <Text style={CommonStyles.welcome}>
-            {name}
-          </Text>
-          {registerUI}
-        </View>
+      <View style={CommonStyles.container}>
+        <LoginButton
+          onLoginFinished={this.handleFBLoginResult}
+          onLogoutFinished={this.handleFBLogoutResult}
+        />
+        <Text style={CommonStyles.welcome}>
+          {name}
+        </Text>
+        {registerUI}
+      </View>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: state.currentUser,
   registerStatus: state.registerStatus,
 });

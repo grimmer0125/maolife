@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 
 const initialState = {
   KID: null,
-  displayName: "bb8",
+  displayName: 'bb8',
   isLogin: false,
 };
 
@@ -19,7 +19,7 @@ export function userChecking(state = true, action = {}) {
 }
 
 // KID
-export function registerStatus(state = "", action) {
+export function registerStatus(state = '', action) {
   switch (action.type) {
     case ActionTypes.INVALID_REGISTERID:
       return 'invalid id';
@@ -37,14 +37,14 @@ export function currentUser(state = initialState, action = {}) {
     case ActionTypes.USER_DATA:
       return {
         ...state,
-        isLogin:action.payload.result,
+        isLogin: action.payload.result,
         ...action.payload.userData,
       };
     case ActionTypes.LOGIN_SUCCESS:
       // console.log("reducer user1:", action.payload.displayName);
       return {
         ...state,
-        isLogin:true,
+        isLogin: true,
         // displayName: action.payload.displayName //就算成功第二次也不會show name,
         // use 1. set/update to firebase 2. get user_data value change (the below action)
       };
@@ -53,16 +53,17 @@ export function currentUser(state = initialState, action = {}) {
       return initialState;
     default:
       return state;
-    }
+  }
 }
 
 export function selectedCat(state = null, action) {
   switch (action.type) {
     case ActionTypes.NAVI_TO_CAT:
-      return {id: action.payload.catID};
+      return { id: action.payload.catID };
     default:
       return state;
-  }}
+  }
+}
 
 // export default combineReducers({
 //   user,
@@ -71,4 +72,4 @@ export function selectedCat(state = null, action) {
 
 export const userRoot = {
   currentUser, userChecking, registerStatus,
-}
+};

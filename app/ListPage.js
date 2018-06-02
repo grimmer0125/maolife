@@ -1,9 +1,7 @@
-  // 1. add cat
+// 1. add cat
 // 2. sharing cats for mananing together
-//TODO 把自己從owner刪掉時, ui要提示,
-//TODO 從detail出來又很快按進去, selectedCat會是null
-
-console.log("load List Page.js !!!!!!!!!")
+// TODO 把自己從owner刪掉時, ui要提示,
+// TODO 從detail出來又很快按進去, selectedCat會是null
 
 import React, { Component } from 'react';
 import {
@@ -29,32 +27,34 @@ import { fetchOwnCats, naviToCat } from './actions/userAction';
 // import { NavigationActions } from 'react-navigation';
 import { NavigationActions, addNavigationHelpers } from 'react-navigation';
 
-class ListMain extends Component {
+console.log('load List Page.js !!!!!!!!!');
 
-//https://github.com/react-community/react-navigation/issues/779
+class ListMain extends Component {
+// https://github.com/react-community/react-navigation/issues/779
   static navigationOptions = ({ navigation }) => ({
     //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
     title: 'Cat List',
     headerRight: (
-      <Button title="Add"
+      <Button
+        title="Add"
         onPress={() => navigation.navigate('AddCat')}
       />
     ),
 
 
-   });
+  });
 
   // Initialize the hardcoded data
   constructor(props) {
     super(props);
 
     // so r1, r2 should be different reference
-    //TODO: Try to use flatlist or list of native-base
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    // TODO: Try to use flatlist or list of native-base
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       dataSource: ds.cloneWithRows([
-        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-      ])
+        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin',
+      ]),
     };
 
     this.props.dispatch(fetchOwnCats());
@@ -68,34 +68,33 @@ class ListMain extends Component {
   // }
 
   shouldComponentUpdate() {
-    console.log("grimme CatList shouldComponentUpdate");
+    console.log('grimme CatList shouldComponentUpdate');
     return true;
   }
 
   componentWillUpdate() {
-    console.log("list will udpate");
+    console.log('list will udpate');
   }
 
 
   onButtonPress(rowData) {
     const catID = rowData.catID;
     const name = rowData.name;
-    //Alert.alert('Button has been pressed!');
-    console.log("grimmer button press, select:", catID);
+    // Alert.alert('Button has been pressed!');
+    console.log('grimmer button press, select:', catID);
 
 
-    //1. original (這也可以傳params)
+    // 1. original (這也可以傳params)
     // this.props.navigation.navigate('CatDetail'); //也一樣,
     // 所以可能沒有像 https://reactnavigation.org/docs/navigators/navigation-actions 說的像下面用2.2
 
     // 原本的onPress={() => this.props.navigation.navigate('Profile', {name: 'Lucy'})}
     // navigation.state.params.name
 
-    //2.
-    const naviAction = NavigationActions.navigate(
-      {
-        routeName: 'CatDetail',
-        params: { catID, name },
+    // 2.
+    const naviAction = NavigationActions.navigate({
+      routeName: 'CatDetail',
+      params: { catID, name },
     });
 
 
@@ -113,44 +112,41 @@ class ListMain extends Component {
   componentWillReceiveProps(newProps) {
     const cats = newProps.cats;
 
-    let catsArray = [];
+    const catsArray = [];
     for (const key in cats) {
-      catsArray.push({catID:key, ...cats[key]});
+      catsArray.push({ catID: key, ...cats[key] });
     }
 
     // ref: 有時會檢查比較多
-    //if (newProps.viewingDayUuid !== this.props.viewingDayUuid) {
-    //let {data, sectionIds} = this._getListViewData(nextProps.patients);
+    // if (newProps.viewingDayUuid !== this.props.viewingDayUuid) {
+    // let {data, sectionIds} = this._getListViewData(nextProps.patients);
 
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(catsArray)
+      dataSource: this.state.dataSource.cloneWithRows(catsArray),
     });
-
   }
 
-// 官方listview的example ref
-// https://facebook.github.io/react-native/docs/listview.html
-//   _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
-// https://facebook.github.io/react-native/docs/listview.html#renderrow
+  // 官方listview的example ref
+  // https://facebook.github.io/react-native/docs/listview.html
+  //   _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
+  // https://facebook.github.io/react-native/docs/listview.html#renderrow
   render() {
-    console.log("list navi info:", this.props.navigation); //.routeName
+    console.log('list navi info:', this.props.navigation); // .routeName
     return (
-      <View style={{flex: 1, paddingTop: 22}}>
+      <View style={{ flex: 1, paddingTop: 22 }}>
 
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => {
-            return (
-              <View>
-                {/* <Text>{rowData.name}</Text> */}
-                <Button
-                  onPress={()=>this.onButtonPress(rowData)}
-                  title={rowData.name?rowData.name:""}
-                  accessibilityLabel="See an informative alert"
-                />
-              </View>
+          renderRow={rowData => (
+            <View>
+              {/* <Text>{rowData.name}</Text> */}
+              <Button
+                onPress={() => this.onButtonPress(rowData)}
+                title={rowData.name ? rowData.name : ''}
+                accessibilityLabel="See an informative alert"
+              />
+            </View>
             )
-            }
           }
         />
       </View>
@@ -158,7 +154,7 @@ class ListMain extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   cats: state.cats,
 });
 
@@ -177,9 +173,9 @@ export const ListPage = createStackNavigator({
     //   title: 'CatDetail',
     // },
   },
-  Measure : {
+  Measure: {
     screen: Measure,
-  }
+  },
 });
 
 // the below api usage is v1 of react navigation. if we still want to use it in v2, need change
@@ -193,7 +189,7 @@ export const ListPage = createStackNavigator({
 //   nav: state.listNav,
 // });
 
-export default ListPage;//connect(mapStateToPropsListPage)(ListPageWithNavState);
+export default ListPage;// connect(mapStateToPropsListPage)(ListPageWithNavState);
 
 
 // export default ListPage;

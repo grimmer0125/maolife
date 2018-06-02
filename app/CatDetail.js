@@ -5,7 +5,7 @@
 // *4. input完後時 直接點button, 要可以work, 把view/content/form拿掉就ok, 也有人提過
 // *5. fab有時pos會錯, and 預設bottom-right位置不太對. 把content拿掉了就ok, github 有人提過
 import React, { Component } from 'react';
-import { Container, Content, Image, Button, Icon, Fab,  Card, CardItem, Body, Form, Item, Input, Right, Text } from 'native-base';
+import { Container, Content, Image, Button, Icon, Fab, Card, CardItem, Body, Form, Item, Input, Right, Text } from 'native-base';
 
 import {
   ListView,
@@ -15,9 +15,9 @@ import {
   View,
 } from 'react-native';
 
-import { Button as Button2 } from "react-native";
+import { Button as Button2 } from 'react-native';
 
-import CommonStyles from './styles/common'
+import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
 import { leaveCatDetail, addNewOwner } from './actions/userAction';
 
@@ -25,27 +25,24 @@ import {
   StackNavigator,
 } from 'react-navigation';
 
-const  moment = require('moment');
+const moment = require('moment');
 
 // import Icon2 from 'react-native-vector-icons/FontAwesome';
 
 function extractCatInfo(catID, cats) {
-
   if (catID && cats && cats.hasOwnProperty(catID)) {
-    return {catID, ...cats[catID]};
+    return { catID, ...cats[catID] };
   }
 
   return {};
-
 }
 
 class CatDetail extends React.Component {
-
   static navigationOptions = ({ navigation }) => ({
     //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
     // title: 'Cat List',
 
-    //this.props.cats;
+    // this.props.cats;
 
     // const cat = extractCatInfo(navigation.state.params.catID, cats);
 
@@ -58,8 +55,9 @@ class CatDetail extends React.Component {
     // }),
 
     headerRight: (
-      <Button2 title="Measure"
-        onPress={() => navigation.navigate('Measure',{
+      <Button2
+        title="Measure"
+        onPress={() => navigation.navigate('Measure', {
           catID: navigation.state.params.catID,
         })}
       />
@@ -71,7 +69,7 @@ class CatDetail extends React.Component {
     //   <Button2 onPress={() => {console.log("back!!");navigation.goBack();} } title={"<"} >
     //   </Button2>
     // ),
-   });
+  });
 
   constructor(props) {
     super(props);
@@ -79,12 +77,12 @@ class CatDetail extends React.Component {
     this.state = {
       active: false,
       shareDialog: false,
-      authID: ""
+      authID: '',
     };
   }
 
   componentWillUpdate() {
-    console.log("detail will udpate");
+    console.log('detail will udpate');
   }
 
   // not been called
@@ -98,21 +96,21 @@ class CatDetail extends React.Component {
   // }
 
   handleChangeAuthID = (text) => {
-    this.setState({authID: text});
+    this.setState({ authID: text });
   }
 
-  onSave = () =>{
+  onSave = () => {
     this.props.dispatch(addNewOwner(this.props.navigation.state.params.catID, this.state.authID));
 
-    this.setState({ shareDialog: false});
+    this.setState({ shareDialog: false });
   }
 
-  onCancel  = () =>{
-    this.setState({ shareDialog: false});
+  onCancel = () => {
+    this.setState({ shareDialog: false });
   }
 
   render() {
-    const {cats, navigation} = this.props;
+    const { cats, navigation } = this.props;
 
     const cat = extractCatInfo(navigation.state.params.catID, cats);
 
@@ -121,42 +119,43 @@ class CatDetail extends React.Component {
       return (
         <Container>
           {/* <View> */}
-            <Card>
-              <CardItem>
-                <Body>
-                  <Text>
+          <Card>
+            <CardItem>
+              <Body>
+                <Text>
                     Add authorized people
-                  </Text>
-                </Body>
-              </CardItem>
-              <CardItem cardBody>
-                {/* <Form> */}
-                    <Item regular>
-                        <Input placeholder="id"
-                            onChangeText={this.handleChangeAuthID}
-                            onSubmitEditing={ (event) => {
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem cardBody>
+              {/* <Form> */}
+              <Item regular>
+                <Input
+                  placeholder="id"
+                  onChangeText={this.handleChangeAuthID}
+                  onSubmitEditing={(event) => {
                               this.onSave();
                             }}
-                        />
-                    </Item>
-                {/* </Form> */}
-              </CardItem>
+                />
+              </Item>
+              {/* </Form> */}
+            </CardItem>
 
-              <CardItem>
-                <Button onPress={this.onCancel}>
-                    {/* <Icon active name="thumbs-up" /> */}
-                    <Text>Cancel</Text>
+            <CardItem>
+              <Button onPress={this.onCancel}>
+                {/* <Icon active name="thumbs-up" /> */}
+                <Text>Cancel</Text>
+              </Button>
+              <Right>
+                <Button onPress={this.onSave}>
+                  {/* <Icon active name="chatbubbles" /> */}
+                  <Text>Save</Text>
                 </Button>
-                <Right>
-                  <Button onPress={this.onSave}>
-                      {/* <Icon active name="chatbubbles" /> */}
-                      <Text>Save</Text>
-                  </Button>
-                </Right>
+              </Right>
 
-                {/* <Text>11h ago</Text> */}
-              </CardItem>
-            </Card>
+              {/* <Text>11h ago</Text> */}
+            </CardItem>
+          </Card>
           {/* </View> */}
         </Container>
       );
@@ -172,12 +171,10 @@ class CatDetail extends React.Component {
 
     // let recordUI = null;
     let timeList = null;
-    if (cat.hasOwnProperty("breathRecord")) {
+    if (cat.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(cat.breathRecord);
 
-      keys.sort(function(a, b) {
-        return b - a;
-      });
+      keys.sort((a, b) => b - a);
 
       timeList = keys;
 
@@ -189,49 +186,48 @@ class CatDetail extends React.Component {
       //   // console.log("day:", day);
       // }
     }
-//    const unixDate = moment(date).unix(); console.log(moment(unixDate * 1000).format('YYYY-MM-DD')); – Yura Zatsepin Feb 15 at 12:16
+    //    const unixDate = moment(date).unix(); console.log(moment(unixDate * 1000).format('YYYY-MM-DD')); – Yura Zatsepin Feb 15 at 12:16
 
 
-//https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/master/js/components/fab/basic.js
-//https://github.com/GeekyAnts/NativeBase/issues/372
-// fab should be outside content
+    // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/master/js/components/fab/basic.js
+    // https://github.com/GeekyAnts/NativeBase/issues/372
+    // fab should be outside content
     return (
       <Container>
 
         <Content>
 
           {/* <View style={{ flex: 1 }}> */}
-            {/* <Text>
+          {/* <Text>
                {cat.name}
             </Text> */}
-            { cat.breathRecord && timeList.map((time) => {
-
+          { cat.breathRecord && timeList.map((time) => {
               // 如果資料大的話就要拆開了, 方便query/sort/pagination
               // breathData/catid1/
               //                   time1
 
-              let prefixToday = "";
-              if(moment(time * 1000).isSame(moment(), 'day')){
-                prefixToday = ", Today";
+              let prefixToday = '';
+              if (moment(time * 1000).isSame(moment(), 'day')) {
+                prefixToday = ', Today';
               }
 
               return (
-                <Card key={time} style={{flex: 0}}>
+                <Card key={time} style={{ flex: 0 }}>
                   <CardItem header>
-                    <Text>{moment(time * 1000).format("YYYY-MM-DD HH:mm")+prefixToday}</Text>
+                    <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
                   </CardItem>
                   <CardItem>
                     <Body>
                       <Text>
                         {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
-                        {cat.breathRecord[time].breathRate+"/min, mode:"+cat.breathRecord[time].mode}
+                        {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
                       </Text>
                     </Body>
                   </CardItem>
                 </Card>
               );
             })}
-            {/* <Card style={{flex: 0}}>
+          {/* <Card style={{flex: 0}}>
               <CardItem>
                 <Image style={{ resizeMode: 'cover', height: 200,flex: 1 }} source={{uri: 'https://assets-cdn.github.com/images/modules/logos_page/Octocat.png'}} />
               </CardItem>
@@ -254,8 +250,9 @@ class CatDetail extends React.Component {
           position="bottomRight"
           onPress={() => {
             this.setState({ active: !this.state.active });
-            this.setState({ shareDialog: true});
-          }}>
+            this.setState({ shareDialog: true });
+          }}
+        >
           <Icon name="share" />
           {/* <Button style={{ backgroundColor: '#34A34F' }}>
               <Icon name="logo-whatsapp" />
@@ -274,8 +271,7 @@ class CatDetail extends React.Component {
 }
 
 
-
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   cats: state.cats,
 });
 

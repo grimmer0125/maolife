@@ -30,13 +30,13 @@ export function cats(state = {}, action) {
         // })
         // assgin:one level shallow copy, so can not use
 
-        let newState = _.cloneDeep(state);
+        const newState = _.cloneDeep(state);
         newState[action.payload.catID] = action.payload.catInfo;
 
-        return newState;//updateCats(state, action);
-      } else {
-        return state;
+        return newState;// updateCats(state, action);
       }
+      return state;
+
     default:
       return state;
   }
@@ -61,4 +61,4 @@ export function cats(state = {}, action) {
 
 export const catsRoot = {
   cats,
-}
+};

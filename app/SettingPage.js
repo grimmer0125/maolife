@@ -12,13 +12,14 @@ import {
 // } from 'react-navigation';
 
 import { createStackNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
+import { handleFBLogout } from './actions/userAction';
 
 const FBSDK = require('react-native-fbsdk');
+
 const {
   LoginButton,
 } = FBSDK;
-import { connect } from 'react-redux';
-import { handleFBLogout } from './actions/userAction';
 
 class MyNotificationsScreen extends React.Component {
   // static navigationOptions = {
@@ -46,7 +47,6 @@ class MySettingsScreen extends Component {
     super(props);
 
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
-
   }
 
   handleFBLogoutResult() {
@@ -54,7 +54,7 @@ class MySettingsScreen extends Component {
   }
 
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
 
     return (
       <ScrollView>
@@ -66,7 +66,7 @@ class MySettingsScreen extends Component {
           onPress={() => navigation.goBack(null)}
           title="In Setting, Go back"
         />
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <LoginButton
             onLogoutFinished={this.handleFBLogoutResult}
           />
@@ -75,14 +75,13 @@ class MySettingsScreen extends Component {
       </ScrollView>
     );
   }
-
 }
 
 const MySettingsScreen2 = connect()(MySettingsScreen);
 
 const SettingPage = createStackNavigator({
   Settings: {
-    screen: MySettingsScreen2 ,
+    screen: MySettingsScreen2,
     // path: '/',
     // wired, is function, not {}
     navigationOptions: () => ({

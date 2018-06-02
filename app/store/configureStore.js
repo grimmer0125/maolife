@@ -18,16 +18,14 @@ export default function configureStore(initialState) {
 
   const middleware = applyMiddleware(thunk);
 
-  const enhancer = composeEnhancers(
-    middleware,
-  );
+  const enhancer = composeEnhancers(middleware);
 
-  //TODO change to use if (__DEV__) {  later
+  // TODO change to use if (__DEV__) {  later
 
   const store = createStore(
     rootReducer,
     initialState,
-    enhancer
+    enhancer,
     // compose(
     //   // applyMiddleware(sagaMiddleware, thunk)
     //   applyMiddleware(thunk),
