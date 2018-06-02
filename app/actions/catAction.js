@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
 
-const moment = require('moment');
+// const moment = require('moment');
 
 // mode: sleep or rest
 export function newBreathRecord(catID, breathRate, mode, recordTime) {
@@ -20,6 +20,26 @@ export function newBreathRecord(catID, breathRate, mode, recordTime) {
       })
       .catch((error) => {
         console.log('add new record failed,', error);
+      });
+  };
+}
+
+export function deleteBreathRecord(catID, recordTime) {
+  return (dispatch) => {
+    const recordPath = `cats/${catID}/breathRecord/${recordTime}`;
+
+    // const time = moment().unix();
+    // const newRecord = {};
+    // newRecord[recordTime] = { mode, breathRate };
+    // var now = moment().format();
+
+    console.log('delete record', recordPath);
+    firebase.database().ref(recordPath).remove()
+      .then(() => {
+        console.log('delete breath ok');
+      })
+      .catch((error) => {
+        console.log('delete record failed,', error);
       });
   };
 }

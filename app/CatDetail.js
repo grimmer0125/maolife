@@ -5,25 +5,26 @@
 // *4. input完後時 直接點button, 要可以work, 把view/content/form拿掉就ok, 也有人提過
 // *5. fab有時pos會錯, and 預設bottom-right位置不太對. 把content拿掉了就ok, github 有人提過
 import React, { Component } from 'react';
-import { Container, Content, Image, Button, Icon, Fab, Card, CardItem, Body, Form, Item, Input, Right, Text } from 'native-base';
 
 import {
   ListView,
-  Alert,
+  Button as Button2,
+  // Alert,
   // Button,
   // Text,
-  View,
+  // View,
 } from 'react-native';
 
-import { Button as Button2 } from 'react-native';
+import { Container, Content, Image, Button, Icon, Fab, Card, CardItem, Body, List, ListItem, Item, Input, Right, Text } from 'native-base';
 
 import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
 import { leaveCatDetail, addNewOwner } from './actions/userAction';
+import { deleteBreathRecord } from './actions/catAction';
 
-import {
-  StackNavigator,
-} from 'react-navigation';
+// import {
+//   StackNavigator,
+// } from 'react-navigation';
 
 const moment = require('moment');
 
@@ -36,6 +37,17 @@ function extractCatInfo(catID, cats) {
 
   return {};
 }
+
+const datas = [
+  'Simon Mignolet',
+  'Nathaniel Clyne',
+  'Dejan Lovren',
+  'Mama Sakho',
+  'Alberto Moreno',
+  'Emre Can',
+  'Joe Allen',
+  'Phil Coutinho',
+];
 
 class CatDetail extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -74,10 +86,16 @@ class CatDetail extends React.Component {
   constructor(props) {
     super(props);
 
+    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    // dataSource={this.ds.cloneWithRows(this.state.listViewData)}
+
     this.state = {
       active: false,
       shareDialog: false,
       authID: '',
+      // listViewData: datas,
+      // listViewData: [], // ds.cloneWithRows(datas),
     };
   }
 
@@ -109,11 +127,48 @@ class CatDetail extends React.Component {
     this.setState({ shareDialog: false });
   }
 
+  deleteRow = (catID, secId, rowId, rowMap) => { // s1, index(0~x), key=s1+index
+    rowMap[`${secId}${rowId}`].props.closeRow();
+    const recordTime = rowMap[`${secId}${rowId}`].props.body.key;
+    // rowMap[`${secId}${rowId}`].props.closeRow(); //props.body.key (recordTime)
+    // const newData = [...this.state.listViewData];
+    // newData.splice(rowId, 1);
+    // this.setState({ listViewData: newData });
+    // TODO: send delete command to Firebase
+    this.props.dispatch(deleteBreathRecord(catID, recordTime));
+  }
+
+  eachRowItem = (cat, time) => {
+    // 如果資料大的話就要拆開了, 方便query/sort/pagination
+    // breathData/catid1/
+    //                   time1
+
+    let prefixToday = '';
+    if (moment(time * 1000).isSame(moment(), 'day')) {
+      prefixToday = ', Today';
+    }
+
+    return (
+      <Card key={time} style={{ flex: 0 }}>
+        <CardItem header>
+          <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
+        </CardItem>
+        <CardItem>
+          <Body>
+            <Text>
+              {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
+              {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
+            </Text>
+          </Body>
+        </CardItem>
+      </Card>
+    );
+  }
+
   render() {
     const { cats, navigation } = this.props;
-
-    const cat = extractCatInfo(navigation.state.params.catID, cats);
-
+    const catID = navigation.state.params.catID;
+    const cat = extractCatInfo(catID, cats);
 
     if (this.state.shareDialog) {
       return (
@@ -170,13 +225,13 @@ class CatDetail extends React.Component {
     // }
 
     // let recordUI = null;
-    let timeList = null;
+    let recordList = [];
     if (cat.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(cat.breathRecord);
 
       keys.sort((a, b) => b - a);
 
-      timeList = keys;
+      recordList = keys;
 
       // for (const key of keys) {
       //   // const time = cat.breathRecord[key].breathRate;
@@ -194,14 +249,30 @@ class CatDetail extends React.Component {
     // fab should be outside content
     return (
       <Container>
-
         <Content>
+          <List
+            dataSource={this.ds.cloneWithRows(recordList)}
+            renderRow={record =>
+              this.eachRowItem(cat, record)}
+            // renderLeftHiddenRow={record =>
+            //   (<Button full onPress={() => alert(record)}>
+            //     <Icon active name="information-circle" />
+            //    </Button>)}
+            disableRightSwipe
+            renderRightHiddenRow={(record, secId, rowId, rowMap) =>
+              (<Button full danger onPress={_ => this.deleteRow(cat.catID, secId, rowId, rowMap)}>
+                <Icon active name="trash" />
+               </Button>)}
+            // leftOpenValue={275}
+            rightOpenValue={-75}
+          />
 
           {/* <View style={{ flex: 1 }}> */}
           {/* <Text>
                {cat.name}
             </Text> */}
-          { cat.breathRecord && timeList.map((time) => {
+
+          {/* { cat.breathRecord && recordList.map((time) => {
               // 如果資料大的話就要拆開了, 方便query/sort/pagination
               // breathData/catid1/
               //                   time1
@@ -219,14 +290,14 @@ class CatDetail extends React.Component {
                   <CardItem>
                     <Body>
                       <Text>
-                        {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
                         {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
                       </Text>
                     </Body>
                   </CardItem>
                 </Card>
               );
-            })}
+            })} */}
+
           {/* <Card style={{flex: 0}}>
               <CardItem>
                 <Image style={{ resizeMode: 'cover', height: 200,flex: 1 }} source={{uri: 'https://assets-cdn.github.com/images/modules/logos_page/Octocat.png'}} />

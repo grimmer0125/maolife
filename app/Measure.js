@@ -36,8 +36,6 @@ import { connect } from 'react-redux';
 import { extractCatInfo } from './store/stateHelper';
 import { newBreathRecord } from './actions/catAction';
 
-import { StackNavigator } from 'react-navigation';
-
 const moment = require('moment');
 
 // import Enum from "es6-enum";
