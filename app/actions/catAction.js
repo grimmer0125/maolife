@@ -17,6 +17,9 @@ export function newBreathRecord(catID, breathRate, mode) {
     firebase.database().ref(catPath).child("breathRecord").update(newRecord)
     .then(()=>{
       console.log("set new breath ok");
+    })
+    .catch(function(error) {
+      console.log('add new record failed,', error);
     });
   };
 

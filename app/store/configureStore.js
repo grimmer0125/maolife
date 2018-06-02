@@ -1,6 +1,6 @@
 
 import { Platform } from 'react-native';
-import devTools from 'remote-redux-devtools';
+// import devTools from 'remote-redux-devtools';
 
 import { createStore, applyMiddleware, compose } from 'redux';
 // import createSagaMiddleware from 'redux-saga';

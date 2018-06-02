@@ -7,9 +7,11 @@ import {
   View,
 } from 'react-native';
 
-import {
-  StackNavigator,
-} from 'react-navigation';
+// import {
+//   StackNavigator,
+// } from 'react-navigation';
+
+import { createStackNavigator } from 'react-navigation';
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -78,7 +80,7 @@ class MySettingsScreen extends Component {
 
 const MySettingsScreen2 = connect()(MySettingsScreen);
 
-const SettingPage = StackNavigator({
+const SettingPage = createStackNavigator({
   Settings: {
     screen: MySettingsScreen2 ,
     // path: '/',

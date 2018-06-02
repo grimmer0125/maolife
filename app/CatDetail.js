@@ -59,7 +59,9 @@ class CatDetail extends React.Component {
 
     headerRight: (
       <Button2 title="Measure"
-        onPress={() => navigation.navigate('Measure')}
+        onPress={() => navigation.navigate('Measure',{
+          catID: navigation.state.params.catID,
+        })}
       />
     ),
 

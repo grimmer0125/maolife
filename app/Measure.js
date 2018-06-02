@@ -98,7 +98,13 @@ class Measure extends React.Component {
     if (!this.state.sleepRadio) {
       mode = "rest";
     }
-    this.props.dispatch(newBreathRecord(this.props.currentCat.catID, this.state.numberOfBreath, mode));
+    console.log("id20:", this.props.navigation.state.params);
+    console.log("id2:",this.props.navigation.state.params.catID);
+    const id2= this.props.navigation.state.params.catID;
+    console.log("id22:",id2);
+
+    // const id1= this.props.currentCat.catID;
+    this.props.dispatch(newBreathRecord(id2, this.state.numberOfBreath, mode));
 
     this.resetSeconds();
   }

@@ -6,17 +6,12 @@
 
 It mainly uses https://nativebase.io/.
 
-## Todo list
-
-Try CodePush for update mechanism.
-https://github.com/Microsoft/react-native-code-push
-
 ## Library Version and environment requirement
 
 The development was setup on 10.12 and has been upgraded to 10.13 with Xcode 9 and latest React version. 10.12 & 10.11 is not tested for the latest code.
 
 - macOS: 10.13.2 (High Sierra)
-- Xcode: 9.2 (only work on 10.13. Its version may affect the versions about React Native and some native npm library)
+- Xcode: 9.2 (Its version may affect the versions about React Native and some native npm library)
 - Android Studio: 3.0.1
 - Gradle version: 4.1
 - Android Gradle plugin version: 3.0.1
@@ -40,10 +35,10 @@ https://facebook.github.io/react-native/docs/getting-started.html
 
 Summary Step:
 1. install homebrew from https://brew.sh. (terminal: `type brew` to check if you have)
-2. brew install node (or you can install v7.9.x from https://nodejs.org/en/, in your terminal, type `node --version` to check your version, should use v7.x)
+2. brew install node (or you can install Node from https://nodejs.org/en/, in your terminal, type `node --version` to check your version, should use Node 8 or newer)
 3. brew install watchman
 4. npm install -g react-native-cli
-5. install Xcode 8 and its command line tools, follow https://facebook.github.io/react-native/docs/getting-started.html#xcode
+5. install Xcode 9 and its command line tools, follow https://facebook.github.io/react-native/docs/getting-started.html#xcode
 6. git clone this project, https://github.com/grimmer0125/Kiteretsu
 7. cd into this project folder, `npm install`
 8. (optional) `node node_modules/native-base/ejectTheme.js` (native-base)
@@ -124,7 +119,7 @@ Follow https://facebook.github.io/react-native/docs/debugging.html to have remot
 
 https://github.com/zalmoxisus/remote-redux-devtools supplies a way to use redux server to get redux'store. It needs
 
-**!! [201806 update] Just use react-native-debugger and it works. The code already set up the according redux store part (same setting as remote-redux-devtools) !! **
+**!! [201806 update] Just use react-native-debugger and it works. The code already set up the according redux store part (same setting as remote-redux-devtools) !!**
 
 **!! [201712 update] remote-redux-devtools-on-debugger is not compatible with the latest React v0.51 and is removed from this project !!**
 
