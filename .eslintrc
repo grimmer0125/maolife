@@ -2,17 +2,21 @@
     "parser": "babel-eslint",
 
     "env": {
-        "browser": true
+        "node": 1,
+        "browser": 1
     },
 
     "plugins": [
         "react"
     ],
 
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
-    ],
+    # "extends": [
+    #     "eslint:recommended",
+    #     "plugin:react/recommended"
+    # ],
+
+    "extends": ["airbnb"],
+
 
     "rules": {
       "react/prop-types": 0,

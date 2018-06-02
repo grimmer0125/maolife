@@ -10,6 +10,9 @@
     "android": "react-native run-android"
   },
   "dependencies": {
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "firebase": "^4.8.1",
     "lodash": "^4.17.10",
     "moment": "^2.19.3",
