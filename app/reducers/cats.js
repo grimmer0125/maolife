@@ -23,6 +23,13 @@ import _ from 'lodash';
 
 export function cats(state = {}, action) {
   switch (action.type) {
+    case ActionTypes.REMOVE_CAT:
+      if (action.payload.catID) {
+        const newState = _.cloneDeep(state);
+        delete newState[action.payload.catID];
+        return newState;
+      }
+      return state;
     case ActionTypes.UPDATE_CAT_INFO:
       if (action.payload.catID) {
         // return Object.assign({}, state, {
@@ -36,7 +43,6 @@ export function cats(state = {}, action) {
         return newState;// updateCats(state, action);
       }
       return state;
-
     default:
       return state;
   }

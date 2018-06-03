@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 
 import { Container, Content, Form, Item, Input, Button, Text, Label } from 'native-base';
 
-import { addNewCat } from './actions/userAction';
+import { addNewCat, removeSelfFromCatOwners } from './actions/userAction';
 import { updateInfo } from './actions/catAction';
 
 import { connect } from 'react-redux';
 
-import {
-  StackNavigator,
-} from 'react-navigation';
+// import {
+//   StackNavigator,
+// } from 'react-navigation';
 
 class EditCat extends Component {
  static navigationOptions = ({ navigation }) => ({
@@ -85,12 +85,18 @@ class EditCat extends Component {
   onDelete = () => {
     console.log('in delete cat page, state:', this.state);
 
+    const { catID } = this.props.navigation.state.params;
+
+    if (catID) {
+      this.props.dispatch(removeSelfFromCatOwners(catID));
+    }
+
     // this.props.dispatch(addNewCat(this.state.name, this.state.age));
 
     // we can also chain the two calls together
 
     // const { username, password } = this.state
-    this.props.navigation.goBack(null);
+    this.props.navigation.pop(2);// goBack(null);
   }
 
 

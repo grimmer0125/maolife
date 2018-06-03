@@ -21,7 +21,7 @@ import CatDetail from './CatDetail';
 import EditCat from './EditCat';
 import Measure from './Measure';
 import { connect } from 'react-redux';
-import { fetchOwnCats, naviToCat } from './actions/userAction';
+import { liveQueryOwnCats, naviToCat } from './actions/userAction';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
 // import { NavigationActions } from 'react-navigation';
@@ -57,7 +57,7 @@ class ListMain extends Component {
       dataSource: ds.cloneWithRows([]),
     };
 
-    this.props.dispatch(fetchOwnCats());
+    // this.props.dispatch(liveQueryOwnCats());
 
     this.onButtonPress = this.onButtonPress.bind(this);
   }

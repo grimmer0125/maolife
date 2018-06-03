@@ -17,6 +17,7 @@ const LOGOUT = 'LOGOUT';
 const INVALID_REGISTERID = 'INVALID_REGISTERID';
 const EXISTING_REGISTERID = 'EXISTING_REGISTERID';
 const UPDATE_CAT_INFO = 'UPDATE_CAT_INFO';
+const REMOVE_CAT = 'REMOVE_CAT';
 const NAVI_TO_CAT = 'NAVI_TO_CAT';
 const LEAVE_CAT_DETAIL = 'LEAVE_CAT_DETAIL';
 
@@ -29,21 +30,43 @@ export const ActionTypes = {
   INVALID_REGISTERID,
   EXISTING_REGISTERID,
   UPDATE_CAT_INFO,
+  REMOVE_CAT,
   NAVI_TO_CAT,
   LEAVE_CAT_DETAIL,
 };
 
-function addCatToUserFireBaseData(catids, newCatId, ownerPath) {
+function addCatToUserFireBaseData(catids, newCatId, ownerPath, getState) {
   console.log('in addCatToUser page, catids:', catids, ';ownerPath:', ownerPath);
 
   catids.push(newCatId);
 
-  firebase.database().ref(ownerPath).child('catids').set(catids)
+  return firebase.database().ref(ownerPath).child('catids').set(catids)
     .then(() => {
       console.log('reset catids ok !!!:');
     })
     .catch((error) => {
       console.log('reset catids failed:', error);
+    });
+}
+
+function removeCatFromUserFields(catids, catID, ownerPath) {
+  console.log('in removeCatFromUserFields, catids:', catids, ';ownerPath:', ownerPath);
+  console.log(catID);
+
+  const index = catids.indexOf(catID);
+  if (index === -1) {
+    console.log("can not find catid in self's catids");
+
+    return;
+  }
+  catids.splice(index, 1);
+
+  firebase.database().ref(ownerPath).child('catids').set(catids)
+    .then(() => {
+      console.log('reset catids (remove) ok !!!:');
+    })
+    .catch((error) => {
+      console.log('reset catids (remove) failed:', error);
     });
 }
 
@@ -70,8 +93,12 @@ export function addNewOwner(catID, ownerKID) {
 
         const state = getState();
 
+        if (state.cats[catID].owners instanceof Array) {
+          console.log('owner is array');
+        }
+
         // let data = //snapshot.val();
-        const owners = Object.values(state.cats[catID].owners);
+        const owners = state.cats[catID].owners.slice(0);// Object.values(state.cats[catID].owners);
         owners.push(matchID);
 
         const catPath = `cats/${catID}`;
@@ -86,7 +113,7 @@ export function addNewOwner(catID, ownerKID) {
 
               let catids = [];
               if (data) {
-                catids = Object.values(data);
+                catids = data;
               }
 
               // TODO avoid duplicate catids
@@ -107,10 +134,69 @@ export function naviToCat(catID) {
   };
 }
 
+export function removeSelfFromCatOwners(catID) {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    // step1: update cat's owners,
+    // a: if self is the only one owner, completely delete cat info.
+    // b: just remove self from cat's owners
+    const owners = state.cats[catID].owners.slice(0);
+    // owners.push(matchID);
+    const index = owners.indexOf(firebase.auth().currentUser.uid);
+    if (index === -1) {
+      console.log("can not find self in cat's owners");
+
+      return;
+    }
+    owners.splice(index, 1);
+
+    const catPath = `cats/${catID}`;
+
+    if (owners.length > 0) {
+      // case 1-a
+
+      firebase.database().ref(catPath).child('owners').set(owners)
+        .then(() => {
+          console.log("update cat's owner ok");
+          // step2: update user's catids
+          // catids = state.currentUser.catids;
+
+          const userPath = `/users/${firebase.auth().currentUser.uid}`;
+          const catids = state.currentUser.catids.slice(0);
+          removeCatFromUserFields(catids, catID, userPath);
+        })
+        .catch((error) => {
+          console.log('update cat owner failed:', error);
+        });
+    } else {
+      // case 1-b
+      //
+      firebase.database().ref(catPath).remove()
+        .then(() => {
+          console.log('remove cat ok');
+          // step2: update user's catids
+          // catids = state.currentUser.catids;
+
+          const userPath = `/users/${firebase.auth().currentUser.uid}`;
+          const catids = state.currentUser.catids.slice(0);
+          removeCatFromUserFields(catids, catID, userPath);
+        })
+        .catch((error) => {
+          console.log('remove cat fail:', error);
+        });
+    }
+  };
+}
+
 export function addNewCat(name, age) {
   return (dispatch, getState) => {
     const state = getState();
     // const sefKID = state.user.KID;
+    //
+    //
+    //
+
 
     const newCatRef = firebase.database().ref('cats').push();
     const newCatId = newCatRef.key;
@@ -124,19 +210,35 @@ export function addNewCat(name, age) {
       .then(() => {
         console.log('set add cat succeeded');
 
-        const userPath = `/users/${firebase.auth().currentUser.uid}`;
-
         // xTODO: 應該也可以改成直接撈redux-state裡的 !!!catids, 應該比較好,
         // 也可以上面set->update, 然後update用chain的方式
         // firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
         //  let data = snapshot.val();
-        const catids = state.currentUser.catids;// Object.values(data);
-        addCatToUserFireBaseData(catids, newCatId, userPath);
+        const userPath = `/users/${firebase.auth().currentUser.uid}`;
+        let catids = [];
+        if (state.currentUser.catids) {
+          catids = state.currentUser.catids.slice(0);
+        }
+        addCatToUserFireBaseData(catids, newCatId, userPath, getState)
+          .then(() => {
+            console.log('add new cat ok');
+
+            // dispatch(liveQueryCatInfo(newCatId));
+          });
       // });
       })
       .catch((error) => {
         console.log('add cat failed:', error);
       });
+  };
+}
+
+export function removeCat(catID) {
+  return {
+    type: REMOVE_CAT,
+    payload: {
+      catID,
+    },
   };
 }
 
@@ -150,38 +252,77 @@ export function updateCatInfo(catID, catInfo) {
   };
 }
 
+function stopLiveQueryCatInfo(catID) {
+  return (dispatch, getState) => {
+    // TODO https://firebase.google.com/docs/reference/js/firebase.database.Reference#off
+    // the callback should be the one passed to "on". Fix later.
+    firebase.database().ref('cats').child(catID).off('value', (snapshot) => {
+      const catInfo = snapshot.val();
+      // owners: firebase not real array already ->JS realy array
+      // console.log("grimmer cat info:", catInfo);
+
+      console.log('grimmer catid info stop live update', catID, catInfo);
+
+      // dispatch(updateCatInfo(catID, catInfo));
+    });
+  };
+}
+
+function liveQueryCatInfo(catID) {
+  return (dispatch, getState) => {
+    firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
+      const catInfo = snapshot.val();
+      // owners: firebase not real array already ->JS realy array
+      // console.log("grimmer cat info:", catInfo);
+
+      console.log('grimmer catid info live update', catID);
+
+      dispatch(updateCatInfo(catID, catInfo));
+    });
+  };
+}
+
 // 但有可能不同手機上改貓名字, 所以還是要listen 貓的變化 .
 // 這樣不就沒有必要去把catids放在user下, 不, 不一樣,
 // 一個是listen 特定貓的變化 +撈貓貓的資料. <-還是先用這個好了˙
 // 一個是去找出 那些貓貓的owner有我, 再show其資訊. ->listen這個很奇怪, 且找不太到, orderByChild應該是只能針對單一的value,
-//
-export function fetchOwnCats() {
-  return (dispatch) => {
+
+// NOTE: not used
+// TODO: A share cat->B.  B要去register 新cat變化 !!! 改成在 on self user value的變化那邊就做
+export function liveQueryOwnCats() {
+  return (dispatch, getState) => {
     const dataPath = `/users/${firebase.auth().currentUser.uid}`;
 
-    firebase.database().ref(dataPath).child('catids').on('value', (snapshot) => {
+    // TODO: use redux's store to get catids instead
+    firebase.database().ref(dataPath).child('catids').once('value', (snapshot) => {
+      console.log('grimmer catids upate1');
       // array
-    //  const data = snapshot.val();
-    //  const values = Object.values(data);
-    //
-    //  for (var i = 0; i < values.length; i++) {
-    //    const value = values[i];
-    //    console.log("grimmer array2:", value); //hello, kitty
-    //   //  firebase.database().ref('groups/' + keys[i]).on(...)
-    //  }
+      //  const data = snapshot.val();
+      //  const values = Object.values(data);
+      //
+      //  for (var i = 0; i < values.length; i++) {
+      //    const value = values[i];
+      //    console.log("grimmer array2:", value); //hello, kitty
+      //   //  firebase.database().ref('groups/' + keys[i]).on(...)
+      //  }
 
       snapshot.forEach((item) => {
         const catID = item.val();
 
         // console.log("grimmer each cat id:", catID);
-
-        firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
-          const catInfo = snapshot.val();
-          // owners: firebase not real array already ->JS realy array
-          // console.log("grimmer cat info:", catInfo);
-
-          dispatch(updateCatInfo(catID, catInfo));
-        });
+        // 至少會trigger callback一次, register時. 所以每新增一個cat. 每個cat都會有得到callback
+        // BUG: 而且會重複callback, 只要value有變. 如果register兩次 !!!
+        // firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
+        //   const catInfo = snapshot.val();
+        //   // owners: firebase not real array already ->JS realy array
+        //   // console.log("grimmer cat info:", catInfo);
+        //
+        //   console.log('grimmer catid info update', catID);
+        //
+        //   dispatch(updateCatInfo(catID, catInfo));
+        // });
+        //
+        dispatch(liveQueryCatInfo(catID));
       });
     });
   };
@@ -290,7 +431,8 @@ export function handleFBLogin(error, result) {
   };
 }
 
-export function fetchUserData(result, userData) {
+export function getUserData(result, userData) {
+  console.log('getUserData:', userData);
   return {
     type: USER_DATA,
     payload: {
@@ -301,7 +443,7 @@ export function fetchUserData(result, userData) {
 }
 
 export function connectDBtoCheckUser() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     firebase.initializeApp(firebaseConfig);
 
     // https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
@@ -312,11 +454,12 @@ export function connectDBtoCheckUser() {
       if (authUser) {
         const dataPath = `/users/${authUser.uid}`;// +"/KID";
 
-        // will not trigger two times !!! if on(xx) two times
+        // will not trigger two times !!! if on(xx) two times but ever logout
+        // value is changed part
         firebase.database().ref(dataPath).on('value', (snap) => {
           const userValue = snap.val();
 
-          console.log('userdata from firebase:', userValue);
+          console.log('grimmer userdata from firebase:', userValue);
 
           if (userValue && userValue.KID) {
             console.log('KID for:', authUser.uid, ';KID:', userValue.KID);
@@ -324,7 +467,51 @@ export function connectDBtoCheckUser() {
             console.log('no KID for:', authUser.uid);
           }
 
-          dispatch(fetchUserData(true, userValue));
+          let catids = [];
+          let catids_copy = [];// userValue.catids.slice(0);
+          let oldCatids_copy = [];
+
+          if (userValue.catids) { // 可能從有->null, 不只是[]
+            catids = userValue.catids.slice(0);
+            catids_copy = userValue.catids.slice(0);
+          }
+
+          const state = getState(); // .currentUser;// .catids
+          if (state.currentUser.catids) {
+            const oldCatids = state.currentUser.catids;
+            // compare
+            for (const id of oldCatids) {
+              const index = catids.indexOf(id);
+              if (index !== -1) {
+                catids.splice(index, 1);
+              }
+            }
+
+            oldCatids_copy = oldCatids.slice(0);
+            for (const id of catids_copy) {
+              const index = oldCatids_copy.indexOf(id);
+              if (index !== -1) {
+                oldCatids_copy.splice(index, 1);
+              }
+            }
+          }
+
+          // 新增的case.
+          for (const id of catids) {
+            dispatch(liveQueryCatInfo(id));
+          }
+
+          // 那被刪掉的case呢 (舊的裡面有, e.g. 5個 新的沒有, 3個)
+          // a. unregister (off) remove redux data
+          for (const id of oldCatids_copy) {
+            console.log('stopquery and remove cat:', id);
+            dispatch(stopLiveQueryCatInfo(id));
+            dispatch(removeCat(id));
+          }
+
+          // const owners = Object.values(state.cats[catID].owners);
+
+          dispatch(getUserData(true, userValue));
         });
 
         // let userData = await firebase.auth().currentUser;
@@ -340,7 +527,7 @@ export function connectDBtoCheckUser() {
 
         // userChecking=false, 直接回到login 第一頁
 
-        dispatch(fetchUserData(false, null));
+        dispatch(getUserData(false, null));
       }
     });
   };
