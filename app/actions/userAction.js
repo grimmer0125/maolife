@@ -254,17 +254,10 @@ export function updateCatInfo(catID, catInfo) {
 
 function stopLiveQueryCatInfo(catID) {
   return (dispatch, getState) => {
-    // TODO https://firebase.google.com/docs/reference/js/firebase.database.Reference#off
-    // the callback should be the one passed to "on". Fix later.
-    firebase.database().ref('cats').child(catID).off('value', (snapshot) => {
-      const catInfo = snapshot.val();
-      // owners: firebase not real array already ->JS realy array
-      // console.log("grimmer cat info:", catInfo);
-
-      console.log('grimmer catid info stop live update', catID, catInfo);
-
-      // dispatch(updateCatInfo(catID, catInfo));
-    });
+    // ref: https://stackoverflow.com/a/28266537/7354486
+    // ref: https://stackoverflow.com/questions/11804424/deactivating-events-with-off indicates that
+    // off('value') w/o callback seems ok too.
+    firebase.database().ref('cats').child(catID).off();
   };
 }
 
