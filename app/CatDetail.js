@@ -8,14 +8,15 @@ import React, { Component } from 'react';
 
 import {
   ListView,
-  Button as Button2,
+  Button as SystemButton,
   // Alert,
   // Button,
   // Text,
-  // View,
+  View,
 } from 'react-native';
 
-import { Container, Content, Image, Button, Icon, Fab, Card, CardItem, Body, List, ListItem, Item, Input, Right, Text } from 'native-base';
+import { Container, Content, Image, Button, Icon, Fab, Card, CardItem,
+  Body, Header, List, ListItem, Item, Input, Left, Right, Text, Separator } from 'native-base';
 
 import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
@@ -38,17 +39,6 @@ function extractCatInfo(catID, cats) {
   return {};
 }
 
-const datas = [
-  'Simon Mignolet',
-  'Nathaniel Clyne',
-  'Dejan Lovren',
-  'Mama Sakho',
-  'Alberto Moreno',
-  'Emre Can',
-  'Joe Allen',
-  'Phil Coutinho',
-];
-
 class CatDetail extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
@@ -67,7 +57,7 @@ class CatDetail extends React.Component {
     // }),
 
     headerRight: (
-      <Button2
+      <SystemButton
         title="Measure"
         onPress={() => navigation.navigate('Measure', {
           catID: navigation.state.params.catID,
@@ -78,8 +68,8 @@ class CatDetail extends React.Component {
     // headerLeft: (
     //   // <MenuButton/>
     //   // <Icon2 name={'chevron-left'} onPress={ () => { navigation.goBack(); } }  />
-    //   <Button2 onPress={() => {console.log("back!!");navigation.goBack();} } title={"<"} >
-    //   </Button2>
+    //   <SystemButton onPress={() => {console.log("back!!");navigation.goBack();} } title={"<"} >
+    //   </SystemButton>
     // ),
   });
 
@@ -149,19 +139,24 @@ class CatDetail extends React.Component {
     }
 
     return (
-      <Card key={time} style={{ flex: 0 }}>
-        <CardItem header>
+      // <Card transparent style={{ flex: 0 }}>
+      // key is not necessary in NativeBase's listItem but it can be used in deleteRow(body.key)
+      <ListItem key={time}>
+        {/* <CardItem header>
           <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
-        </CardItem>
-        <CardItem>
-          <Body>
-            <Text>
-              {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
-              {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
-            </Text>
-          </Body>
-        </CardItem>
-      </Card>
+        </CardItem> */}
+        {/* <CardItem> */}
+        {/* Instead of Body, View can be used too */}
+        <Body>
+          <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
+          <Text>
+            {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
+            {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
+          </Text>
+        </Body>
+        {/* </CardItem> */}
+        {/* </Card> */}
+      </ListItem>
     );
   }
 
@@ -178,7 +173,7 @@ class CatDetail extends React.Component {
             <CardItem>
               <Body>
                 <Text>
-                    Add authorized people
+                    Authorize people
                 </Text>
               </Body>
             </CardItem>
@@ -250,54 +245,69 @@ class CatDetail extends React.Component {
     return (
       <Container>
         <Content>
-          <List
-            dataSource={this.ds.cloneWithRows(recordList)}
-            renderRow={record =>
+          {/* <Card >
+            <CardItem>
+              <Body>
+                <Text>
+                   aaa
+                </Text>
+              </Body>
+            </CardItem>
+          </Card> */}
+          {/* <Separator bordered>
+            <Text>Records1</Text>
+          </Separator> */}
+          {/* <View> */}
+          {/* <Card> */}
+          <List style={{ backgroundColor: 'white' }}>
+            <ListItem>
+              <Text>Total Avg: 27. Rest Avg.:33. Sleep Avg: 25</Text>
+            </ListItem>
+            <ListItem
+              onPress={() => this.props.navigation.navigate('EditCat', {
+                title: 'Edit Cat',
+                catID,
+                age: cat.age,
+                name: cat.name,
+              })}
+            >
+              <Left>
+                <Text>Edit</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+          </List>
+          {/* </Card> */}
+          {/* </View> */}
+
+          <Separator bordered>
+            <Text>Records</Text>
+          </Separator>
+          <View>
+            <List
+              dataSource={this.ds.cloneWithRows(recordList)}
+              renderRow={record =>
               this.eachRowItem(cat, record)}
             // renderLeftHiddenRow={record =>
             //   (<Button full onPress={() => alert(record)}>
             //     <Icon active name="information-circle" />
             //    </Button>)}
-            disableRightSwipe
-            renderRightHiddenRow={(record, secId, rowId, rowMap) =>
+              disableRightSwipe
+              renderRightHiddenRow={(record, secId, rowId, rowMap) =>
               (<Button full danger onPress={_ => this.deleteRow(cat.catID, secId, rowId, rowMap)}>
                 <Icon active name="trash" />
                </Button>)}
             // leftOpenValue={275}
-            rightOpenValue={-75}
-          />
+              rightOpenValue={-75}
+            />
+          </View>
 
           {/* <View style={{ flex: 1 }}> */}
           {/* <Text>
                {cat.name}
             </Text> */}
-
-          {/* { cat.breathRecord && recordList.map((time) => {
-              // 如果資料大的話就要拆開了, 方便query/sort/pagination
-              // breathData/catid1/
-              //                   time1
-
-              let prefixToday = '';
-              if (moment(time * 1000).isSame(moment(), 'day')) {
-                prefixToday = ', Today';
-              }
-
-              return (
-                <Card key={time} style={{ flex: 0 }}>
-                  <CardItem header>
-                    <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
-                  </CardItem>
-                  <CardItem>
-                    <Body>
-                      <Text>
-                        {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
-                      </Text>
-                    </Body>
-                  </CardItem>
-                </Card>
-              );
-            })} */}
-
           {/* <Card style={{flex: 0}}>
               <CardItem>
                 <Image style={{ resizeMode: 'cover', height: 200,flex: 1 }} source={{uri: 'https://assets-cdn.github.com/images/modules/logos_page/Octocat.png'}} />
@@ -309,7 +319,6 @@ class CatDetail extends React.Component {
                 </Button>
               </CardItem>
             </Card> */}
-
           {/* </View> */}
         </Content>
 

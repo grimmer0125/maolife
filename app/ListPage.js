@@ -18,7 +18,7 @@ import {
 import { createStackNavigator } from 'react-navigation';
 
 import CatDetail from './CatDetail';
-import AddCat from './AddCat';
+import EditCat from './EditCat';
 import Measure from './Measure';
 import { connect } from 'react-redux';
 import { fetchOwnCats, naviToCat } from './actions/userAction';
@@ -37,7 +37,9 @@ class ListMain extends Component {
     headerRight: (
       <Button
         title="Add"
-        onPress={() => navigation.navigate('AddCat')}
+        onPress={() => navigation.navigate('EditCat', {
+          title: 'New Cat',
+        })}
       />
     ),
 
@@ -52,9 +54,7 @@ class ListMain extends Component {
     // TODO: Try to use flatlist or list of native-base
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: ds.cloneWithRows([
-        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin',
-      ]),
+      dataSource: ds.cloneWithRows([]),
     };
 
     this.props.dispatch(fetchOwnCats());
@@ -164,8 +164,8 @@ export const ListPage = createStackNavigator({
   List: {
     screen: ListMainReduxState,
   },
-  AddCat: {
-    screen: AddCat,
+  EditCat: {
+    screen: EditCat,
   },
   CatDetail: {
     screen: CatDetail,

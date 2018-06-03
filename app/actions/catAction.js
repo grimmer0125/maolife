@@ -24,6 +24,26 @@ export function newBreathRecord(catID, breathRate, mode, recordTime) {
   };
 }
 
+export function updateInfo(catID, info) {
+  return () => {
+    const catPath = `cats/${catID}`;
+
+    // const time = moment().unix();
+    // const newRecord = {};
+    // newRecord[recordTime] = { mode, breathRate };
+    // var now = moment().format();
+
+    console.log('new info', info);
+    firebase.database().ref(catPath).update(info)
+      .then(() => {
+        console.log('update cat info ok');
+      })
+      .catch((error) => {
+        console.log('update cat info failed,', error);
+      });
+  };
+}
+
 export function deleteBreathRecord(catID, recordTime) {
   return (dispatch) => {
     const recordPath = `cats/${catID}/breathRecord/${recordTime}`;
