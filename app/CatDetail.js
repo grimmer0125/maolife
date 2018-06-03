@@ -160,6 +160,39 @@ class CatDetail extends React.Component {
     );
   }
 
+  calculateAverage(breathRecord) {
+    // let mixTotal =0;
+    // let mixNumTotal = 0;
+    let sleepTotal = 0;
+    let numSleep = 0;
+    let restTotal = 0;
+    let numRest = 0;
+    if (breathRecord) {
+      for (key in breathRecord) {
+        const record = breathRecord[key];
+        if (record.mode === 'sleep') {
+          numSleep++;
+          sleepTotal += parseInt(record.breathRate);
+        } else if (record.mode == 'rest') {
+          numRest++;
+          restTotal += parseInt(record.breathRate);
+        }
+      }
+    }
+
+    const numTotal = numRest + numSleep;
+    return {
+      sleepAvg: numSleep ? sleepTotal / numSleep : 0,
+      restAvg: numRest ? restTotal / numRest : 0,
+      mixAvg: numTotal ? (sleepTotal + restTotal) / numTotal : 0,
+    };
+
+    // return {
+    //   breathRate(pin): "22"
+    //   mode(pin): "sleep" /rest
+    // }
+  }
+
   render() {
     const { cats, navigation } = this.props;
     const catID = navigation.state.params.catID;
@@ -221,6 +254,7 @@ class CatDetail extends React.Component {
 
     // let recordUI = null;
     let recordList = [];
+    let stats = null;
     if (cat.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(cat.breathRecord);
 
@@ -235,6 +269,7 @@ class CatDetail extends React.Component {
       //   // const day = moment.unix(key); //object
       //   // console.log("day:", day);
       // }
+      stats = this.calculateAverage(cat.breathRecord);
     }
     //    const unixDate = moment(date).unix(); console.log(moment(unixDate * 1000).format('YYYY-MM-DD')); – Yura Zatsepin Feb 15 at 12:16
 
@@ -260,9 +295,6 @@ class CatDetail extends React.Component {
           {/* <View> */}
           {/* <Card> */}
           <List style={{ backgroundColor: 'white' }}>
-            <ListItem>
-              <Text>Total Avg: 27. Rest Avg.:33. Sleep Avg: 25</Text>
-            </ListItem>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditCat', {
                 title: 'Edit Cat',
@@ -277,6 +309,9 @@ class CatDetail extends React.Component {
               <Right>
                 <Icon name="arrow-forward" />
               </Right>
+            </ListItem>
+            <ListItem>
+              <Text>{stats ? `Mix Avg: ${stats.mixAvg}. Rest Avg.:${stats.restAvg}. Sleep Avg: ${stats.sleepAvg}` : 'no stats data'}</Text>
             </ListItem>
           </List>
           {/* </Card> */}
