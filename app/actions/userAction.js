@@ -34,12 +34,16 @@ export const ActionTypes = {
 };
 
 function addCatToUserFireBaseData(catids, newCatId, ownerPath) {
+  console.log('in addCatToUser page, catids:', catids, ';ownerPath:', ownerPath);
+
   catids.push(newCatId);
-  console.log('in new page, catids:', catids, ';ownerPath:', ownerPath);
 
   firebase.database().ref(ownerPath).child('catids').set(catids)
     .then(() => {
       console.log('reset catids ok !!!:');
+    })
+    .catch((error) => {
+      console.log('reset catids failed:', error);
     });
 }
 
@@ -126,12 +130,12 @@ export function addNewCat(name, age) {
         // 也可以上面set->update, 然後update用chain的方式
         // firebase.database().ref(userPath).child("catids").once('value', (snapshot)=>{
         //  let data = snapshot.val();
-        const catids = state.user.catids;// Object.values(data);
+        const catids = state.currentUser.catids;// Object.values(data);
         addCatToUserFireBaseData(catids, newCatId, userPath);
       // });
       })
       .catch((error) => {
-        console.log('add cat failed');
+        console.log('add cat failed:', error);
       });
   };
 }
