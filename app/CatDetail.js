@@ -160,20 +160,28 @@ class CatDetail extends React.Component {
     );
   }
 
-  calculateAverage(breathRecord) {
+  calculateStats(breathRecord, recordTimeList) {
+    const t0 = performance.now();
+
     // let mixTotal =0;
     // let mixNumTotal = 0;
     let sleepTotal = 0;
     let numSleep = 0;
     let restTotal = 0;
     let numRest = 0;
+
+    const sleepList = [];
+    const restList = [];
+
     if (breathRecord) {
-      for (key in breathRecord) {
+      for (key of recordTimeList) {
         const record = breathRecord[key];
         if (record.mode === 'sleep') {
+          sleepList.push(parseInt(record.breathRate));
           numSleep++;
           sleepTotal += parseInt(record.breathRate);
         } else if (record.mode == 'rest') {
+          restList.push(parseInt(record.breathRate));
           numRest++;
           restTotal += parseInt(record.breathRate);
         }
@@ -181,11 +189,47 @@ class CatDetail extends React.Component {
     }
 
     const numTotal = numRest + numSleep;
-    return {
+    const info = {
+      numRest,
+      numSleep,
       sleepAvg: numSleep ? sleepTotal / numSleep : 0,
       restAvg: numRest ? restTotal / numRest : 0,
       mixAvg: numTotal ? (sleepTotal + restTotal) / numTotal : 0,
     };
+
+    if (numSleep > 20) {
+      let total = 0;
+      for (let i = 0; i < 20; i++) {
+        total += sleepList[i];
+      }
+      info.sleepFirst20Avg = (total / 20).toFixed(2);
+
+      total = 0;
+      for (let i = 0; i < 20; i++) {
+        total += sleepList[numSleep - 1 - i];
+      }
+      info.sleepLast20Avg = (total / 20).toFixed(2);
+    }
+
+    if (numRest > 20) {
+      let total = 0;
+      for (let i = 0; i < 20; i++) {
+        total += restList[i];
+      }
+      info.restFirst20Avg = (total / 20).toFixed(2);
+
+      total = 0;
+      for (let i = 0; i < 20; i++) {
+        total += restList[numSleep - 1 - i];
+      }
+      info.restLast20Avg = (total / 20).toFixed(2);
+    }
+
+    const t1 = performance.now();
+    console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
+    // console.log('calculateStats');
+
+    return info;
 
     // return {
     //   breathRate(pin): "22"
@@ -253,14 +297,14 @@ class CatDetail extends React.Component {
     // }
 
     // let recordUI = null;
-    let recordList = [];
+    let recordTimeList = [];
     let stats = null;
     if (cat.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(cat.breathRecord);
 
       keys.sort((a, b) => b - a);
 
-      recordList = keys;
+      recordTimeList = keys;
 
       // for (const key of keys) {
       //   // const time = cat.breathRecord[key].breathRate;
@@ -269,7 +313,7 @@ class CatDetail extends React.Component {
       //   // const day = moment.unix(key); //object
       //   // console.log("day:", day);
       // }
-      stats = this.calculateAverage(cat.breathRecord);
+      stats = this.calculateStats(cat.breathRecord, recordTimeList);
     }
     //    const unixDate = moment(date).unix(); console.log(moment(unixDate * 1000).format('YYYY-MM-DD')); – Yura Zatsepin Feb 15 at 12:16
 
@@ -289,11 +333,12 @@ class CatDetail extends React.Component {
               </Body>
             </CardItem>
           </Card> */}
-          {/* <Separator bordered>
-            <Text>Records1</Text>
-          </Separator> */}
+          <Separator bordered>
+            <Text>Stats & Setting</Text>
+          </Separator>
           {/* <View> */}
           {/* <Card> */}
+          {/* <View> */}
           <List style={{ backgroundColor: 'white' }}>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditCat', {
@@ -310,8 +355,14 @@ class CatDetail extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
+            {/* <ListItem>
+                <Text>{stats ? `Mix Avg: ${stats.mixAvg.toFixed(1)}` : 'no stats data'}</Text>
+            </ListItem> */}
             <ListItem>
-              <Text>{stats ? `Mix Avg: ${stats.mixAvg}. Rest Avg.:${stats.restAvg}. Sleep Avg: ${stats.sleepAvg}` : 'no stats data'}</Text>
+              <Text>{stats ? `Rest total:${stats.numRest}, first20Avg.:${stats.restFirst20Avg}, last20Avg.:${stats.restLast20Avg}, Avg.:${stats.restAvg.toFixed(1)}` : 'no stats data'}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>{stats ? `Sleep total:${stats.numSleep}, first20Avg.:${stats.sleepFirst20Avg}, last20Avg.:${stats.sleepLast20Avg}, Avg.: ${stats.sleepAvg.toFixed(1)}` : 'no stats data'}</Text>
             </ListItem>
           </List>
           {/* </Card> */}
@@ -322,7 +373,7 @@ class CatDetail extends React.Component {
           </Separator>
           <View>
             <List
-              dataSource={this.ds.cloneWithRows(recordList)}
+              dataSource={this.ds.cloneWithRows(recordTimeList)}
               renderRow={record =>
               this.eachRowItem(cat, record)}
             // renderLeftHiddenRow={record =>
