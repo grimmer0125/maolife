@@ -88,26 +88,27 @@ class CatDetail extends React.Component {
     if (moment(time * 1000).isSame(moment(), 'day')) {
       prefixToday = ', Today';
     }
+    const text = `${moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday
+    } \n${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`;
 
     return (
     // <Card transparent style={{ flex: 0 }}>
     // key is not necessary in NativeBase's listItem but it can be used in deleteRow(body.key)
-
-    // <ListItem key={time}>
-    //   {/* <CardItem header>
+      <ListItem key={time}>
+        {/* <CardItem header>
     //     <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
     //   </CardItem> */}
-    //   {/* <CardItem> */}
-    //   {/* Instead of Body, View can be used too */}
-      <View>
-        <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
-        <Text>
-          {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
+        {/* <CardItem> */}
+        {/* Instead of Body, View can be used too */}
+        {/* <View> */}
+        <Text>{text}
         </Text>
-      </View>
-    //   {/* </CardItem> */}
-    //   {/* </Card> */}
-    // </ListItem>
+        {/* <Text>
+        </Text> */}
+        {/* </View> */}
+        {/* </CardItem> */}
+        {/* </Card> */}
+      </ListItem>
 
     );
   }
@@ -245,9 +246,6 @@ class CatDetail extends React.Component {
 
       keys.sort((a, b) => b - a);
 
-      const t1 = performance.now();
-      console.log(`Call to sort took ${t1 - t0} milliseconds.`);
-
       recordTimeList = keys;
 
       stats = this.calculateStats(cat.breathRecord, recordTimeList);
@@ -298,21 +296,23 @@ class CatDetail extends React.Component {
               keyExtractor={this._keyExtractor}
               data={recordTimeList}
               renderItem={({ item }) => (
-                <SwipeRow
-                  // leftOpenValue={75}
-                  rightOpenValue={-75}
-                  // left={
-                  //   <Button success onPress={() => alert(item.value)} >
-                  //     <Icon active name="add" />
-                  //   </Button>
-                  //         }
-                  body={this.eachRowItem(cat, item)}
-                  right={
-                    <Button danger onPress={() => this.removeItem(cat.catID, item)}>
-                      <Icon active name="trash" />
-                    </Button>
-                          }
-                />)}
+                this.eachRowItem(cat, item)
+                // <SwipeRow
+                //   // leftOpenValue={75}
+                //   rightOpenValue={-75}
+                //   // left={
+                //   //   <Button success onPress={() => alert(item.value)} >
+                //   //     <Icon active name="add" />
+                //   //   </Button>
+                //   //         }
+                //   body={this.eachRowItem(cat, item)}
+                //   right={
+                //     <Button danger onPress={() => this.removeItem(cat.catID, item)}>
+                //       <Icon active name="trash" />
+                //     </Button>
+                //           }
+                // />
+              )}
             />
 
             {/* // TODO: it seems to be slow when number of Row is 122.
