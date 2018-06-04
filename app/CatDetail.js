@@ -1,35 +1,20 @@
-// TODO:
-// 1. show logs
-// *2. add log
-// 3. add cat's icon
-// *4. input完後時 直接點button, 要可以work, 把view/content/form拿掉就ok, 也有人提過
-// *5. fab有時pos會錯, and 預設bottom-right位置不太對. 把content拿掉了就ok, github 有人提過
 import React, { Component } from 'react';
 
 import {
   ListView,
   Button as SystemButton,
-  // Alert,
-  // Button,
-  // Text,
   View,
 } from 'react-native';
 
-import { Container, Content, Image, Button, Icon, Fab, Card, CardItem,
-  Body, Header, List, ListItem, Item, Input, Left, Right, Text, Separator } from 'native-base';
+import { Container, Content, Button, Icon, Fab, Card, CardItem,
+  Body, List, ListItem, Item, Input, Left, Right, Text, Separator } from 'native-base';
 
-import CommonStyles from './styles/common';
+// import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
 import { leaveCatDetail, addNewOwner } from './actions/userAction';
 import { deleteBreathRecord } from './actions/catAction';
 
-// import {
-//   StackNavigator,
-// } from 'react-navigation';
-
 const moment = require('moment');
-
-// import Icon2 from 'react-native-vector-icons/FontAwesome';
 
 function extractCatInfo(catID, cats) {
   if (catID && cats && cats.hasOwnProperty(catID)) {
@@ -41,21 +26,7 @@ function extractCatInfo(catID, cats) {
 
 class CatDetail extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    //  title: `Chat with ${navigation.state.params.user}`, <- 進階用法
-    // title: 'Cat List',
-
-    // this.props.cats;
-
-    // const cat = extractCatInfo(navigation.state.params.catID, cats);
-
-    // title: navigation.state.params.catID,
-
     title: navigation.state.params.name,
-
-    // header: ({ goBack }) => ({
-    //   left: (  ),
-    // }),
-
     headerRight: (
       <SystemButton
         title="Measure"
@@ -64,13 +35,6 @@ class CatDetail extends React.Component {
         })}
       />
     ),
-
-    // headerLeft: (
-    //   // <MenuButton/>
-    //   // <Icon2 name={'chevron-left'} onPress={ () => { navigation.goBack(); } }  />
-    //   <SystemButton onPress={() => {console.log("back!!");navigation.goBack();} } title={"<"} >
-    //   </SystemButton>
-    // ),
   });
 
   constructor(props) {
@@ -78,33 +42,15 @@ class CatDetail extends React.Component {
 
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-    // dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-
     this.state = {
       active: false,
       shareDialog: false,
       authID: '',
-      // listViewData: datas,
-      // listViewData: [], // ds.cloneWithRows(datas),
     };
   }
 
   componentWillUpdate() {
     console.log('detail will udpate');
-  }
-
-  // not been called
-  // componentWillReceiveProps() {
-  //   console.log("CatDetail will receive props");
-  // }
-  // componentWillUnmount() {
-  //   console.log("grimmer unmount, selecte = null")
-  //   //xTODO not a good way, may use detecting navi change instead of using this
-  //   // this.props.dispatch(leaveCatDetail());
-  // }
-
-  handleChangeAuthID = (text) => {
-    this.setState({ authID: text });
   }
 
   onSave = () => {
@@ -117,22 +63,19 @@ class CatDetail extends React.Component {
     this.setState({ shareDialog: false });
   }
 
-  deleteRow = (catID, secId, rowId, rowMap) => { // s1, index(0~x), key=s1+index
+  handleChangeAuthID = (text) => {
+    this.setState({ authID: text });
+  }
+
+  // s1, index(0~x), key=s1+index
+  deleteRow = (catID, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow();
     const recordTime = rowMap[`${secId}${rowId}`].props.body.key;
-    // rowMap[`${secId}${rowId}`].props.closeRow(); //props.body.key (recordTime)
-    // const newData = [...this.state.listViewData];
-    // newData.splice(rowId, 1);
-    // this.setState({ listViewData: newData });
-    // TODO: send delete command to Firebase
+
     this.props.dispatch(deleteBreathRecord(catID, recordTime));
   }
 
   eachRowItem = (cat, time) => {
-    // 如果資料大的話就要拆開了, 方便query/sort/pagination
-    // breathData/catid1/
-    //                   time1
-
     let prefixToday = '';
     if (moment(time * 1000).isSame(moment(), 'day')) {
       prefixToday = ', Today';
@@ -150,7 +93,6 @@ class CatDetail extends React.Component {
         <Body>
           <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
           <Text>
-            {/* {moment(time * 1000).format("YYYY-MM-DD HH:mm")} */}
             {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
           </Text>
         </Body>
@@ -163,8 +105,6 @@ class CatDetail extends React.Component {
   calculateStats(breathRecord, recordTimeList) {
     const t0 = performance.now();
 
-    // let mixTotal =0;
-    // let mixNumTotal = 0;
     let sleepTotal = 0;
     let numSleep = 0;
     let restTotal = 0;
@@ -174,13 +114,13 @@ class CatDetail extends React.Component {
     const restList = [];
 
     if (breathRecord) {
-      for (key of recordTimeList) {
+      for (const key of recordTimeList) {
         const record = breathRecord[key];
         if (record.mode === 'sleep') {
           sleepList.push(parseInt(record.breathRate));
           numSleep++;
           sleepTotal += parseInt(record.breathRate);
-        } else if (record.mode == 'rest') {
+        } else if (record.mode === 'rest') {
           restList.push(parseInt(record.breathRate));
           numRest++;
           restTotal += parseInt(record.breathRate);
@@ -232,14 +172,8 @@ class CatDetail extends React.Component {
 
     const t1 = performance.now();
     console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
-    // console.log('calculateStats');
 
     return info;
-
-    // return {
-    //   breathRate(pin): "22"
-    //   mode(pin): "sleep" /rest
-    // }
   }
 
   render() {
@@ -265,7 +199,7 @@ class CatDetail extends React.Component {
                 <Input
                   placeholder="id"
                   onChangeText={this.handleChangeAuthID}
-                  onSubmitEditing={(event) => {
+                  onSubmitEditing={() => {
                               this.onSave();
                             }}
                 />
@@ -275,33 +209,21 @@ class CatDetail extends React.Component {
 
             <CardItem>
               <Button onPress={this.onCancel}>
-                {/* <Icon active name="thumbs-up" /> */}
                 <Text>Cancel</Text>
               </Button>
               <Right>
                 <Button onPress={this.onSave}>
-                  {/* <Icon active name="chatbubbles" /> */}
                   <Text>Save</Text>
                 </Button>
               </Right>
-
-              {/* <Text>11h ago</Text> */}
             </CardItem>
+
           </Card>
           {/* </View> */}
         </Container>
       );
     }
 
-    // cat.breathRecord:{
-    //   time1: {
-    //    breathRate:
-    //    mode:
-    //   },
-    //   time2:
-    // }
-
-    // let recordUI = null;
     let recordTimeList = [];
     let stats = null;
     if (cat.hasOwnProperty('breathRecord')) {
@@ -311,39 +233,19 @@ class CatDetail extends React.Component {
 
       recordTimeList = keys;
 
-      // for (const key of keys) {
-      //   // const time = cat.breathRecord[key].breathRate;
-      //   console.log("time2:", key)
-      //   console.log(moment(key * 1000).format("YYYY-MM-DD HH:mm"));
-      //   // const day = moment.unix(key); //object
-      //   // console.log("day:", day);
-      // }
       stats = this.calculateStats(cat.breathRecord, recordTimeList);
     }
-    //    const unixDate = moment(date).unix(); console.log(moment(unixDate * 1000).format('YYYY-MM-DD')); – Yura Zatsepin Feb 15 at 12:16
 
-
+    // fab:
     // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/master/js/components/fab/basic.js
     // https://github.com/GeekyAnts/NativeBase/issues/372
     // fab should be outside content
     return (
       <Container>
         <Content>
-          {/* <Card >
-            <CardItem>
-              <Body>
-                <Text>
-                   aaa
-                </Text>
-              </Body>
-            </CardItem>
-          </Card> */}
           <Separator bordered>
             <Text>Stats & Setting</Text>
           </Separator>
-          {/* <View> */}
-          {/* <Card> */}
-          {/* <View> */}
           <List style={{ backgroundColor: 'white' }}>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditCat', {
@@ -370,15 +272,12 @@ class CatDetail extends React.Component {
               <Text>{stats ? `Sleep total:${stats.numSleep}, first20Avg.:${stats.sleepFirst20Avg}, last20Avg.:${stats.sleepLast20Avg}, Avg.: ${stats.sleepAvg.toFixed(1)}` : 'no stats data'}</Text>
             </ListItem>
           </List>
-          {/* </Card> */}
-          {/* </View> */}
-
           <Separator bordered>
             <Text>Records</Text>
           </Separator>
           <View>
             {/* // TODO: it seems to be slow when number of Row is 122.
-            // Use Flatlist instead. */}
+            // Use Flatlist/pagination instead. */}
             <List
               dataSource={this.ds.cloneWithRows(recordTimeList)}
               renderRow={record =>
@@ -396,23 +295,6 @@ class CatDetail extends React.Component {
               rightOpenValue={-75}
             />
           </View>
-
-          {/* <View style={{ flex: 1 }}> */}
-          {/* <Text>
-               {cat.name}
-            </Text> */}
-          {/* <Card style={{flex: 0}}>
-              <CardItem>
-                <Image style={{ resizeMode: 'cover', height: 200,flex: 1 }} source={{uri: 'https://assets-cdn.github.com/images/modules/logos_page/Octocat.png'}} />
-              </CardItem>
-              <CardItem>
-                <Button transparent>
-                  <Icon name="logo-github" />
-                  <Text>15,021 stars</Text>
-                </Button>
-              </CardItem>
-            </Card> */}
-          {/* </View> */}
         </Content>
 
         <Fab
@@ -427,22 +309,12 @@ class CatDetail extends React.Component {
           }}
         >
           <Icon name="share" />
-          {/* <Button style={{ backgroundColor: '#34A34F' }}>
-              <Icon name="logo-whatsapp" />
-          </Button>
-          <Button style={{ backgroundColor: '#3B5998' }}>
-              <Icon name="logo-facebook" />
-          </Button>
-          <Button disabled style={{ backgroundColor: '#DD5144' }}>
-              <Icon name="mail" />
-          </Button> */}
         </Fab>
       </Container>
 
     );
   }
 }
-
 
 const mapStateToProps = state => ({
   cats: state.cats,

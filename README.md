@@ -8,6 +8,8 @@ It mainly uses https://nativebase.io/.
 
 ## Library Version and environment requirement
 
+**Not updated to the latest package used, will update soon**
+
 The development was setup on 10.12 and has been upgraded to 10.13 with Xcode 9 and latest React version. 10.12 & 10.11 is not tested for the latest code.
 
 - macOS: 10.13.2 (High Sierra)

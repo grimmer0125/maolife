@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 
 const initialState = {
   KID: null,
-  displayName: 'bb8',
+  displayName: '',
   isLogin: false,
 };
 
@@ -18,13 +18,12 @@ export function userChecking(state = true, action = {}) {
   }
 }
 
-// KID
 export function registerStatus(state = '', action) {
   switch (action.type) {
     case ActionTypes.INVALID_REGISTERID:
-      return 'invalid id';
+      return 'invalid kid';
     case ActionTypes.EXISTING_REGISTERID:
-      return 'existing id';
+      return 'existing kid';
     case ActionTypes.LOGOUT:
       return '';
     default:
@@ -41,15 +40,11 @@ export function currentUser(state = initialState, action = {}) {
         ...action.payload.userData,
       };
     case ActionTypes.LOGIN_SUCCESS:
-      // console.log("reducer user1:", action.payload.displayName);
       return {
         ...state,
         isLogin: true,
-        // displayName: action.payload.displayName //就算成功第二次也不會show name,
-        // use 1. set/update to firebase 2. get user_data value change (the below action)
       };
     case ActionTypes.LOGOUT:
-      // console.log("got logout action in reducer")
       return initialState;
     default:
       return state;
@@ -64,11 +59,6 @@ export function selectedCat(state = null, action) {
       return state;
   }
 }
-
-// export default combineReducers({
-//   user,
-//   userChecking
-// });
 
 export const userRoot = {
   currentUser, userChecking, registerStatus,

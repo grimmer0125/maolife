@@ -1,30 +1,13 @@
-// import React, { Component } from 'react';
 import React, { Component } from 'react';
-
-import { Container, Content, Form, Item, Input, Button, Text, Label } from 'native-base';
+import { Container, Form, Item, Input, Button, Text, Label } from 'native-base';
+import { connect } from 'react-redux';
 
 import { addNewCat, removeSelfFromCatOwners } from './actions/userAction';
 import { updateInfo } from './actions/catAction';
 
-import { connect } from 'react-redux';
-
-// import {
-//   StackNavigator,
-// } from 'react-navigation';
-
 class EditCat extends Component {
  static navigationOptions = ({ navigation }) => ({
-   //  title: `Chat with ${navigation.state.params.user}`,
-   // title: 'New Cat',
    title: navigation.state.params.title,
-   //  headerRight: (
-   //    <Button title="Save"
-   //      onPress={() => {
-   //        //try to save
-   //        navigation.goBack(null);
-   //      }}
-   //    />
-   //  ),
  });
 
  constructor(props) {
@@ -33,7 +16,7 @@ class EditCat extends Component {
    this.state = { name: '', age: '' };
  }
 
- // not triggered
+ // navigation change will not trgger this
  // componentWillReceiveProps(newProps) {
  //   const {
  //     title, catID, name, age,
@@ -41,15 +24,6 @@ class EditCat extends Component {
  //
  //   this.setState({ name });
  // }
-
-  // https://github.com/GeekyAnts/ignite-native-base-boilerplate/blob/42a1cc8a9366b5aed191e7f8fcc660788cedcd64/boilerplate/App/Containers/LoginScreen.js
-  handleChangeUsername = (text) => {
-    this.setState({ name: text });
-  }
-
-  handleChangeAge = (text) => {
-    this.setState({ age: text });
-  }
 
   onSave = () => {
     console.log('in add/edit cat page, state:', this.state);
@@ -76,14 +50,11 @@ class EditCat extends Component {
       this.props.dispatch(updateInfo(catID, info));
     }
 
-    // we can also chain the two calls together
-
-    // const { username, password } = this.state
     this.props.navigation.goBack(null);
   }
 
   onDelete = () => {
-    console.log('in delete cat page, state:', this.state);
+    console.log('clicking delete cat');
 
     const { catID } = this.props.navigation.state.params;
 
@@ -91,21 +62,17 @@ class EditCat extends Component {
       this.props.dispatch(removeSelfFromCatOwners(catID));
     }
 
-    // this.props.dispatch(addNewCat(this.state.name, this.state.age));
-
-    // we can also chain the two calls together
-
-    // const { username, password } = this.state
-    this.props.navigation.pop(2);// goBack(null);
+    this.props.navigation.pop(2);
   }
 
+  // https://github.com/GeekyAnts/ignite-native-base-boilerplate/blob/42a1cc8a9366b5aed191e7f8fcc660788cedcd64/boilerplate/App/Containers/LoginScreen.js
+  handleChangeUsername = (text) => {
+    this.setState({ name: text });
+  }
 
-  // https://github.com/GeekyAnts/NativeBase/issues/483
-  // username input:
-  // onSubmitEditing={ (event) => {
-  //               this.refs._root.Password.focus();
-  //         }}
-  // password input: onSubmit: this.onPressButton();
+  handleChangeAge = (text) => {
+    this.setState({ age: text });
+  }
 
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
   render() {
@@ -146,7 +113,6 @@ class EditCat extends Component {
           >
             <Text>Delete</Text>
           </Button>) : null}
-
         {/* </Content> */}
       </Container>
     );

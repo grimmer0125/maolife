@@ -16,8 +16,6 @@ import { connect } from 'react-redux';
 import CommonStyles from './styles/common';
 import { handleFBLogin, handleFBLogout, registerKID } from './actions/userAction';
 
-'use strict';
-
 const FBSDK = require('react-native-fbsdk');
 
 const {
@@ -35,21 +33,22 @@ class Login extends Component {
     this.state = { registerText: '' };
   }
 
-  handleFBLoginResult(error, result) {
-    console.log('login action in login');
-    this.props.dispatch(handleFBLogin(error, result));
-  }
-
-  handleFBLogoutResult() {
-    console.log('logout action in login:');
-    this.props.dispatch(handleFBLogout());
-  }
-
   onButtonPress() {
     this.props.dispatch(registerKID(this.state.registerText));
   }
 
-  // TODO: use https://github.com/halilb/react-native-textinput-effects instead of using native TextInput
+  handleFBLoginResult(error, result) {
+    console.log('login action result in login page');
+    this.props.dispatch(handleFBLogin(error, result));
+  }
+
+  handleFBLogoutResult() {
+    console.log('logout action restul in login page');
+    this.props.dispatch(handleFBLogout());
+  }
+
+  // TODO: instead of using native TextInput,
+  // use https://github.com/halilb/react-native-textinput-effects
   // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
 
   render() {

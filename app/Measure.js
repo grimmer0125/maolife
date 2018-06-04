@@ -1,18 +1,13 @@
 // record number of breath per minute
 
-// maybe one of the tabs, but even decide to do, implement later
-
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Container,
   Content,
   Button,
-  Icon,
-  Fab,
   Card,
   CardItem,
   Body,
-  Form,
   Item,
   Input,
   Right,
@@ -23,22 +18,15 @@ import {
 } from 'native-base';
 
 import {
-  // Text,
-  // TextInput,
-  View,
   Vibration,
   Platform,
-  // Button,
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
-import { extractCatInfo } from './store/stateHelper';
 import { newBreathRecord } from './actions/catAction';
 
 const moment = require('moment');
-
-// import Enum from "es6-enum";
 
 const BUTTON_STATUS_INIT = 'Click to Start';
 const BUTTON_STATUS_RUNNING = 'Click to Cancel';
@@ -61,22 +49,16 @@ class Measure extends React.Component {
     console.log('Measure init');
     this.state = {
       sleepRadio: true,
-      // radio2: false,
-      // radio3: false,
-      // radio4: true,
-      // numberOfBreath: -1,
     };
     this.state = {
       ...initialState,
     };
 
-    // this.resetSeconds();
-
     this.timerID = -1;
   }
 
   resetSeconds() {
-    console.log('reset !!!!!!!!!!!!!!!');
+    console.log('reset seconds and other everything!!');
     this.setState({
       ...initialState,
     });
@@ -93,7 +75,7 @@ class Measure extends React.Component {
   }
 
   onSave = () => {
-    console.log('submit!!!:', this.state.numberOfBreath);
+    console.log('on save!!!:', this.state.numberOfBreath);
     console.log('time:', this.inputTime);
     let time;
     if (!this.inputTime) {
@@ -102,23 +84,23 @@ class Measure extends React.Component {
       time = moment(this.inputTime).unix();
     }
 
-    // this.props.currentCat
     let mode = 'sleep';
     if (!this.state.sleepRadio) {
       mode = 'rest';
     }
-    // console.log("id20:", this.props.navigation.state.params);
+    // console.log("params:", this.props.navigation.state.params);
     const catID = this.props.navigation.state.params.catID;
     console.log('catID:', catID);
 
-    // const id1= this.props.currentCat.catID;
     this.props.dispatch(newBreathRecord(catID, this.state.numberOfBreath, mode, time));
 
     this.resetSeconds();
+
+    // this.props.navigation.goBack(null);
   }
 
   onCancel = () => {
-    console.log('Cancel!!!:', this.state.numberOfBreath);
+    console.log('Cancel! !!:', this.state.numberOfBreath);
     this.resetSeconds();
   }
 
@@ -127,15 +109,16 @@ class Measure extends React.Component {
   }
 
   startCalibration = () => {
-    if (this.state.buttonStatus == BUTTON_STATUS_INIT) {
+    if (this.state.buttonStatus === BUTTON_STATUS_INIT) {
       this.setState({ buttonStatus: BUTTON_STATUS_RUNNING });
+
       // start timer;
       this.timerID = setInterval(() => {
         console.log('timer !!!!');
 
         const newSeconds = this.state.seconds - 1;
         this.setState({ seconds: newSeconds });
-        if (newSeconds == 0) {
+        if (newSeconds === 0) {
           this.endTime = moment().format('YYYY-MM-DD HH:mm');
           console.log(this.endTime);
           this.setState({ buttonStatus: BUTTON_STATUS_END });
@@ -153,7 +136,7 @@ class Measure extends React.Component {
           clearInterval(this.timerID);
         }
       }, 1000);
-    } else if (this.state.buttonStatus == BUTTON_STATUS_RUNNING) {
+    } else if (this.state.buttonStatus === BUTTON_STATUS_RUNNING) {
       this.resetSeconds();
 
       // stop timer
@@ -162,14 +145,9 @@ class Measure extends React.Component {
   }
 
   render() {
-    // if (state.listNav.routes.length>1 && state.listNav.routes[1].params.catID) {
-
-    console.log('in render new measure props:', this.props.navigation.state);
-    console.log('current cat:', this.props.currentCat);
-
     let inputUI = null;
 
-    if (this.state.buttonStatus == BUTTON_STATUS_END) {
+    if (this.state.buttonStatus === BUTTON_STATUS_END) {
       // show input text
       const labelStr = `Record time (default is currentTime, ${this.endTime}) Modify it if need be`;
       inputUI = (
@@ -180,71 +158,48 @@ class Measure extends React.Component {
               {/* <Form> */}
               <Item stackedLabel>
                 <Label>{labelStr}</Label>
-                <Input onChangeText={text => this.inputTime = text} />
+                <Input onChangeText={(text) => { this.inputTime = text; }} />
               </Item>
               <Item>
-                {/* <Label>Username</Label> */}
                 <Input placeholder="Input Number of breath" onChangeText={this.inputNumberOfBreach} />
               </Item>
               {/* </Form> */}
             </Body>
           </CardItem>
-          {/* <Card> */}
           <CardItem>
             <Button onPress={this.onCancel}>
-              {/* <Icon active name="thumbs-up" /> */}
               <Text>Cancel</Text>
             </Button>
             <Right>
               <Button onPress={this.onSave}>
-                {/* <Icon active name="chatbubbles" /> */}
                 <Text>Save</Text>
               </Button>
             </Right>
           </CardItem>
-          {/* </Card> */}
         </Card>);
     }
 
-    return (<Container>
-      <Content>
-        <ListItem onPress={() => this.toggleRadio()}>
-          <Radio selected={this.state.sleepRadio} onPress={() => this.toggleRadio()} />
-          <Text>睡著時</Text>
-        </ListItem>
-        <ListItem onPress={() => this.toggleRadio()}>
-          <Radio selected={!this.state.sleepRadio} onPress={() => this.toggleRadio()} />
-          <Text>休息時</Text>
-        </ListItem>
-        <Button onPress={this.startCalibration}>
-          <Text>{this.state.buttonStatus}</Text>
-        </Button>
-        <Text>
-          {this.state.seconds}
-        </Text>
-      </Content>
-      {inputUI}
-    </Container>);
+    return (
+      <Container>
+        <Content>
+          <ListItem onPress={() => this.toggleRadio()}>
+            <Radio selected={this.state.sleepRadio} onPress={() => this.toggleRadio()} />
+            <Text>sleep</Text>
+          </ListItem>
+          <ListItem onPress={() => this.toggleRadio()}>
+            <Radio selected={!this.state.sleepRadio} onPress={() => this.toggleRadio()} />
+            <Text>rest</Text>
+          </ListItem>
+          <Button onPress={this.startCalibration}>
+            <Text>{this.state.buttonStatus}</Text>
+          </Button>
+          <Text>
+            {this.state.seconds}
+          </Text>
+        </Content>
+        {inputUI}
+      </Container>);
   }
 }
 
-// function extractCatInfo(state) {
-//
-//       state.routes[1].params.catID;
-//
-//   let cat = {};
-//   if (state.listNav.routes.length > 1 && state.listNav.routes[1].params.catID) {
-//     const catID = state.listNav.routes[1].params.catID;
-//
-//     if (state.cats && state.cats.hasOwnProperty(catID)) {
-//       cat = {catID, ...state.cats[catID]};
-//     }
-//   }
-//
-//   return cat;
-//
-// }
-
-const mapStateToProps = state => ({ currentCat: extractCatInfo(state) });
-
-export default connect(mapStateToProps)(Measure);
+export default connect()(Measure);

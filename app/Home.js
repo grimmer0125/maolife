@@ -14,15 +14,11 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
-    // Three ways to dispatch action
-    // 1. bind action
-    // 2. map dispatch
-    // 3.  directly use dispatch
-    this.props.dispatch(connectDBtoCheckUser());
-
-    // initial actions in constructor vs in componentDidMount
+    // ref: initial actions in constructor vs in componentDidMount
     // https://discuss.reactjs.org/t/constructor-vs-componentwillmount-vs-componentdidmount/4287
-    // Actually, the rule is: If your initialization depends upon the DOM, use componentDidMount, otherwise use constructor.
+    // Actually, the rule is: If your initialization depends upon the DOM, use componentDidMount,
+    // otherwise use constructor.
+    this.props.dispatch(connectDBtoCheckUser());
   }
 
   render() {
@@ -36,7 +32,7 @@ class Home extends Component {
         </View>
       );
     }
-    // user should not be null due to the current default value
+
     if (user && user.KID) {
       return <MainScreen />;
     }
@@ -44,12 +40,12 @@ class Home extends Component {
   }
 }
 
-function debugState(state) {
-  return state.currentUser;
-}
+// function debugState(state) {
+//   return state.currentUser;
+// }
 
 const mapStateToProps = state => ({
-  user: debugState(state),
+  user: state.currentUser,
   userChecking: state.userChecking,
 });
 

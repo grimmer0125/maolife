@@ -10,13 +10,7 @@
         "react"
     ],
 
-    # "extends": [
-    #     "eslint:recommended",
-    #     "plugin:react/recommended"
-    # ],
-
     "extends": ["airbnb"],
-
 
     "rules": {
       "react/prop-types": 0,

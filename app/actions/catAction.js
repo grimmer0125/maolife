@@ -1,17 +1,14 @@
 import * as firebase from 'firebase';
-import firebaseConfig from '../../firebaseConfig';
 
-// const moment = require('moment');
-
-// mode: sleep or rest
+/**
+ * @param  {string} mode "sleep" or "rest"
+ */
 export function newBreathRecord(catID, breathRate, mode, recordTime) {
-  return (dispatch, getState) => {
+  return () => {
     const catPath = `cats/${catID}`;
 
-    // const time = moment().unix();
     const newRecord = {};
     newRecord[recordTime] = { mode, breathRate };
-    // var now = moment().format();
 
     console.log('new record', newRecord);
     firebase.database().ref(catPath).child('breathRecord').update(newRecord)
@@ -28,11 +25,6 @@ export function updateInfo(catID, info) {
   return () => {
     const catPath = `cats/${catID}`;
 
-    // const time = moment().unix();
-    // const newRecord = {};
-    // newRecord[recordTime] = { mode, breathRate };
-    // var now = moment().format();
-
     console.log('new info', info);
     firebase.database().ref(catPath).update(info)
       .then(() => {
@@ -45,13 +37,8 @@ export function updateInfo(catID, info) {
 }
 
 export function deleteBreathRecord(catID, recordTime) {
-  return (dispatch) => {
+  return () => {
     const recordPath = `cats/${catID}/breathRecord/${recordTime}`;
-
-    // const time = moment().unix();
-    // const newRecord = {};
-    // newRecord[recordTime] = { mode, breathRate };
-    // var now = moment().format();
 
     console.log('delete record', recordPath);
     firebase.database().ref(recordPath).remove()
