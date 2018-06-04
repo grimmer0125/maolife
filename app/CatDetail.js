@@ -195,8 +195,13 @@ class CatDetail extends React.Component {
       sleepAvg: numSleep ? sleepTotal / numSleep : 0,
       restAvg: numRest ? restTotal / numRest : 0,
       mixAvg: numTotal ? (sleepTotal + restTotal) / numTotal : 0,
+      sleepFirst20Avg: '',
+      sleepLast20Avg: '',
+      restFirst20Avg: '',
+      restLast20Avg: '',
     };
 
+    // TODO: become a function
     if (numSleep > 20) {
       let total = 0;
       for (let i = 0; i < 20; i++) {
@@ -372,6 +377,8 @@ class CatDetail extends React.Component {
             <Text>Records</Text>
           </Separator>
           <View>
+            {/* // TODO: it seems to be slow when number of Row is 122.
+            // Use Flatlist instead. */}
             <List
               dataSource={this.ds.cloneWithRows(recordTimeList)}
               renderRow={record =>
