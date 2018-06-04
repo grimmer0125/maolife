@@ -4,14 +4,15 @@ import {
   ListView,
   Button as SystemButton,
   View,
+  FlatList,
 } from 'react-native';
 
 import { Container, Content, Button, Icon, Fab, Card, CardItem,
-  Body, List, ListItem, Item, Input, Left, Right, Text, Separator } from 'native-base';
+  Body, List, ListItem, SwipeRow, Item, Input, Left, Right, Text, Separator } from 'native-base';
 
 // import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
-import { leaveCatDetail, addNewOwner } from './actions/userAction';
+import { addNewOwner } from './actions/userAction';
 import { deleteBreathRecord } from './actions/catAction';
 
 const moment = require('moment');
@@ -67,6 +68,13 @@ class CatDetail extends React.Component {
     this.setState({ authID: text });
   }
 
+  removeItem(catID, recordTime) {
+    // let data = this.state.data;
+    // data = data.filter(item => item.key !== key);
+    // this.setState({ data });
+    this.props.dispatch(deleteBreathRecord(catID, recordTime));
+  }
+
   // s1, index(0~x), key=s1+index
   deleteRow = (catID, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow();
@@ -82,28 +90,30 @@ class CatDetail extends React.Component {
     }
 
     return (
-      // <Card transparent style={{ flex: 0 }}>
-      // key is not necessary in NativeBase's listItem but it can be used in deleteRow(body.key)
-      <ListItem key={time}>
-        {/* <CardItem header>
-          <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
-        </CardItem> */}
-        {/* <CardItem> */}
-        {/* Instead of Body, View can be used too */}
-        <Body>
-          <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
-          <Text>
-            {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
-          </Text>
-        </Body>
-        {/* </CardItem> */}
-        {/* </Card> */}
-      </ListItem>
+    // <Card transparent style={{ flex: 0 }}>
+    // key is not necessary in NativeBase's listItem but it can be used in deleteRow(body.key)
+
+    // <ListItem key={time}>
+    //   {/* <CardItem header>
+    //     <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
+    //   </CardItem> */}
+    //   {/* <CardItem> */}
+    //   {/* Instead of Body, View can be used too */}
+      <View>
+        <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
+        <Text>
+          {`${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`}
+        </Text>
+      </View>
+    //   {/* </CardItem> */}
+    //   {/* </Card> */}
+    // </ListItem>
+
     );
   }
 
   calculateStats(breathRecord, recordTimeList) {
-    const t0 = performance.now();
+    // const t0 = performance.now();
 
     let sleepTotal = 0;
     let numSleep = 0;
@@ -170,11 +180,13 @@ class CatDetail extends React.Component {
       info.restLast20Avg = (total / 20).toFixed(2);
     }
 
-    const t1 = performance.now();
-    console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
+    // const t1 = performance.now();
+    // console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
 
     return info;
   }
+
+  _keyExtractor = (item, index) => item;
 
   render() {
     const { cats, navigation } = this.props;
@@ -229,7 +241,12 @@ class CatDetail extends React.Component {
     if (cat.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(cat.breathRecord);
 
+      const t0 = performance.now();
+
       keys.sort((a, b) => b - a);
+
+      const t1 = performance.now();
+      console.log(`Call to sort took ${t1 - t0} milliseconds.`);
 
       recordTimeList = keys;
 
@@ -276,9 +293,31 @@ class CatDetail extends React.Component {
             <Text>Records</Text>
           </Separator>
           <View>
+
+            <FlatList
+              keyExtractor={this._keyExtractor}
+              data={recordTimeList}
+              renderItem={({ item }) => (
+                <SwipeRow
+                  // leftOpenValue={75}
+                  rightOpenValue={-75}
+                  // left={
+                  //   <Button success onPress={() => alert(item.value)} >
+                  //     <Icon active name="add" />
+                  //   </Button>
+                  //         }
+                  body={this.eachRowItem(cat, item)}
+                  right={
+                    <Button danger onPress={() => this.removeItem(cat.catID, item)}>
+                      <Icon active name="trash" />
+                    </Button>
+                          }
+                />)}
+            />
+
             {/* // TODO: it seems to be slow when number of Row is 122.
             // Use Flatlist/pagination instead. */}
-            <List
+            {/* <List
               dataSource={this.ds.cloneWithRows(recordTimeList)}
               renderRow={record =>
               this.eachRowItem(cat, record)}
@@ -293,7 +332,7 @@ class CatDetail extends React.Component {
                </Button>)}
             // leftOpenValue={275}
               rightOpenValue={-75}
-            />
+            /> */}
           </View>
         </Content>
 
