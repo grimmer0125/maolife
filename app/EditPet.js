@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import { Container, Form, Item, Input, Button, Text, Label } from 'native-base';
 import { connect } from 'react-redux';
 
@@ -81,6 +82,7 @@ class EditPet extends Component {
     } = this.props.navigation.state.params;
     console.log('render in EditPet:', title, petID);
     // native-base's Input's value is not the normal defitnion, more like initialValue
+
     return (
       <Container>
         {/* <Content> */}
@@ -100,19 +102,25 @@ class EditPet extends Component {
             />
           </Item>
         </Form>
+
         <Button
-          style={{ margin: 15, marginTop: 50 }}
+          style={{ margin: 15, marginTop: 20 }}
           onPress={this.onSave}
         >
           <Text>Save</Text>
         </Button>
+
         {petID ? (
-          <Button
-            style={{ margin: 15, marginTop: 50 }}
-            onPress={this.onDelete}
-          >
-            <Text>Delete</Text>
-          </Button>) : null}
+          <View>
+            <Button
+              style={{ margin: 15, marginTop: 100 }}
+              onPress={this.onDelete}
+            >
+              <Text>Remove self from Owners</Text>
+            </Button>
+            <Text style={{ color: 'red' }}>The pet data will be removed too, if you are the only one owner</Text>
+          </View>
+          ) : null}
         {/* </Content> */}
       </Container>
     );

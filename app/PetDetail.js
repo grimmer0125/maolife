@@ -204,7 +204,7 @@ class PetDetail extends React.Component {
             <CardItem>
               <Body>
                 <Text>
-                    Input your friend's kid to authorize him/her
+                    Input your friend's KID to authorize him/her
                 </Text>
               </Body>
             </CardItem>

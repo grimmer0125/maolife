@@ -21,9 +21,9 @@ export function userChecking(state = true, action = {}) {
 export function registerStatus(state = '', action) {
   switch (action.type) {
     case ActionTypes.INVALID_REGISTERID:
-      return 'invalid kid';
+      return 'invalid KID';
     case ActionTypes.EXISTING_REGISTERID:
-      return 'existing kid';
+      return 'existing KID';
     case ActionTypes.LOGOUT:
       return '';
     default:

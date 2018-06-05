@@ -7,6 +7,9 @@ import {
   View,
 } from 'react-native';
 
+import { Text } from 'native-base';
+
+
 // import {
 //   StackNavigator,
 // } from 'react-navigation';
@@ -54,7 +57,7 @@ class MySettingsScreen extends Component {
   }
 
   render() {
-    // const { navigation } = this.props;
+    const { currentUser } = this.props;
 
     return (
       <ScrollView>
@@ -67,6 +70,9 @@ class MySettingsScreen extends Component {
           title="In Setting, Go back"
         /> */}
         <View style={{ alignItems: 'center' }}>
+          <Text>
+            {`Self's KID: ${currentUser.KID}`}
+          </Text>
           <LoginButton
             onLogoutFinished={this.handleFBLogoutResult}
           />
@@ -77,7 +83,11 @@ class MySettingsScreen extends Component {
   }
 }
 
-const MySettingsScreen2 = connect()(MySettingsScreen);
+const mapStateToProps = state => ({
+  currentUser: state.currentUser,
+});
+
+const MySettingsScreen2 = connect(mapStateToProps)(MySettingsScreen);
 
 const SettingPage = createStackNavigator({
   Settings: {
