@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import {
-  ListView,
+  FlatList,
   Button,
   View,
 } from 'react-native';
 
 import { createStackNavigator, NavigationActions } from 'react-navigation';
+
 import { connect } from 'react-redux';
 
 import PetDetail from './PetDetail';
 import EditPet from './EditPet';
+import EditRecord from './EditRecord';
 import Measure from './Measure';
 // import { liveQueryOwnPets, naviToPet } from './actions/userAction';
-
-console.log('load List Page.js !!');
 
 class ListMain extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -32,17 +32,17 @@ class ListMain extends Component {
     super(props);
 
     // TODO: Try to use flatlist or list of native-base
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: ds.cloneWithRows([]),
+      dataSource: [], // ds.cloneWithRows([]),
     };
 
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 
   onButtonPress(rowData) {
-    const { petID, name } = rowData;
-
+    const { name } = rowData;
+    const petID = rowData.key;
     // three ways
     // 1. navigation.navigate
     // 2. react navigation redux integration
@@ -61,11 +61,11 @@ class ListMain extends Component {
 
     const petsArray = [];
     for (const key in pets) {
-      petsArray.push({ petID: key, ...pets[key] });
+      petsArray.push({ key, ...pets[key] });
     }
 
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(petsArray),
+      dataSource: petsArray, // this.state.dataSource.cloneWithRows(petsArray),
     });
   }
 
@@ -73,15 +73,14 @@ class ListMain extends Component {
     // console.log('render list page, navi info:', this.props.navigation);
     return (
       <View style={{ flex: 1, paddingTop: 22 }}>
-        <ListView
-          enableemptysections
-          dataSource={this.state.dataSource}
-          renderRow={rowData => (
+        <FlatList
+          data={this.state.dataSource}
+          renderItem={({ item }) => (
             <View>
               {/* <Text>{rowData.name}</Text> */}
               <Button
-                onPress={() => this.onButtonPress(rowData)}
-                title={rowData.name ? rowData.name : ''}
+                onPress={() => this.onButtonPress(item)}
+                title={item.name ? item.name : ''}
                 accessibilityLabel="See an informative alert"
               />
             </View>
@@ -105,6 +104,9 @@ export const ListPage = createStackNavigator({
   },
   EditPet: {
     screen: EditPet,
+  },
+  EditRecord: {
+    screen: EditRecord,
   },
   PetDetail: {
     screen: PetDetail,
