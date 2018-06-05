@@ -29,11 +29,11 @@ import { newBreathRecord } from './actions/petAction';
 
 const moment = require('moment');
 
-const BUTTON_STATUS_INIT = 'Start Countdown timer';
+const BUTTON_STATUS_INIT = 'Start Countdown';
 const BUTTON_STATUS_RUNNING = 'Cancel';
 const BUTTON_STATUS_END = 'End';
 
-const TOTAL_SECONDS = 2;
+const TOTAL_SECONDS = 60;
 
 const initialState = {
   buttonStatus: BUTTON_STATUS_INIT,
@@ -105,12 +105,17 @@ class Measure extends React.Component {
     this.resetSeconds();
   }
 
+  componentWillMount() {
+    this.endTime = moment().format('YYYY-MM-DD HH:mm');
+  }
+
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
   startCalibration = () => {
     if (this.state.buttonStatus === BUTTON_STATUS_INIT) {
+      // Start Action
       this.setState({ buttonStatus: BUTTON_STATUS_RUNNING });
 
       // start timer;
@@ -138,6 +143,8 @@ class Measure extends React.Component {
         }
       }, 1000);
     } else if (this.state.buttonStatus === BUTTON_STATUS_RUNNING) {
+      // Cancel Action
+
       this.resetSeconds();
 
       // stop timer
@@ -148,7 +155,7 @@ class Measure extends React.Component {
   render() {
     let inputUI = null;
 
-    if (this.state.buttonStatus === BUTTON_STATUS_END) {
+    if (this.state.buttonStatus !== BUTTON_STATUS_RUNNING) {
       // show input text
       const labelStr = `Record time (default is currentTime, ${this.endTime}) Modify it if need be`;
       inputUI = (
