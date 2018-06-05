@@ -1,5 +1,5 @@
 // 1. login in FB
-// 2. At least people need to register a unique KID for sharing cats. May change later, add "ignore"
+// 2. At least people need to register a unique KID for sharing pets. May change later, add "ignore"
 
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js

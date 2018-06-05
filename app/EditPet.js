@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Container, Form, Item, Input, Button, Text, Label } from 'native-base';
 import { connect } from 'react-redux';
 
-import { addNewCat, removeSelfFromCatOwners } from './actions/userAction';
-import { updateInfo } from './actions/catAction';
+import { addNewPet, removeSelfFromPetOwners } from './actions/userAction';
+import { updateInfo } from './actions/petAction';
 
-class EditCat extends Component {
+class EditPet extends Component {
  static navigationOptions = ({ navigation }) => ({
    title: navigation.state.params.title,
  });
@@ -19,25 +19,25 @@ class EditCat extends Component {
  // navigation change will not trgger this
  // componentWillReceiveProps(newProps) {
  //   const {
- //     title, catID, name, age,
+ //     title, petID, name, age,
  //   } = newProps.navigation.state.params;
  //
  //   this.setState({ name });
  // }
 
   onSave = () => {
-    console.log('in add/edit cat page, state:', this.state);
+    console.log('in add/edit pet page, state:', this.state);
 
-    const { catID } = this.props.navigation.state.params;
+    const { petID } = this.props.navigation.state.params;
 
-    if (!catID) {
+    if (!petID) {
       if (!this.state.name || !this.state.age) {
         console.log('no name/age, return');
         return;
       }
-      this.props.dispatch(addNewCat(this.state.name, this.state.age));
+      this.props.dispatch(addNewPet(this.state.name, this.state.age));
     } else {
-      console.log('save edited cat info');
+      console.log('save edited pet info');
       const info = {};
       if (this.state.name) {
         info.name = this.state.name;
@@ -47,19 +47,19 @@ class EditCat extends Component {
         info.age = this.state.age;
       }
 
-      this.props.dispatch(updateInfo(catID, info));
+      this.props.dispatch(updateInfo(petID, info));
     }
 
     this.props.navigation.goBack(null);
   }
 
   onDelete = () => {
-    console.log('clicking delete cat');
+    console.log('clicking delete pet');
 
-    const { catID } = this.props.navigation.state.params;
+    const { petID } = this.props.navigation.state.params;
 
-    if (catID) {
-      this.props.dispatch(removeSelfFromCatOwners(catID));
+    if (petID) {
+      this.props.dispatch(removeSelfFromPetOwners(petID));
     }
 
     this.props.navigation.pop(2);
@@ -77,9 +77,9 @@ class EditCat extends Component {
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
   render() {
     const {
-      title, catID, name, age,
+      title, petID, name, age,
     } = this.props.navigation.state.params;
-    console.log('render in EditCat:', title, catID);
+    console.log('render in EditPet:', title, petID);
     // native-base's Input's value is not the normal defitnion, more like initialValue
     return (
       <Container>
@@ -106,7 +106,7 @@ class EditCat extends Component {
         >
           <Text>Save</Text>
         </Button>
-        {catID ? (
+        {petID ? (
           <Button
             style={{ margin: 15, marginTop: 50 }}
             onPress={this.onDelete}
@@ -119,4 +119,4 @@ class EditCat extends Component {
   }
 }
 
-export default connect()(EditCat);
+export default connect()(EditPet);

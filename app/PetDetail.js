@@ -15,26 +15,26 @@ import {
 // import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
 import { addNewOwner } from './actions/userAction';
-import { deleteBreathRecord } from './actions/catAction';
+import { deleteBreathRecord } from './actions/petAction';
 
 const moment = require('moment');
 
-function extractCatInfo(catID, cats) {
-  if (catID && cats && cats.hasOwnProperty(catID)) {
-    return { catID, ...cats[catID] };
+function extractPetInfo(petID, pets) {
+  if (petID && pets && pets.hasOwnProperty(petID)) {
+    return { petID, ...pets[petID] };
   }
 
   return {};
 }
 
-class CatDetail extends React.Component {
+class PetDetail extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.name,
     headerRight: (
       <SystemButton
         title="Measure"
         onPress={() => navigation.navigate('Measure', {
-          catID: navigation.state.params.catID,
+          petID: navigation.state.params.petID,
         })}
       />
     ),
@@ -57,7 +57,7 @@ class CatDetail extends React.Component {
   }
 
   onSave = () => {
-    this.props.dispatch(addNewOwner(this.props.navigation.state.params.catID, this.state.authID));
+    this.props.dispatch(addNewOwner(this.props.navigation.state.params.petID, this.state.authID));
 
     this.setState({ shareDialog: false });
   }
@@ -70,28 +70,28 @@ class CatDetail extends React.Component {
     this.setState({ authID: text });
   }
 
-  removeItem(catID, recordTime) {
+  removeItem(petID, recordTime) {
     // let data = this.state.data;
     // data = data.filter(item => item.key !== key);
     // this.setState({ data });
-    this.props.dispatch(deleteBreathRecord(catID, recordTime));
+    this.props.dispatch(deleteBreathRecord(petID, recordTime));
   }
 
   // s1, index(0~x), key=s1+index
-  deleteRow = (catID, secId, rowId, rowMap) => {
+  deleteRow = (petID, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow();
     const recordTime = rowMap[`${secId}${rowId}`].props.body.key;
 
-    this.props.dispatch(deleteBreathRecord(catID, recordTime));
+    this.props.dispatch(deleteBreathRecord(petID, recordTime));
   }
 
-  eachRowItem = (cat, time) => {
+  eachRowItem = (pet, time) => {
     let prefixToday = '';
     if (moment(time * 1000).isSame(moment(), 'day')) {
       prefixToday = ', Today';
     }
     const text = `${moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday
-    } \n${cat.breathRecord[time].breathRate}/min, mode:${cat.breathRecord[time].mode}`;
+    } \n${pet.breathRecord[time].breathRate}/min, mode:${pet.breathRecord[time].mode}`;
 
     return (
     // <Card transparent style={{ flex: 0 }}>
@@ -192,9 +192,9 @@ class CatDetail extends React.Component {
   _keyExtractor = (item, index) => item;
 
   render() {
-    const { cats, navigation } = this.props;
-    const catID = navigation.state.params.catID;
-    const cat = extractCatInfo(catID, cats);
+    const { pets, navigation } = this.props;
+    const petID = navigation.state.params.petID;
+    const pet = extractPetInfo(petID, pets);
 
     if (this.state.shareDialog) {
       return (
@@ -241,16 +241,14 @@ class CatDetail extends React.Component {
 
     let recordTimeList = [];
     let stats = null;
-    if (cat.hasOwnProperty('breathRecord')) {
-      const keys = Object.keys(cat.breathRecord);
-
-      const t0 = performance.now();
+    if (pet.hasOwnProperty('breathRecord')) {
+      const keys = Object.keys(pet.breathRecord);
 
       keys.sort((a, b) => b - a);
 
       recordTimeList = keys;
 
-      stats = this.calculateStats(cat.breathRecord, recordTimeList);
+      stats = this.calculateStats(pet.breathRecord, recordTimeList);
     }
 
     // fab:
@@ -265,11 +263,11 @@ class CatDetail extends React.Component {
           </Separator>
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
-              onPress={() => this.props.navigation.navigate('EditCat', {
-                title: 'Edit Cat',
-                catID,
-                age: cat.age,
-                name: cat.name,
+              onPress={() => this.props.navigation.navigate('EditPet', {
+                title: 'Edit Pet',
+                petID,
+                age: pet.age,
+                name: pet.name,
               })}
             >
               <Left>
@@ -298,7 +296,7 @@ class CatDetail extends React.Component {
               keyExtractor={this._keyExtractor}
               data={recordTimeList}
               renderItem={({ item }) => (
-                this.eachRowItem(cat, item)
+                this.eachRowItem(pet, item)
                 // <SwipeRow
                 //   // leftOpenValue={75}
                 //   rightOpenValue={-75}
@@ -307,9 +305,9 @@ class CatDetail extends React.Component {
                 //   //     <Icon active name="add" />
                 //   //   </Button>
                 //   //         }
-                //   body={this.eachRowItem(cat, item)}
+                //   body={this.eachRowItem(pet, item)}
                 //   right={
-                //     <Button danger onPress={() => this.removeItem(cat.catID, item)}>
+                //     <Button danger onPress={() => this.removeItem(pet.petID, item)}>
                 //       <Icon active name="trash" />
                 //     </Button>
                 //           }
@@ -322,14 +320,14 @@ class CatDetail extends React.Component {
             {/* <List
               dataSource={this.ds.cloneWithRows(recordTimeList)}
               renderRow={record =>
-              this.eachRowItem(cat, record)}
+              this.eachRowItem(pet, record)}
             // renderLeftHiddenRow={record =>
             //   (<Button full onPress={() => alert(record)}>
             //     <Icon active name="information-circle" />
             //    </Button>)}
               disableRightSwipe
               renderRightHiddenRow={(record, secId, rowId, rowMap) =>
-              (<Button full danger onPress={_ => this.deleteRow(cat.catID, secId, rowId, rowMap)}>
+              (<Button full danger onPress={_ => this.deleteRow(pet.petID, secId, rowId, rowMap)}>
                 <Icon active name="trash" />
                </Button>)}
             // leftOpenValue={275}
@@ -358,7 +356,7 @@ class CatDetail extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  cats: state.cats,
+  pets: state.pets,
 });
 
-export default connect(mapStateToProps)(CatDetail);
+export default connect(mapStateToProps)(PetDetail);

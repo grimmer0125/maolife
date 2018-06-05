@@ -35,48 +35,48 @@ export const ActionTypes = {
   LEAVE_CAT_DETAIL,
 };
 
-function addCatToUserFireBaseData(catids, newCatId, ownerPath) {
-  catids.push(newCatId);
+function addPetToUserFireBaseData(petids, newPetId, ownerPath) {
+  petids.push(newPetId);
 
-  return firebase.database().ref(ownerPath).child('catids').set(catids)
+  return firebase.database().ref(ownerPath).child('petids').set(petids)
     .then(() => {
-      console.log('add cat to catids ok !!!:');
+      console.log('add pet to petids ok !!!:');
     })
     .catch((error) => {
-      console.log('add cat to catids failed:', error);
+      console.log('add pet to petids failed:', error);
     });
 }
 
-function removeCatFromUserFields(catids, catID, ownerPath) {
-  const index = catids.indexOf(catID);
+function removePetFromUserFields(petids, petID, ownerPath) {
+  const index = petids.indexOf(petID);
   if (index === -1) {
-    console.log("can not find catid in self's catids");
+    console.log("can not find petid in self's petids");
 
     return;
   }
-  catids.splice(index, 1);
+  petids.splice(index, 1);
 
-  firebase.database().ref(ownerPath).child('catids').set(catids)
+  firebase.database().ref(ownerPath).child('petids').set(petids)
     .then(() => {
-      console.log('reset catids (remove) ok !!!:');
+      console.log('reset petids (remove) ok !!!:');
     })
     .catch((error) => {
-      console.log('reset catids (remove) failed:', error);
+      console.log('reset petids (remove) failed:', error);
     });
 }
 
 export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
-export const leaveCatDetail = createAction(LEAVE_CAT_DETAIL);
+export const leavePetDetail = createAction(LEAVE_CAT_DETAIL);
 export const LogoutAction = createAction(LOGOUT);
 
 /**
- * two steps: 1. add owners to cat's property
- * 2. add cat to owner's catids property
+ * two steps: 1. add owners to pet's property
+ * 2. add pet to owner's petids property
  */
-export function addNewOwner(catID, ownerKID) {
+export function addNewOwner(petID, ownerKID) {
   return (dispatch, getState) => {
-    console.log('start to add owner:', ownerKID, ';for cat:', catID);
+    console.log('start to add owner:', ownerKID, ';for pet:', petID);
 
     const query = firebase.database().ref().child('users').orderByChild('KID')
       .equalTo(ownerKID);
@@ -90,30 +90,30 @@ export function addNewOwner(catID, ownerKID) {
 
         const state = getState();
 
-        if (state.cats[catID].owners instanceof Array) {
+        if (state.pets[petID].owners instanceof Array) {
           console.log('owner is array');
         }
 
-        const owners = state.cats[catID].owners.slice(0);
+        const owners = state.pets[petID].owners.slice(0);
         owners.push(matchID);
 
-        const catPath = `cats/${catID}`;
+        const petPath = `pets/${petID}`;
 
-        firebase.database().ref(catPath).child('owners').set(owners)
+        firebase.database().ref(petPath).child('owners').set(owners)
           .then(() => {
             console.log('add ownerID into owners ok !!!');
 
             const userPath = `users/${matchID}`;
-            firebase.database().ref(userPath).child('catids').once('value', (snapshot) => {
+            firebase.database().ref(userPath).child('petids').once('value', (snapshot) => {
               const data = snapshot.val();
 
-              let catids = [];
+              let petids = [];
               if (data) {
-                catids = data;
+                petids = data;
               }
 
-              // TODO avoid duplicate catid in catids
-              addCatToUserFireBaseData(catids, catID, userPath);
+              // TODO avoid duplipete petid in petids
+              addPetToUserFireBaseData(petids, petID, userPath);
             });
           });
       }
@@ -121,135 +121,135 @@ export function addNewOwner(catID, ownerKID) {
   };
 }
 
-export function naviToCat(catID) {
+export function naviToPet(petID) {
   return {
     type: NAVI_TO_CAT,
     payload: {
-      catID,
+      petID,
     },
   };
 }
 
-export function removeSelfFromCatOwners(catID) {
+export function removeSelfFromPetOwners(petID) {
   return (dispatch, getState) => {
     const state = getState();
 
-    // step1: update cat's owners,
-    // a: if self is the only one owner, completely delete cat info.
-    // b: just remove self from cat's owners
-    const owners = state.cats[catID].owners.slice(0);
+    // step1: update pet's owners,
+    // a: if self is the only one owner, completely delete pet info.
+    // b: just remove self from pet's owners
+    const owners = state.pets[petID].owners.slice(0);
 
     const index = owners.indexOf(firebase.auth().currentUser.uid);
     if (index === -1) {
-      console.log("can not find self in cat's owners");
+      console.log("can not find self in pet's owners");
 
       return;
     }
     owners.splice(index, 1);
 
-    const catPath = `cats/${catID}`;
+    const petPath = `pets/${petID}`;
 
     if (owners.length > 0) {
       // case 1-a
 
-      firebase.database().ref(catPath).child('owners').set(owners)
+      firebase.database().ref(petPath).child('owners').set(owners)
         .then(() => {
-          console.log("update cat's owner ok");
-          // step2: update user's catids
+          console.log("update pet's owner ok");
+          // step2: update user's petids
 
           const userPath = `/users/${firebase.auth().currentUser.uid}`;
-          const catids = state.currentUser.catids.slice(0);
-          removeCatFromUserFields(catids, catID, userPath);
+          const petids = state.currentUser.petids.slice(0);
+          removePetFromUserFields(petids, petID, userPath);
         })
         .catch((error) => {
-          console.log('update cat owner failed:', error);
+          console.log('update pet owner failed:', error);
         });
     } else {
       // case 1-b
-      firebase.database().ref(catPath).remove()
+      firebase.database().ref(petPath).remove()
         .then(() => {
-          console.log('remove cat ok');
-          // step2: update user's catids
+          console.log('remove pet ok');
+          // step2: update user's petids
 
           const userPath = `/users/${firebase.auth().currentUser.uid}`;
-          const catids = state.currentUser.catids.slice(0);
-          removeCatFromUserFields(catids, catID, userPath);
+          const petids = state.currentUser.petids.slice(0);
+          removePetFromUserFields(petids, petID, userPath);
         })
         .catch((error) => {
-          console.log('remove cat fail:', error);
+          console.log('remove pet fail:', error);
         });
     }
   };
 }
 
-export function addNewCat(name, age) {
+export function addNewPet(name, age) {
   return (dispatch, getState) => {
     const state = getState();
 
-    const newCatRef = firebase.database().ref('cats').push();
-    const newCatId = newCatRef.key;
-    console.log('newCat:', newCatId);
+    const newPetRef = firebase.database().ref('pets').push();
+    const newPetId = newPetRef.key;
+    console.log('newPet:', newPetId);
 
-    newCatRef.set({
+    newPetRef.set({
       name,
       age,
       owners: [firebase.auth().currentUser.uid],
     })
       .then(() => {
-        console.log('add new cat succeeded');
+        console.log('add new pet succeeded');
 
         const userPath = `/users/${firebase.auth().currentUser.uid}`;
-        let catids = [];
-        if (state.currentUser.catids) {
-          catids = state.currentUser.catids.slice(0);
+        let petids = [];
+        if (state.currentUser.petids) {
+          petids = state.currentUser.petids.slice(0);
         }
-        addCatToUserFireBaseData(catids, newCatId, userPath, getState)
+        addPetToUserFireBaseData(petids, newPetId, userPath, getState)
           .then(() => {
-            console.log('add new cat\'s id to user\'s catids ok');
+            console.log('add new pet\'s id to user\'s petids ok');
           });
       })
       .catch((error) => {
-        console.log('add cat failed:', error);
+        console.log('add pet failed:', error);
       });
   };
 }
 
-export function removeCat(catID) {
+export function removePet(petID) {
   return {
     type: REMOVE_CAT,
     payload: {
-      catID,
+      petID,
     },
   };
 }
 
-export function updateCatInfo(catID, catInfo) {
+export function updatePetInfo(petID, petInfo) {
   return {
     type: UPDATE_CAT_INFO,
     payload: {
-      catID,
-      catInfo,
+      petID,
+      petInfo,
     },
   };
 }
 
-function stopLiveQueryCatInfo(catID) {
+function stopLiveQueryPetInfo(petID) {
   return (dispatch, getState) => {
     // ref: https://stackoverflow.com/a/28266537/7354486
-    // ref: https://stackoverflow.com/questions/11804424/deactivating-events-with-off indicates that
+    // ref: https://stackoverflow.com/questions/11804424/deactivating-events-with-off indipetes that
     // off('value') w/o callback seems ok too.
-    firebase.database().ref('cats').child(catID).off();
+    firebase.database().ref('pets').child(petID).off();
   };
 }
 
-function liveQueryCatInfo(catID) {
+function liveQueryPetInfo(petID) {
   return (dispatch) => {
-    firebase.database().ref('cats').child(catID).on('value', (snapshot) => {
-      const catInfo = snapshot.val();
+    firebase.database().ref('pets').child(petID).on('value', (snapshot) => {
+      const petInfo = snapshot.val();
 
-      console.log('grimmer catid info live update', catID);
+      console.log('grimmer petid info live update', petID);
 
-      dispatch(updateCatInfo(catID, catInfo));
+      dispatch(updatePetInfo(petID, petInfo));
     });
   };
 }
@@ -382,45 +382,45 @@ export function connectDBtoCheckUser() {
             console.log('no KID for:', authUser.uid);
           }
 
-          let catids = [];
-          let catids_copy = [];
-          let oldCatids_copy = [];
+          let petids = [];
+          let petids_copy = [];
+          let oldPetids_copy = [];
 
-          if (userValue.catids) {
-            catids = userValue.catids.slice(0);
-            catids_copy = userValue.catids.slice(0);
+          if (userValue.petids) {
+            petids = userValue.petids.slice(0);
+            petids_copy = userValue.petids.slice(0);
           }
 
           const state = getState();
-          if (state.currentUser.catids) {
-            const oldCatids = state.currentUser.catids;
+          if (state.currentUser.petids) {
+            const oldPetids = state.currentUser.petids;
 
-            for (const id of oldCatids) {
-              const index = catids.indexOf(id);
+            for (const id of oldPetids) {
+              const index = petids.indexOf(id);
               if (index !== -1) {
-                catids.splice(index, 1);
+                petids.splice(index, 1);
               }
             }
 
-            oldCatids_copy = oldCatids.slice(0);
-            for (const id of catids_copy) {
-              const index = oldCatids_copy.indexOf(id);
+            oldPetids_copy = oldPetids.slice(0);
+            for (const id of petids_copy) {
+              const index = oldPetids_copy.indexOf(id);
               if (index !== -1) {
-                oldCatids_copy.splice(index, 1);
+                oldPetids_copy.splice(index, 1);
               }
             }
           }
 
-          // case: add cat to catids
-          for (const id of catids) {
-            dispatch(liveQueryCatInfo(id));
+          // case: add pet to petids
+          for (const id of petids) {
+            dispatch(liveQueryPetInfo(id));
           }
 
-          // case: remvoe cat from catids
-          for (const id of oldCatids_copy) {
-            console.log('stopquery and remove cat:', id);
-            dispatch(stopLiveQueryCatInfo(id));
-            dispatch(removeCat(id));
+          // case: remvoe pet from petids
+          for (const id of oldPetids_copy) {
+            console.log('stopquery and remove pet:', id);
+            dispatch(stopLiveQueryPetInfo(id));
+            dispatch(removePet(id));
           }
 
           dispatch(getUserData(true, userValue));

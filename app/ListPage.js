@@ -8,21 +8,21 @@ import {
 import { createStackNavigator, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import CatDetail from './CatDetail';
-import EditCat from './EditCat';
+import PetDetail from './PetDetail';
+import EditPet from './EditPet';
 import Measure from './Measure';
-// import { liveQueryOwnCats, naviToCat } from './actions/userAction';
+// import { liveQueryOwnPets, naviToPet } from './actions/userAction';
 
 console.log('load List Page.js !!');
 
 class ListMain extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Cat List',
+    title: 'Pet List',
     headerRight: (
       <Button
         title="Add"
-        onPress={() => navigation.navigate('EditCat', {
-          title: 'New Cat',
+        onPress={() => navigation.navigate('EditPet', {
+          title: 'New Pet',
         })}
       />
     ),
@@ -41,7 +41,7 @@ class ListMain extends Component {
   }
 
   onButtonPress(rowData) {
-    const { catID, name } = rowData;
+    const { petID, name } = rowData;
 
     // three ways
     // 1. navigation.navigate
@@ -49,23 +49,23 @@ class ListMain extends Component {
     // 3. NavigationActions.navigate
     // https://v1.reactnavigation.org/docs/navigating-without-navigation-prop.html
     const naviAction = NavigationActions.navigate({
-      routeName: 'CatDetail',
-      params: { catID, name },
+      routeName: 'PetDetail',
+      params: { petID, name },
     });
 
     this.props.navigation.dispatch(naviAction);
   }
 
   componentWillReceiveProps(newProps) {
-    const { cats } = newProps;
+    const { pets } = newProps;
 
-    const catsArray = [];
-    for (const key in cats) {
-      catsArray.push({ catID: key, ...cats[key] });
+    const petsArray = [];
+    for (const key in pets) {
+      petsArray.push({ petID: key, ...pets[key] });
     }
 
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(catsArray),
+      dataSource: this.state.dataSource.cloneWithRows(petsArray),
     });
   }
 
@@ -94,7 +94,7 @@ class ListMain extends Component {
 }
 
 const mapStateToProps = state => ({
-  cats: state.cats,
+  pets: state.pets,
 });
 
 const ListMainReduxState = connect(mapStateToProps)(ListMain);
@@ -103,13 +103,13 @@ export const ListPage = createStackNavigator({
   List: {
     screen: ListMainReduxState,
   },
-  EditCat: {
-    screen: EditCat,
+  EditPet: {
+    screen: EditPet,
   },
-  CatDetail: {
-    screen: CatDetail,
+  PetDetail: {
+    screen: PetDetail,
     // navigationOptions: {
-    //   title: 'CatDetail',
+    //   title: 'PetDetail',
     // },
   },
   Measure: {

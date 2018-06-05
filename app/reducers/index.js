@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { userRoot } from './user';
-import { catsRoot } from './cats';
+import { petsRoot } from './pets';
 import { ListPage } from '../ListPage';
 
 // redux + react navigation 1
@@ -37,7 +37,7 @@ const listNav = (state = initialState, action) => {
 const rootReducer = combineReducers({
   listNav,
   ...userRoot,
-  ...catsRoot,
+  ...petsRoot,
 });
 
 export default rootReducer;

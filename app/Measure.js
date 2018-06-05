@@ -25,7 +25,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import { newBreathRecord } from './actions/catAction';
+import { newBreathRecord } from './actions/petAction';
 
 const moment = require('moment');
 
@@ -90,10 +90,10 @@ class Measure extends React.Component {
       mode = 'rest';
     }
     // console.log("params:", this.props.navigation.state.params);
-    const catID = this.props.navigation.state.params.catID;
-    console.log('catID:', catID);
+    const petID = this.props.navigation.state.params.petID;
+    console.log('petID:', petID);
 
-    this.props.dispatch(newBreathRecord(catID, this.state.numberOfBreath, mode, time));
+    this.props.dispatch(newBreathRecord(petID, this.state.numberOfBreath, mode, time));
 
     this.resetSeconds();
 

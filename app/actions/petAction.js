@@ -3,15 +3,15 @@ import * as firebase from 'firebase';
 /**
  * @param  {string} mode "sleep" or "rest"
  */
-export function newBreathRecord(catID, breathRate, mode, recordTime) {
+export function newBreathRecord(petID, breathRate, mode, recordTime) {
   return () => {
-    const catPath = `cats/${catID}`;
+    const petPath = `pets/${petID}`;
 
     const newRecord = {};
     newRecord[recordTime] = { mode, breathRate };
 
     console.log('new record', newRecord);
-    firebase.database().ref(catPath).child('breathRecord').update(newRecord)
+    firebase.database().ref(petPath).child('breathRecord').update(newRecord)
       .then(() => {
         console.log('set new breath ok');
       })
@@ -21,24 +21,24 @@ export function newBreathRecord(catID, breathRate, mode, recordTime) {
   };
 }
 
-export function updateInfo(catID, info) {
+export function updateInfo(petID, info) {
   return () => {
-    const catPath = `cats/${catID}`;
+    const petPath = `pets/${petID}`;
 
     console.log('new info', info);
-    firebase.database().ref(catPath).update(info)
+    firebase.database().ref(petPath).update(info)
       .then(() => {
-        console.log('update cat info ok');
+        console.log('update pet info ok');
       })
       .catch((error) => {
-        console.log('update cat info failed,', error);
+        console.log('update pet info failed,', error);
       });
   };
 }
 
-export function deleteBreathRecord(catID, recordTime) {
+export function deleteBreathRecord(petID, recordTime) {
   return () => {
-    const recordPath = `cats/${catID}/breathRecord/${recordTime}`;
+    const recordPath = `pets/${petID}/breathRecord/${recordTime}`;
 
     console.log('delete record', recordPath);
     firebase.database().ref(recordPath).remove()

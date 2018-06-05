@@ -1,1 +1,1 @@
-// All cats' information/log will show here, just like FB's wall
+// All pets' information/log will show here, just like FB's wall
