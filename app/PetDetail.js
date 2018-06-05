@@ -7,6 +7,8 @@ import {
   FlatList,
 } from 'react-native';
 
+import { VictoryLegend, VictoryVoronoiContainer, VictoryTooltip, VictoryGroup, VictoryBar, VictoryLine, VictoryChart, VictoryTheme } from 'victory-native';
+
 import {
   Container, Content, Button, Icon, Fab, Card, CardItem,
   Body, List, ListItem, SwipeRow, Item, Input, Left, Right, Text, Separator,
@@ -135,19 +137,27 @@ class PetDetail extends React.Component {
       for (const key of recordTimeList) {
         const record = breathRecord[key];
         if (record.mode === 'sleep') {
-          sleepList.push(parseInt(record.breathRate));
+          sleepList.push({
+            x: new Date(key * 1000),
+            y: parseInt(record.breathRate, 10),
+          });
           numSleep++;
-          sleepTotal += parseInt(record.breathRate);
+          sleepTotal += parseInt(record.breathRate, 10);
         } else if (record.mode === 'rest') {
-          restList.push(parseInt(record.breathRate));
+          restList.push({
+            x: new Date(key * 1000),
+            y: parseInt(record.breathRate, 10),
+          });
           numRest++;
-          restTotal += parseInt(record.breathRate);
+          restTotal += parseInt(record.breathRate, 10);
         }
       }
     }
 
     const numTotal = numRest + numSleep;
     const info = {
+      dataSleep: sleepList,
+      dataRest: restList,
       numRest,
       numSleep,
       sleepAvg: numSleep ? sleepTotal / numSleep : 0,
@@ -163,35 +173,126 @@ class PetDetail extends React.Component {
     if (numSleep > 20) {
       let total = 0;
       for (let i = 0; i < 20; i++) {
-        total += sleepList[i];
+        total += sleepList[i].y;
       }
-      info.sleepFirst20Avg = (total / 20).toFixed(2);
+      info.sleepFirst20Avg = (total / 20).toFixed(1);
 
       total = 0;
       for (let i = 0; i < 20; i++) {
-        total += sleepList[numSleep - 1 - i];
+        total += sleepList[numSleep - 1 - i].y;
       }
-      info.sleepLast20Avg = (total / 20).toFixed(2);
+      info.sleepLast20Avg = (total / 20).toFixed(1);
     }
 
     if (numRest > 20) {
       let total = 0;
       for (let i = 0; i < 20; i++) {
-        total += restList[i];
+        total += restList[i].y;
       }
-      info.restFirst20Avg = (total / 20).toFixed(2);
+      info.restFirst20Avg = (total / 20).toFixed(1);
 
       total = 0;
       for (let i = 0; i < 20; i++) {
-        total += restList[numSleep - 1 - i];
+        total += restList[numSleep - 1 - i].y;
       }
-      info.restLast20Avg = (total / 20).toFixed(2);
+      info.restLast20Avg = (total / 20).toFixed(1);
     }
+
 
     // const t1 = performance.now();
     // console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
 
     return info;
+  }
+
+  getChartUI(stats) {
+    const { dataSleep, dataRest } = stats;
+    // pet.breathRecord
+    // const dataSleep = [];
+    // const dataRest = [];
+    // if (pet.breathRecord) {
+    //   for (const key in pet.breathRecord) {
+    //     const record = pet.breathRecord[key];
+    //
+    //     if (record.mode === 'sleep') {
+    //       dataSleep.push({
+    //         x: new Date(key * 1000),
+    //         y: parseInt(record.breathRate, 10),
+    //       });
+    //     } else if (record.mode === 'rest') {
+    //       dataRest.push({
+    //         x: new Date(key * 1000),
+    //         y: parseInt(record.breathRate, 10),
+    //       });
+    //     }
+    //   }
+    // }
+
+    // console.log('getChartUI, data count:', dataSleep.length, dataRest.length);
+
+    return (
+      // example:
+      // http://formidable.com/open-source/victory/docs/victory-line/
+      // https://formidable.com/open-source/victory/gallery/brush-zoom/
+      // https://stackoverflow.com/a/48957518/7354486
+
+      // <VictoryChart
+      //   theme={VictoryTheme.material}
+      // >
+      //   <VictoryLine
+      //     style={{
+      //       data: { stroke: '#c43a31' },
+      //       parent: { border: '1px solid #ccc' },
+      //     }}
+      //     data={[
+      //       { x: 1, y: 2 },
+      //       { x: 2, y: 3 },
+      //       { x: 3, y: 5 },
+      //       { x: 4, y: 4 },
+      //       { x: 5, y: 7 },
+      //     ]}
+      //   />
+      // </VictoryChart>
+
+      <VictoryChart
+        scale={{ x: 'time' }}
+        containerComponent={
+          <VictoryVoronoiContainer
+            labels={d => `x:${d.x}\ny:${d.y}`}
+          />
+        }
+      >
+        <VictoryLegend
+          title="AVG"
+          x={200}
+          y={50}
+          centerTitle
+          orientation="horizontal"
+          gutter={20}
+          style={{ title: { fontSize: 10 } }}
+          data={[
+            { name: stats.restAvg.toFixed(1), symbol: { fill: 'tomato', type: 'star' } },
+            { name: stats.sleepAvg.toFixed(1), symbol: { fill: 'blue' } },
+          ]}
+        />
+        {dataSleep ? (
+          <VictoryLine
+            labelComponent={<VictoryTooltip />}
+            style={{
+            data: { stroke: 'blue' },
+          }}
+            data={dataSleep}
+          />) : null}
+        {dataRest ? (
+          <VictoryLine
+            labelComponent={<VictoryTooltip />}
+            style={{
+            data: { stroke: 'tomato' },
+          }}
+            data={dataRest}
+          />) : null}
+      </VictoryChart>
+    );
   }
 
   _keyExtractor = (item, index) => item;
@@ -249,7 +350,10 @@ class PetDetail extends React.Component {
     if (pet.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(pet.breathRecord);
 
+      // const t0 = performance.now();
       keys.sort((a, b) => b - a);
+      // const t1 = performance.now();
+      // console.log(`Call to sort took ${t1 - t0} milliseconds.`);
 
       recordTimeList = keys;
 
@@ -263,9 +367,9 @@ class PetDetail extends React.Component {
     return (
       <Container>
         <Content>
-          <Separator bordered>
+          {/* <Separator bordered>
             <Text>Stats & Setting</Text>
-          </Separator>
+          </Separator> */}
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditPet', {
@@ -285,13 +389,25 @@ class PetDetail extends React.Component {
             {/* <ListItem>
                 <Text>{stats ? `Mix Avg: ${stats.mixAvg.toFixed(1)}` : 'no stats data'}</Text>
             </ListItem> */}
-            <ListItem>
-              <Text>{stats ? `Rest total:${stats.numRest}, first20Avg.:${stats.restFirst20Avg}, last20Avg.:${stats.restLast20Avg}, Avg.:${stats.restAvg.toFixed(1)}` : 'no stats data'}</Text>
+            {/* <ListItem>
+              <Text>{stats ? `Rest count:${stats.numRest}, first20AVG:${stats.restFirst20Avg}, last20AVG:${stats.restLast20Avg}, AVG:${stats.restAvg.toFixed(1)}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text>{stats ? `Sleep total:${stats.numSleep}, first20Avg.:${stats.sleepFirst20Avg}, last20Avg.:${stats.sleepLast20Avg}, Avg.: ${stats.sleepAvg.toFixed(1)}` : 'no stats data'}</Text>
-            </ListItem>
+              <Text>{stats ? `Sleep count:${stats.numSleep}, first20AVG:${stats.sleepFirst20Avg}, last20AVG:${stats.sleepLast20Avg}, AVG: ${stats.sleepAvg.toFixed(1)}` : ''}</Text>
+            </ListItem> */}
           </List>
+          <Separator bordered>
+            <Text>Stats & Chart </Text>
+          </Separator>
+          <View>
+            <ListItem>
+              <Text style={{ color: '#FF6347' }}>{stats ? `Rest CNT:${stats.numRest}, first20AVG:${stats.restFirst20Avg}, last20AVG:${stats.restLast20Avg}` : ''}</Text>
+            </ListItem>
+            <ListItem>
+              <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.numSleep}, first20AVG:${stats.sleepFirst20Avg}, last20AVG:${stats.sleepLast20Avg}` : ''}</Text>
+            </ListItem>
+            {stats ? this.getChartUI(stats) : null}
+          </View>
           <Separator bordered>
             <Text>Records</Text>
           </Separator>

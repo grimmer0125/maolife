@@ -50,7 +50,7 @@ class EditRecord extends Component {
       alignItems: 'center',
      }}
      >
-       <View style={{ width: 100, height: 100, backgroundColor: 'powderblue' }} >
+       <View style={{ width: 100, height: 100 }} >
          <Button
            onPress={this.onDelete}
          >
