@@ -70,20 +70,17 @@ class PetDetail extends React.Component {
     this.setState({ authID: text });
   }
 
-  removeItem(petID, recordTime) {
-    // let data = this.state.data;
-    // data = data.filter(item => item.key !== key);
-    // this.setState({ data });
-    this.props.dispatch(deleteBreathRecord(petID, recordTime));
-  }
-
-  // s1, index(0~x), key=s1+index
-  deleteRow = (petID, secId, rowId, rowMap) => {
-    rowMap[`${secId}${rowId}`].props.closeRow();
-    const recordTime = rowMap[`${secId}${rowId}`].props.body.key;
-
-    this.props.dispatch(deleteBreathRecord(petID, recordTime));
-  }
+  // removeItem(petID, recordTime) {
+  //   this.props.dispatch(deleteBreathRecord(petID, recordTime));
+  // }
+  //
+  // // s1, index(0~x), key=s1+index
+  // deleteRow = (petID, secId, rowId, rowMap) => {
+  //   rowMap[`${secId}${rowId}`].props.closeRow();
+  //   const recordTime = rowMap[`${secId}${rowId}`].props.body.key;
+  //
+  //   this.props.dispatch(deleteBreathRecord(petID, recordTime));
+  // }
 
   eachRowItem = (pet, time) => {
     let prefixToday = '';
@@ -96,7 +93,15 @@ class PetDetail extends React.Component {
     return (
     // <Card transparent style={{ flex: 0 }}>
     // key is not necessary in NativeBase's listItem but it can be used in deleteRow(body.key)
-      <ListItem key={time}>
+      <ListItem
+        key={time}
+        onPress={() => {
+        this.props.navigation.navigate('EditRecord', {
+          petID: pet.petID,
+          recordTime: time,
+        });
+      }}
+      >
         {/* <CardItem header>
     //     <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
     //   </CardItem> */}
@@ -291,7 +296,6 @@ class PetDetail extends React.Component {
             <Text>Records</Text>
           </Separator>
           <View>
-
             <FlatList
               keyExtractor={this._keyExtractor}
               data={recordTimeList}
