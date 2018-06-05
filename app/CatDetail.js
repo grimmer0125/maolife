@@ -7,8 +7,10 @@ import {
   FlatList,
 } from 'react-native';
 
-import { Container, Content, Button, Icon, Fab, Card, CardItem,
-  Body, List, ListItem, SwipeRow, Item, Input, Left, Right, Text, Separator } from 'native-base';
+import {
+  Container, Content, Button, Icon, Fab, Card, CardItem,
+  Body, List, ListItem, SwipeRow, Item, Input, Left, Right, Text, Separator,
+} from 'native-base';
 
 // import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
@@ -202,7 +204,7 @@ class CatDetail extends React.Component {
             <CardItem>
               <Body>
                 <Text>
-                    Authorize people
+                    Input your friend's kid to authorize him/her
                 </Text>
               </Body>
             </CardItem>
@@ -210,7 +212,7 @@ class CatDetail extends React.Component {
               {/* <Form> */}
               <Item regular>
                 <Input
-                  placeholder="id"
+                  // placeholder="your friend's kid"
                   onChangeText={this.handleChangeAuthID}
                   onSubmitEditing={() => {
                               this.onSave();
@@ -261,7 +263,7 @@ class CatDetail extends React.Component {
           <Separator bordered>
             <Text>Stats & Setting</Text>
           </Separator>
-          <List style={{ backgroundColor: 'white' }}>
+          <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditCat', {
                 title: 'Edit Cat',

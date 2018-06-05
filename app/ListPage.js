@@ -74,6 +74,7 @@ class ListMain extends Component {
     return (
       <View style={{ flex: 1, paddingTop: 22 }}>
         <ListView
+          enableemptysections
           dataSource={this.state.dataSource}
           renderRow={rowData => (
             <View>

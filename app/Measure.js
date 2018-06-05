@@ -18,6 +18,7 @@ import {
 } from 'native-base';
 
 import {
+  View,
   Vibration,
   Platform,
 } from 'react-native';
@@ -28,11 +29,11 @@ import { newBreathRecord } from './actions/catAction';
 
 const moment = require('moment');
 
-const BUTTON_STATUS_INIT = 'Click to Start';
-const BUTTON_STATUS_RUNNING = 'Click to Cancel';
+const BUTTON_STATUS_INIT = 'Start Countdown timer';
+const BUTTON_STATUS_RUNNING = 'Cancel';
 const BUTTON_STATUS_END = 'End';
 
-const TOTAL_SECONDS = 60;
+const TOTAL_SECONDS = 2;
 
 const initialState = {
   buttonStatus: BUTTON_STATUS_INIT,
@@ -184,18 +185,23 @@ class Measure extends React.Component {
         <Content>
           <ListItem onPress={() => this.toggleRadio()}>
             <Radio selected={this.state.sleepRadio} onPress={() => this.toggleRadio()} />
-            <Text>sleep</Text>
+            <Text>sleep mode</Text>
           </ListItem>
           <ListItem onPress={() => this.toggleRadio()}>
             <Radio selected={!this.state.sleepRadio} onPress={() => this.toggleRadio()} />
-            <Text>rest</Text>
+            <Text>rest mode</Text>
           </ListItem>
-          <Button onPress={this.startCalibration}>
-            <Text>{this.state.buttonStatus}</Text>
-          </Button>
-          <Text>
-            {this.state.seconds}
-          </Text>
+          <View style={{
+  flex: 1, flexDirection: 'row',
+}}
+          >
+            <Button onPress={this.startCalibration}>
+              <Text>{this.state.buttonStatus}</Text>
+            </Button>
+            <Text>
+              {` ${this.state.seconds}s`}
+            </Text>
+          </View>
         </Content>
         {inputUI}
       </Container>);

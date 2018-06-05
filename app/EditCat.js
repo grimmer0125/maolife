@@ -86,7 +86,7 @@ class EditCat extends Component {
         {/* <Content> */}
         <Form>
           <Item stackedLabel>
-            <Label>Username</Label>
+            <Label>Name</Label>
             <Input
               onChangeText={this.handleChangeUsername}
               value={name}

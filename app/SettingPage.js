@@ -54,18 +54,18 @@ class MySettingsScreen extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    // const { navigation } = this.props;
 
     return (
       <ScrollView>
-        <Button
+        {/* <Button
           onPress={() => navigation.navigate('NotifSettings')}
           title="Go to notification settings"
         />
         <Button
           onPress={() => navigation.goBack(null)}
           title="In Setting, Go back"
-        />
+        /> */}
         <View style={{ alignItems: 'center' }}>
           <LoginButton
             onLogoutFinished={this.handleFBLogoutResult}

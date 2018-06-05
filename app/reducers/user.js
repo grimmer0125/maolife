@@ -51,15 +51,6 @@ export function currentUser(state = initialState, action = {}) {
   }
 }
 
-export function selectedCat(state = null, action) {
-  switch (action.type) {
-    case ActionTypes.NAVI_TO_CAT:
-      return { id: action.payload.catID };
-    default:
-      return state;
-  }
-}
-
 export const userRoot = {
   currentUser, userChecking, registerStatus,
 };
