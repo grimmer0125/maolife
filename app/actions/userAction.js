@@ -35,33 +35,33 @@ export const ActionTypes = {
   LEAVE_CAT_DETAIL,
 };
 
-function addPetToUserFireBaseData(petids, newPetId, ownerPath) {
-  petids.push(newPetId);
+function addPetToUserFireBaseData(petIDList, newPetId, ownerPath) {
+  petIDList.push(newPetId);
 
-  return firebase.database().ref(ownerPath).child('petids').set(petids)
+  return firebase.database().ref(ownerPath).child('petIDList').set(petIDList)
     .then(() => {
-      console.log('add pet to petids ok !!!:');
+      console.log('add pet to petIDList ok !!!:');
     })
     .catch((error) => {
-      console.log('add pet to petids failed:', error);
+      console.log('add pet to petIDList failed:', error);
     });
 }
 
-function removePetFromUserFields(petids, petID, ownerPath) {
-  const index = petids.indexOf(petID);
+function removePetFromUserFields(petIDList, petID, ownerPath) {
+  const index = petIDList.indexOf(petID);
   if (index === -1) {
-    console.log("can not find petid in self's petids");
+    console.log("can not find petid in self's petIDList");
 
     return;
   }
-  petids.splice(index, 1);
+  petIDList.splice(index, 1);
 
-  firebase.database().ref(ownerPath).child('petids').set(petids)
+  firebase.database().ref(ownerPath).child('petIDList').set(petIDList)
     .then(() => {
-      console.log('reset petids (remove) ok !!!:');
+      console.log('reset petIDList (remove) ok !!!:');
     })
     .catch((error) => {
-      console.log('reset petids (remove) failed:', error);
+      console.log('reset petIDList (remove) failed:', error);
     });
 }
 
@@ -72,7 +72,7 @@ export const LogoutAction = createAction(LOGOUT);
 
 /**
  * two steps: 1. add owners to pet's property
- * 2. add pet to owner's petids property
+ * 2. add pet to owner's petIDList property
  */
 export function addNewOwner(petID, ownerKID) {
   return (dispatch, getState) => {
@@ -104,16 +104,16 @@ export function addNewOwner(petID, ownerKID) {
             console.log('add ownerID into owners ok !!!');
 
             const userPath = `users/${matchID}`;
-            firebase.database().ref(userPath).child('petids').once('value', (snapshot) => {
+            firebase.database().ref(userPath).child('petIDList').once('value', (snapshot) => {
               const data = snapshot.val();
 
-              let petids = [];
+              let petIDList = [];
               if (data) {
-                petids = data;
+                petIDList = data;
               }
 
-              // TODO avoid duplipete petid in petids
-              addPetToUserFireBaseData(petids, petID, userPath);
+              // TODO avoid duplipete petid in petIDList
+              addPetToUserFireBaseData(petIDList, petID, userPath);
             });
           });
       }
@@ -155,11 +155,11 @@ export function removeSelfFromPetOwners(petID) {
       firebase.database().ref(petPath).child('owners').set(owners)
         .then(() => {
           console.log("update pet's owner ok");
-          // step2: update user's petids
+          // step2: update user's petIDList
 
           const userPath = `/users/${firebase.auth().currentUser.uid}`;
-          const petids = state.currentUser.petids.slice(0);
-          removePetFromUserFields(petids, petID, userPath);
+          const petIDList = state.currentUser.petIDList.slice(0);
+          removePetFromUserFields(petIDList, petID, userPath);
         })
         .catch((error) => {
           console.log('update pet owner failed:', error);
@@ -169,11 +169,11 @@ export function removeSelfFromPetOwners(petID) {
       firebase.database().ref(petPath).remove()
         .then(() => {
           console.log('remove pet ok');
-          // step2: update user's petids
+          // step2: update user's petIDList
 
           const userPath = `/users/${firebase.auth().currentUser.uid}`;
-          const petids = state.currentUser.petids.slice(0);
-          removePetFromUserFields(petids, petID, userPath);
+          const petIDList = state.currentUser.petIDList.slice(0);
+          removePetFromUserFields(petIDList, petID, userPath);
         })
         .catch((error) => {
           console.log('remove pet fail:', error);
@@ -199,13 +199,13 @@ export function addNewPet(name, age) {
         console.log('add new pet succeeded');
 
         const userPath = `/users/${firebase.auth().currentUser.uid}`;
-        let petids = [];
-        if (state.currentUser.petids) {
-          petids = state.currentUser.petids.slice(0);
+        let petIDList = [];
+        if (state.currentUser.petIDList) {
+          petIDList = state.currentUser.petIDList.slice(0);
         }
-        addPetToUserFireBaseData(petids, newPetId, userPath, getState)
+        addPetToUserFireBaseData(petIDList, newPetId, userPath, getState)
           .then(() => {
-            console.log('add new pet\'s id to user\'s petids ok');
+            console.log('add new pet\'s id to user\'s petIDList ok');
           });
       })
       .catch((error) => {
@@ -382,42 +382,42 @@ export function connectDBtoCheckUser() {
             console.log('no KID for:', authUser.uid);
           }
 
-          let petids = [];
-          let petids_copy = [];
-          let oldPetids_copy = [];
+          let petIDList = [];
+          let petIDList_copy = [];
+          let oldPetIDList_copy = [];
 
-          if (userValue.petids) {
-            petids = userValue.petids.slice(0);
-            petids_copy = userValue.petids.slice(0);
+          if (userValue.petIDList) {
+            petIDList = userValue.petIDList.slice(0);
+            petIDList_copy = userValue.petIDList.slice(0);
           }
 
           const state = getState();
-          if (state.currentUser.petids) {
-            const oldPetids = state.currentUser.petids;
+          if (state.currentUser.petIDList) {
+            const oldPetIDList = state.currentUser.petIDList;
 
-            for (const id of oldPetids) {
-              const index = petids.indexOf(id);
+            for (const id of oldPetIDList) {
+              const index = petIDList.indexOf(id);
               if (index !== -1) {
-                petids.splice(index, 1);
+                petIDList.splice(index, 1);
               }
             }
 
-            oldPetids_copy = oldPetids.slice(0);
-            for (const id of petids_copy) {
-              const index = oldPetids_copy.indexOf(id);
+            oldPetIDList_copy = oldPetIDList.slice(0);
+            for (const id of petIDList_copy) {
+              const index = oldPetIDList_copy.indexOf(id);
               if (index !== -1) {
-                oldPetids_copy.splice(index, 1);
+                oldPetIDList_copy.splice(index, 1);
               }
             }
           }
 
-          // case: add pet to petids
-          for (const id of petids) {
+          // case: add pet to petIDList
+          for (const id of petIDList) {
             dispatch(liveQueryPetInfo(id));
           }
 
-          // case: remvoe pet from petids
-          for (const id of oldPetids_copy) {
+          // case: remvoe pet from petIDList
+          for (const id of oldPetIDList_copy) {
             console.log('stopquery and remove pet:', id);
             dispatch(stopLiveQueryPetInfo(id));
             dispatch(removePet(id));
