@@ -327,16 +327,26 @@ export function handleFBLogin(error, result) {
       // alert("login is cancelled.");
     } else {
       console.log('login ok, result:', result);// not much info
+
+      // FB login ok by users
+      dispatch(LoginSuccess(''));
+
+      // NOTE:
+      // dispatch(LoginSuccess('')) here ->
+      // login button-ui change (logined status)
+      // -> signIn callback ->auth callback
+
       AccessToken.getCurrentAccessToken()
         .then((data) => {
           console.log('access token data:', data);
 
           const token = data.accessToken.toString();
 
+          // Try FB auth by this app, not users
           return firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token));
           // alert(data.accessToken.toString());
         }).then((result) => {
-          console.log('login FB from Firebae result:', result);
+          console.log('login FB ok. Firebae result:', result);
 
           if (result.displayName) {
             console.log(`try saving displayName ${result.displayName}`);
@@ -352,7 +362,7 @@ export function handleFBLogin(error, result) {
             });
           }
 
-          dispatch(LoginSuccess(result.displayName));
+          // dispatch(LoginSuccess('')); // displayName can be gotten from auth+data callback
         }).catch((error) => {
         // TODO handle firebase login fail or
         // getCurrentAccessToken fail
