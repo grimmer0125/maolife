@@ -49,7 +49,6 @@ class ListMain extends Component {
   }
 
   onButtonPress(rowData) {
-    console.log('onButtonPress');
     const { name } = rowData;
     const petID = rowData.key;
     // three ways

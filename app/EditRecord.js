@@ -21,8 +21,6 @@ class EditRecord extends Component {
  }
 
  onDelete = () => {
-   console.log('clicking delete record');
-
    const { petID, recordTime } = this.props.navigation.state.params;
    //
    // if (petID) {

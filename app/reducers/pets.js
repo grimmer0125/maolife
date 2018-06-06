@@ -28,11 +28,9 @@ export function pets(state = {}, action) {
 // export function selectedPet(state = null, action) {
 //   switch (action.type) {
 //     case ActionTypes.NAVI_TO_CAT:
-//       console.log("grimmer reducer, navi to pet");
 //       return {id: action.payload.petID};
 //     // case "Navigation/NAVIGATE":
 //     //   if (action.routeName == "List") {
-//     //     console.log("grimmer reducer, navi to pet back");
 //     //     return null;
 //     //   }
 //     //   break;

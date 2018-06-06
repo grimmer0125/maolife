@@ -27,8 +27,6 @@ class EditPet extends Component {
  // }
 
   onSave = () => {
-    console.log('in add/edit pet page, state:', this.state);
-
     const { petID } = this.props.navigation.state.params;
 
     if (!petID) {
@@ -38,7 +36,6 @@ class EditPet extends Component {
       }
       this.props.dispatch(addNewPet(this.state.name, this.state.age));
     } else {
-      console.log('save edited pet info');
       const info = {};
       if (this.state.name) {
         info.name = this.state.name;
@@ -55,8 +52,6 @@ class EditPet extends Component {
   }
 
   onDelete = () => {
-    console.log('clicking delete pet');
-
     const { petID } = this.props.navigation.state.params;
 
     if (petID) {
@@ -80,7 +75,6 @@ class EditPet extends Component {
     const {
       title, petID, name, age,
     } = this.props.navigation.state.params;
-    console.log('render in EditPet:', title, petID);
     // native-base's Input's value is not the normal defitnion, more like initialValue
 
     return (

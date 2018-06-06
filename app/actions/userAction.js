@@ -76,8 +76,6 @@ export const LogoutAction = createAction(LOGOUT);
  */
 export function addNewOwner(petID, ownerKID) {
   return (dispatch, getState) => {
-    console.log('start to add owner:', ownerKID, ';for pet:', petID);
-
     if (!ownerKID || ownerKID === '') {
       console.log('invalid ownerKID:', ownerKID);
       return;
@@ -91,13 +89,9 @@ export function addNewOwner(petID, ownerKID) {
         const matchIDKeys = Object.keys(matchIDs); // or use snapshot.foreach
         const matchID = matchIDKeys[0];
 
-        console.log('get match KID, userID:', matchID);
+        console.log('get matched KID:', matchID);
 
         const state = getState();
-
-        if (state.pets[petID].owners instanceof Array) {
-          console.log('owner is array');
-        }
 
         const owners = state.pets[petID].owners.slice(0);
         owners.push(matchID);
@@ -252,7 +246,7 @@ function liveQueryPetInfo(petID) {
     firebase.database().ref('pets').child(petID).on('value', (snapshot) => {
       const petInfo = snapshot.val();
 
-      console.log('grimmer petid info live update', petID);
+      // console.log('pet info changed:', petID);
 
       dispatch(updatePetInfo(petID, petInfo));
     });
@@ -266,10 +260,10 @@ export function skipRegistration() {
     firebase.database().ref(dataPath).update({
       KID: '',
     }).then(() => {
-      console.log('register KID (null) ok !!!');
+      console.log('register dummy KID ("") ok !!!');
     })
       .catch((error) => {
-        console.log('registering KID (null) fail:', error);
+        console.log('registering dummy KID ("") fail:', error);
       });
   };
 }
@@ -280,8 +274,6 @@ export function registerKID(registerID) {
       console.log('invalid register id:', registerID);
       dispatch(invalidRegisterIDAction());
     } else {
-      console.log('try registring id:', registerID);
-
       const query = firebase.database().ref().child('users').orderByChild('KID')
         .equalTo(registerID);
       query.once('value', (snapshot) => {
@@ -356,7 +348,7 @@ export function handleFBLogin(error, result) {
             firebase.database().ref(dataPath).update({
               displayName: result.displayName,
             }).then(() => {
-              console.log('register displayName ok');
+              console.log('save displayName ok');
             });
           }
 
@@ -371,7 +363,6 @@ export function handleFBLogin(error, result) {
 }
 
 export function getUserData(result, userData) {
-  console.log('getUserData:', userData);
   return {
     type: USER_DATA,
     payload: {
@@ -397,13 +388,7 @@ export function connectDBtoCheckUser() {
         firebase.database().ref(dataPath).on('value', (snap) => {
           const userValue = snap.val();
 
-          console.log('grimmer userdata from firebase:', userValue);
-
-          if (userValue && userValue.KID) {
-            console.log('KID for:', authUser.uid, ';KID:', userValue.KID);
-          } else {
-            console.log('no KID for:', authUser.uid);
-          }
+          console.log('user value changed from firebase:', userValue);
 
           let petIDList = [];
           let petIDList_copy = [];

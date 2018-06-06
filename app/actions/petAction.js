@@ -13,7 +13,7 @@ export function newBreathRecord(petID, breathRate, mode, recordTime) {
     console.log('new record', newRecord);
     firebase.database().ref(petPath).child('breathRecord').update(newRecord)
       .then(() => {
-        console.log('set new breath ok');
+        console.log('set new record ok');
       })
       .catch((error) => {
         console.log('add new record failed,', error);
@@ -25,7 +25,7 @@ export function updateInfo(petID, info) {
   return () => {
     const petPath = `pets/${petID}`;
 
-    console.log('new info', info);
+    // console.log('new info', info);
     firebase.database().ref(petPath).update(info)
       .then(() => {
         console.log('update pet info ok');
@@ -40,7 +40,7 @@ export function deleteBreathRecord(petID, recordTime) {
   return () => {
     const recordPath = `pets/${petID}/breathRecord/${recordTime}`;
 
-    console.log('delete record', recordPath);
+    // console.log('delete record', recordPath);
     firebase.database().ref(recordPath).remove()
       .then(() => {
         console.log('delete breath ok');

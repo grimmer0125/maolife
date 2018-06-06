@@ -37,12 +37,10 @@ class Login extends Component {
   // }
 
   handleFBLoginResult(error, result) {
-    console.log('login action result in login page');
     this.props.dispatch(handleFBLogin(error, result));
   }
 
   handleFBLogoutResult() {
-    console.log('logout action restul in login page');
     this.props.dispatch(handleFBLogout());
   }
 

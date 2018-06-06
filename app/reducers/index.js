@@ -15,7 +15,6 @@ import { ListPage } from '../ListPage';
 // redux integration section
 const initialState = ListPage.router.getStateForAction(ListPage.router.getActionForPathAndParams('List'));
 const listNav = (state = initialState, action) => {
-  console.log('nav action:', action);
   let nextState;
   switch (action.type) {
     // we can trigger navigation here !!! example:

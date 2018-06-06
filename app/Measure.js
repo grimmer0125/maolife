@@ -47,7 +47,6 @@ class Measure extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log('Measure init');
     this.state = {
       sleepRadio: true,
     };
@@ -59,7 +58,6 @@ class Measure extends React.Component {
   }
 
   resetSeconds() {
-    console.log('reset seconds and other everything!!');
     this.setState({
       ...initialState,
     });
@@ -76,8 +74,6 @@ class Measure extends React.Component {
   }
 
   onSave = () => {
-    console.log('on save!!!:', this.state.numberOfBreath);
-    console.log('time:', this.inputTime);
     let time;
     if (!this.inputTime) {
       time = moment().unix();
@@ -89,9 +85,8 @@ class Measure extends React.Component {
     if (!this.state.sleepRadio) {
       mode = 'rest';
     }
-    // console.log("params:", this.props.navigation.state.params);
-    const petID = this.props.navigation.state.params.petID;
-    console.log('petID:', petID);
+
+    const { petID } = this.props.navigation.state.params;
 
     this.props.dispatch(newBreathRecord(petID, this.state.numberOfBreath, mode, time));
 
@@ -101,7 +96,6 @@ class Measure extends React.Component {
   }
 
   onCancel = () => {
-    console.log('Cancel! !!:', this.state.numberOfBreath);
     this.resetSeconds();
   }
 
@@ -120,20 +114,16 @@ class Measure extends React.Component {
 
       // start timer;
       this.timerID = setInterval(() => {
-        console.log('timer !!!!');
-
         const newSeconds = this.state.seconds - 1;
         this.setState({ seconds: newSeconds });
         if (newSeconds === 0) {
           this.endTime = moment().format('YYYY-MM-DD HH:mm');
-          console.log(this.endTime);
           this.setState({ buttonStatus: BUTTON_STATUS_END });
 
           // make some vibration on phone for seconds
           if (Platform.OS === 'android') {
             const pattern = [0, 500, 200, 500];
             Vibration.vibrate(pattern);
-            console.log('Vibration:', pattern);
           } else {
             Vibration.vibrate();
           }

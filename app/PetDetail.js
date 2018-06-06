@@ -54,10 +54,6 @@ class PetDetail extends React.Component {
     };
   }
 
-  componentWillUpdate() {
-    console.log('detail will udpate');
-  }
-
   onSave = () => {
     this.props.dispatch(addNewOwner(this.props.navigation.state.params.petID, this.state.authID));
 
