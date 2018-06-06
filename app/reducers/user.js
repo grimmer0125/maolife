@@ -3,13 +3,12 @@ import { ActionTypes } from '../actions/userAction';
 import { combineReducers } from 'redux';
 
 const initialState = {
-  KID: null,
   displayName: '',
   isLogin: false,
 };
 
 // may move to user
-export function userChecking(state = true, action = {}) {
+export function authenticatingWithFirebase(state = true, action = {}) {
   switch (action.type) {
     case ActionTypes.USER_DATA:
       return false;
@@ -52,5 +51,5 @@ export function currentUser(state = initialState, action = {}) {
 }
 
 export const userRoot = {
-  currentUser, userChecking, registerStatus,
+  currentUser, authenticatingWithFirebase, registerStatus,
 };

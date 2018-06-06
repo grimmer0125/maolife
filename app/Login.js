@@ -13,8 +13,8 @@ import {
 
 import { connect } from 'react-redux';
 
+import { handleFBLogin, handleFBLogout } from './actions/userAction';
 import CommonStyles from './styles/common';
-import { handleFBLogin, handleFBLogout, registerKID } from './actions/userAction';
 
 const FBSDK = require('react-native-fbsdk');
 
@@ -28,14 +28,13 @@ class Login extends Component {
 
     this.handleFBLoginResult = this.handleFBLoginResult.bind(this);
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
-    this.onButtonPress = this.onButtonPress.bind(this);
-
-    this.state = { registerText: '' };
+    // this.onButtonPress = this.onButtonPress.bind(this);
+    // this.state = { registerText: '' };
   }
 
-  onButtonPress() {
-    this.props.dispatch(registerKID(this.state.registerText));
-  }
+  // onButtonPress() {
+  //   this.props.dispatch(registerKID(this.state.registerText));
+  // }
 
   handleFBLoginResult(error, result) {
     console.log('login action result in login page');
@@ -52,31 +51,15 @@ class Login extends Component {
   // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
 
   render() {
-    const { user, registerStatus } = this.props;
-    const name = user ? user.displayName : '';
-    let registerUI = null;
+    // const { user } = this.props;
+    // const registerUI = null;
 
     // TODO improve <TextInput style={{width: 150}}> width part later
-    if (user.isLogin) {
-      registerUI = (
-        <View>
-          <Text>
-            {registerStatus}
-          </Text>
-          <TextInput
-            style={{ height: 40, width: 300, textAlign: 'center' }}
-            placeholder="Please type an ID to register here!"
-            onChangeText={registerText => this.setState({ registerText })}
-          />
-          <Button
-            onPress={this.onButtonPress}
-            title="Click to register"
-            color="#841584"
-            accessibilityLabel="Learn more about purple"
-          />
-        </View>
-      );
-    }
+    // if (user.isLogin) {
+    //   registerUI = (
+    //
+    //   );
+    // }
 
     // const instructionText =
     // "This app is to daily record pet's (usually cat/dog) breath rate.\
@@ -94,18 +77,16 @@ class Login extends Component {
           onLoginFinished={this.handleFBLoginResult}
           onLogoutFinished={this.handleFBLogoutResult}
         />
-        <Text style={CommonStyles.welcome}>
-          {name}
-        </Text>
-        {registerUI}
+
+        {/* {registerUI} */}
       </View>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.currentUser,
-  registerStatus: state.registerStatus,
-});
+// const mapStateToProps = state => ({
+//   user: state.currentUser,
+//   registerStatus: state.registerStatus,
+// });
 
-export default connect(mapStateToProps)(Login);
+export default connect()(Login);

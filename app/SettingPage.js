@@ -17,6 +17,7 @@ import { Text } from 'native-base';
 import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { handleFBLogout } from './actions/userAction';
+import Registration from './Registration';
 
 const FBSDK = require('react-native-fbsdk');
 
@@ -60,25 +61,32 @@ class MySettingsScreen extends Component {
     const { currentUser } = this.props;
 
     return (
-      <ScrollView>
-        {/* <Button
-          onPress={() => navigation.navigate('NotifSettings')}
-          title="Go to notification settings"
+    // <ScrollView>
+    //   {/* <Button
+    //     onPress={() => navigation.navigate('NotifSettings')}
+    //     title="Go to notification settings"
+    //   />
+    //   <Button
+    //     onPress={() => navigation.goBack(null)}
+    //     title="In Setting, Go back"
+    //   /> */}
+      <View style={{ alignItems: 'center' }}>
+        {currentUser.KID === '' ? (<Registration />) : (
+          <View>
+            <Text>
+              {`hi,${currentUser.displayName}`}
+            </Text>
+            <Text>
+              {`Self's KID: ${currentUser.KID}`}
+            </Text>
+          </View>
+        )}
+        <LoginButton
+          onLogoutFinished={this.handleFBLogoutResult}
         />
-        <Button
-          onPress={() => navigation.goBack(null)}
-          title="In Setting, Go back"
-        /> */}
-        <View style={{ alignItems: 'center' }}>
-          <Text>
-            {`Self's KID: ${currentUser.KID}`}
-          </Text>
-          <LoginButton
-            onLogoutFinished={this.handleFBLogoutResult}
-          />
-        </View>
+      </View>
 
-      </ScrollView>
+    // </ScrollView>
     );
   }
 }

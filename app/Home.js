@@ -9,6 +9,7 @@ import CommonStyles from './styles/common';
 import { connectDBtoCheckUser } from './actions/userAction';
 import Login from './Login';
 import MainScreen from './MainScreen';
+import Registration from './Registration';
 
 class Home extends Component {
   constructor(props) {
@@ -22,8 +23,8 @@ class Home extends Component {
   }
 
   render() {
-    const { userChecking, user } = this.props;
-    if (userChecking) {
+    const { authenticatingWithFirebase, currentUser } = this.props;
+    if (authenticatingWithFirebase) {
       return (
         <View style={CommonStyles.container}>
           <Text style={CommonStyles.welcome}>
@@ -33,8 +34,17 @@ class Home extends Component {
       );
     }
 
-    if (user && user.KID) {
-      return <MainScreen />;
+    if (currentUser && currentUser.isLogin) {
+      if (currentUser.KID || currentUser.KID === '') {
+        return <MainScreen />;
+      }
+
+      return (
+        <View style={CommonStyles.container}>
+          <Registration />
+        </View>);
+
+      // undefine
     }
     return <Login />;
   }
@@ -45,8 +55,8 @@ class Home extends Component {
 // }
 
 const mapStateToProps = state => ({
-  user: state.currentUser,
-  userChecking: state.userChecking,
+  currentUser: state.currentUser,
+  authenticatingWithFirebase: state.authenticatingWithFirebase,
 });
 
 export default connect(mapStateToProps)(Home);

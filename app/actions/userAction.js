@@ -78,6 +78,11 @@ export function addNewOwner(petID, ownerKID) {
   return (dispatch, getState) => {
     console.log('start to add owner:', ownerKID, ';for pet:', petID);
 
+    if (!ownerKID || ownerKID === '') {
+      console.log('invalid ownerKID:', ownerKID);
+      return;
+    }
+
     const query = firebase.database().ref().child('users').orderByChild('KID')
       .equalTo(ownerKID);
     query.once('value', (snapshot) => {
@@ -254,6 +259,21 @@ function liveQueryPetInfo(petID) {
   };
 }
 
+// use a empty string as KID to note "skip" status in DB
+export function skipRegistration() {
+  return () => {
+    const dataPath = `/users/${firebase.auth().currentUser.uid}`;
+    firebase.database().ref(dataPath).update({
+      KID: '',
+    }).then(() => {
+      console.log('register KID (null) ok !!!');
+    })
+      .catch((error) => {
+        console.log('registering KID (null) fail:', error);
+      });
+  };
+}
+
 export function registerKID(registerID) {
   return (dispatch) => {
     if (!registerID || registerID.indexOf(' ') >= 0) {
@@ -274,7 +294,10 @@ export function registerKID(registerID) {
             KID: registerID,
           }).then(() => {
             console.log('register KID ok !!!:', registerID);
-          });
+          })
+            .catch((error) => {
+              console.log('registering KID fail:', error);
+            });
         }
       });
     }
@@ -291,7 +314,7 @@ export function LoginSuccess(displayName) {
 }
 
 export function handleFBLogout(error) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     // https://firebase.google.com/docs/reference/node/firebase.auth.Auth#signOut
     firebase.auth().signOut()
       .then(() => {
@@ -386,7 +409,7 @@ export function connectDBtoCheckUser() {
           let petIDList_copy = [];
           let oldPetIDList_copy = [];
 
-          if (userValue.petIDList) {
+          if (userValue && userValue.petIDList) {
             petIDList = userValue.petIDList.slice(0);
             petIDList_copy = userValue.petIDList.slice(0);
           }
