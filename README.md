@@ -2,6 +2,10 @@
 
 **It has only been tested on Mac. However Windows and Linux should work**
 
+**Features, Possible feature backlog, Screenshots**
+
+See the wiki, https://github.com/grimmer0125/Kiteretsu/wiki
+
 ## UI components
 
 It mainly uses https://nativebase.io/.
@@ -28,6 +32,43 @@ The development was setup on 10.12 and has been upgraded to 10.13 with Xcode 9 a
 
 Android FacebookSDK v4.29 has some compatibiliy issue with the latest Android Studio and Gradle, so that this project uses some tricky way to force use older version, setup in build.grade in Android Studio.
 
+### (optional) Create your Firebase project if you are not using this project's Firebase project
+
+ref: https://Firebase.google.com/docs/web/setup
+
+1. Create a Firebase project in the [Firebase console](https://console.Firebase.google.com/)
+2. Authentication -> Enable Facebook. Then record **Oauth redirect URI** for the following Facebook setting.
+3. Click Add Firebase to your web app to get its **config information**.
+
+## Setup Firebase config
+
+### Firebase web console config
+
+1. Create a project, then choose Realtime Database.
+2. Enable Facebook login in Authentication.
+3. Change Database rule as the following    
+    ```
+    {
+        "rules": {
+            ".read": "auth != null",
+            ".write": "auth != null",
+            "users":{
+              ".indexOn":["KID"]
+            }   
+        }
+    }
+    ```
+
+### Change the fields of `firebaseConfig.js`:
+
+    ```
+    apiKey: "<API_KEY>",
+    authDomain: "<PROJECT_ID>.Firebaseapp.com",
+    databaseURL: "https://<DATABASE_NAME>.Firebaseio.com",
+    storageBucket: "<BUCKET>.appspot.com",
+    messagingSenderId: "<SENDER_ID>",
+    ```
+
 ## iOS
 
 ### Installation
@@ -44,27 +85,8 @@ Summary Step:
 6. git clone this project, https://github.com/grimmer0125/Kiteretsu
 7. cd into this project folder, `npm install`
 8. (optional) `node node_modules/native-base/ejectTheme.js` (native-base)
-9. `react-native link` (required by some react native npm libraries)
+9. `react-native link` (required by native-base, react-native-vector-icons, react-native-fbsdk, react-native-svg)
 
-### (optional) Create your Firebase project if you are not using this project's Firebase project
-
-ref: https://Firebase.google.com/docs/web/setup
-
-1. Create a Firebase project in the [Firebase console](https://console.Firebase.google.com/)
-2. Authentication -> Enable Facebook. Then record **Oauth redirect URI** for the following Facebook setting.
-3. Click Add Firebase to your web app to get its **config information**.
-
-### Setup Firebase config
-
-modify the following in `firebaseConfig.js`:
-
-    ```
-    apiKey: "<API_KEY>",
-    authDomain: "<PROJECT_ID>.Firebaseapp.com",
-    databaseURL: "https://<DATABASE_NAME>.Firebaseio.com",
-    storageBucket: "<BUCKET>.appspot.com",
-    messagingSenderId: "<SENDER_ID>",
-    ```
 
 ### Download Facebook SDK on iOS
 
@@ -108,16 +130,16 @@ You can use the following ways to launch emulators
 
 It is possible to directly use Android Studio to launch and debug. In this case, you may encounter `Unable to load script from assets 'index.android.bundle'`, the relative discussion: https://stackoverflow.com/questions/44446523/unable-to-load-script-from-assets-index-android-bundle-on-windows/47035389.
 
-### How to debug
+## How to debug
 
 Follow https://facebook.github.io/react-native/docs/debugging.html to have remote JS debugging. You can setup breakpoint on Nuclide or chrome debugger.
 
-### Debug React Widget
+## Debug React Widget
 1. Use Nuclide's "React Native Inspector".
 2. Use https://github.com/jhen0409/react-native-debugger. (which also includes redux-devtoolsy). p.s. And you can not use it to debug react widget and use http://localhost:8081/debugger-ui to see JavaScript logs at the same time.
 3. Standalone [react-devtools](https://facebook.github.io/react-native/docs/debugging.html#react-developer-tools)
 
-### Debug Redux
+## Debug Redux
 
 https://github.com/zalmoxisus/remote-redux-devtools supplies a way to use redux server to get redux'store. It needs
 
