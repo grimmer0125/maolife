@@ -271,7 +271,7 @@ class PetDetail extends React.Component {
             { name: stats.sleepAvg.toFixed(1), symbol: { fill: 'blue' } },
           ]}
         />
-        {dataSleep ? (
+        {(dataSleep && dataSleep.length >= 2) ? (
           <VictoryLine
             labelComponent={<VictoryTooltip />}
             style={{
@@ -279,7 +279,7 @@ class PetDetail extends React.Component {
           }}
             data={dataSleep}
           />) : null}
-        {dataRest ? (
+        {(dataRest && dataRest.length >= 2) ? (
           <VictoryLine
             labelComponent={<VictoryTooltip />}
             style={{
