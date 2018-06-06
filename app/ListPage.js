@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import {
-  FlatList,
   Button,
   View,
 } from 'react-native';
+
+import {
+  Container,
+  Content, // ~ ScrollView of react-native
+  Card,
+  CardItem,
+  Body,
+  Text,
+} from 'native-base';
 
 import { createStackNavigator, NavigationActions } from 'react-navigation';
 
@@ -41,6 +49,7 @@ class ListMain extends Component {
   }
 
   onButtonPress(rowData) {
+    console.log('onButtonPress');
     const { name } = rowData;
     const petID = rowData.key;
     // three ways
@@ -70,14 +79,30 @@ class ListMain extends Component {
   }
 
   render() {
-    // console.log('render list page, navi info:', this.props.navigation);
+    // console.log('render list page, data:', this.state.dataSource);
     return (
-      <View style={{ flex: 1, paddingTop: 22 }}>
-        <FlatList
+      <Container>
+        <Content>
+          {/* <View style={{ flex: 1, paddingTop: 22 }}> */}
+          {this.state.dataSource.map(item => (
+            <Card key={item.key}>
+              <CardItem header button onPress={() => this.onButtonPress(item)}>
+                <Text>
+                  {item.name}
+                </Text>
+              </CardItem>
+              <CardItem button onPress={() => this.onButtonPress(item)}>
+                <Body>
+                  <Text>
+                    {item.age ? `age:${item.age}` : null}
+                  </Text>
+                </Body>
+              </CardItem>
+            </Card>))}
+          {/* <FlatList
           data={this.state.dataSource}
           renderItem={({ item }) => (
             <View>
-              {/* <Text>{rowData.name}</Text> */}
               <Button
                 onPress={() => this.onButtonPress(item)}
                 title={item.name ? item.name : ''}
@@ -86,8 +111,11 @@ class ListMain extends Component {
             </View>
             )
           }
-        />
-      </View>
+        /> */}
+          {/* </View> */}
+        </Content>
+
+      </Container>
     );
   }
 }

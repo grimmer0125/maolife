@@ -191,13 +191,21 @@ class Measure extends React.Component {
       <Container>
         <Content>
           <ListItem onPress={() => this.toggleRadio()}>
-            <Radio selected={this.state.sleepRadio} onPress={() => this.toggleRadio()} />
             <Text>sleep mode</Text>
+            <Right>
+              <Radio selected={this.state.sleepRadio} />
+            </Right>
           </ListItem>
           <ListItem onPress={() => this.toggleRadio()}>
-            <Radio selected={!this.state.sleepRadio} onPress={() => this.toggleRadio()} />
             <Text>rest mode</Text>
+            <Right>
+              <Radio selected={!this.state.sleepRadio} />
+            </Right>
           </ListItem>
+          <Text>
+            Direct input measured per minute breath rate or click
+            the assisting countdown which will trigger a vibration
+          </Text>
           <View style={{
   flex: 1, flexDirection: 'row',
 }}

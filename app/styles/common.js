@@ -1,6 +1,4 @@
-import {
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const CommonStyles = StyleSheet.create({
   container: {
@@ -8,6 +6,9 @@ const CommonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  instruction: {
+    margin: 10,
   },
   welcome: {
     fontSize: 20,

@@ -78,8 +78,18 @@ class Login extends Component {
       );
     }
 
+    // const instructionText =
+    // "This app is to daily record pet's (usually cat/dog) breath rate.\
+    // Monitoring this can avoid some diseases (e.g. cat's HCM) happen or become worse.\
+    // Higher breath rate is a kind of alert";
+
     return (
       <View style={CommonStyles.container}>
+        <Text style={CommonStyles.instruction}>
+          This app is to daily record pet's (usually cat/dog) breath rate.
+          Monitoring this can avoid some diseases (e.g. cat's HCM) happen or become worse.
+          Higher breath rate is a kind of alert. The app uses Facebook authentication.
+        </Text>
         <LoginButton
           onLoginFinished={this.handleFBLoginResult}
           onLogoutFinished={this.handleFBLogoutResult}

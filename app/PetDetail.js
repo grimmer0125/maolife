@@ -234,7 +234,7 @@ class PetDetail extends React.Component {
       // example:
       // http://formidable.com/open-source/victory/docs/victory-line/
       // https://formidable.com/open-source/victory/gallery/brush-zoom/
-      // https://stackoverflow.com/a/48957518/7354486
+      // https://codesandbox.io/embed/vyykx3jp77
 
       // <VictoryChart
       //   theme={VictoryTheme.material}
