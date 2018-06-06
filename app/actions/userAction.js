@@ -310,7 +310,7 @@ export function handleFBLogout(error) {
     // https://firebase.google.com/docs/reference/node/firebase.auth.Auth#signOut
     firebase.auth().signOut()
       .then(() => {
-        console.log('firebase logout');
+        console.log('firebase auth signOut ok');
         dispatch(LogoutAction());
       });
   };

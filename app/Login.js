@@ -6,9 +6,7 @@
 import React, { Component } from 'react';
 import {
   Text,
-  TextInput,
   View,
-  Button,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -30,6 +28,7 @@ class Login extends Component {
     this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
     // this.onButtonPress = this.onButtonPress.bind(this);
     // this.state = { registerText: '' };
+    //
   }
 
   // onButtonPress() {
