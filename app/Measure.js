@@ -176,7 +176,7 @@ class Measure extends React.Component {
                 <Input onChangeText={(text) => { this.inputTime = text; }} />
               </Item>
               <Item>
-                <Input placeholder="Input Number of breath" onChangeText={this.inputNumberOfBreach} />
+                <Input keyboardType="numeric" placeholder="Input Number of breath" onChangeText={this.inputNumberOfBreach} />
               </Item>
               {/* </Form> */}
             </Body>

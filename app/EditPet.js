@@ -107,6 +107,7 @@ class EditPet extends Component {
           <Item stackedLabel>
             <Label>Age</Label>
             <Input
+              keyboardType="numeric"
               onChangeText={this.handleChangeAge}
               value={age ? age.toString() : null}
             />
