@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Button,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -84,20 +85,23 @@ class ListMain extends Component {
         <Content>
           {/* <View style={{ flex: 1, paddingTop: 22 }}> */}
           {this.state.dataSource.map(item => (
-            <Card key={item.key}>
-              <CardItem header button onPress={() => this.onButtonPress(item)}>
-                <Text>
-                  {item.name}
-                </Text>
-              </CardItem>
-              <CardItem button onPress={() => this.onButtonPress(item)}>
-                <Body>
+            <TouchableOpacity key={item.key} onPress={() => this.onButtonPress(item)}>
+              <Card>
+                <CardItem header >
                   <Text>
-                    {item.age ? `age:${item.age}` : null}
+                    {item.name}
                   </Text>
-                </Body>
-              </CardItem>
-            </Card>))}
+                </CardItem>
+                <CardItem >
+                  <Body>
+                    <Text>
+                      {item.age ? `age:${item.age}` : null}
+                    </Text>
+                  </Body>
+                </CardItem>
+              </Card>
+            </TouchableOpacity>
+          ))}
           {/* <FlatList
           data={this.state.dataSource}
           renderItem={({ item }) => (
