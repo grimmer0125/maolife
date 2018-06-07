@@ -94,7 +94,7 @@ class Measure extends React.Component {
 
     this.resetSeconds();
 
-    // this.props.navigation.goBack(null);
+    this.props.navigation.goBack(null);
   }
 
   onCancel = () => {
