@@ -15,6 +15,8 @@ import {
   ListItem,
   Radio,
   Label,
+  Form,
+  List,
 } from 'native-base';
 
 import {
@@ -170,7 +172,6 @@ class Measure extends React.Component {
         <Card>
           <CardItem>
             <Body>
-              {/* <Form> */}
               <Item stackedLabel>
                 <Label>{labelStr}</Label>
                 <Input onChangeText={(text) => { this.inputTime = text; }} />
@@ -178,7 +179,6 @@ class Measure extends React.Component {
               <Item>
                 <Input keyboardType="numeric" placeholder="Input Number of breath" onChangeText={this.inputNumberOfBreach} />
               </Item>
-              {/* </Form> */}
             </Body>
           </CardItem>
           <CardItem>
@@ -197,22 +197,30 @@ class Measure extends React.Component {
     return (
       <Container>
         <Content>
-          <ListItem onPress={() => this.toggleRadio()}>
-            <Text>rest mode</Text>
-            <Right>
-              <Radio selected={!this.state.sleepRadio} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.toggleRadio()}>
-            <Text>sleep mode</Text>
-            <Right>
-              <Radio selected={this.state.sleepRadio} />
-            </Right>
-          </ListItem>
-          <Text>
-            Directly input measured per minute breath rate or click
-            the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate
-          </Text>
+          <List
+            style={{ backgroundColor: 'white' }}
+          >
+            <ListItem onPress={() => this.toggleRadio()}>
+              <Text>rest mode</Text>
+              <Right>
+                <Radio selected={!this.state.sleepRadio} />
+              </Right>
+            </ListItem>
+            <ListItem onPress={() => this.toggleRadio()}>
+              <Text>sleep mode</Text>
+              <Right>
+                <Radio selected={this.state.sleepRadio} />
+              </Right>
+            </ListItem>
+          </List>
+          <View
+            style={{ marginTop: 10 }}
+          >
+            <Text>
+              Directly input measured per minute breath rate or click
+              the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate
+            </Text>
+          </View>
           <View style={{
   flex: 1, flexDirection: 'row',
 }}
@@ -224,8 +232,8 @@ class Measure extends React.Component {
               {` ${this.state.seconds}s`}
             </Text>
           </View>
+          {inputUI}
         </Content>
-        {inputUI}
       </Container>);
   }
 }
