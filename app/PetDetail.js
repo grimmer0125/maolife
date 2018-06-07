@@ -171,13 +171,13 @@ class PetDetail extends React.Component {
     // TODO: become a function
     if (numSleep > baselineNum) {
       let total = 0;
-      for (let i = 0; i < baselineNum; i++) {
+      for (let i = 0; i < baselineNum; i += 1) {
         total += sleepList[i].y;
       }
       info.sleepHeadAvg = (total / baselineNum).toFixed(1);
 
       total = 0;
-      for (let i = 0; i < baselineNum; i++) {
+      for (let i = 0; i < baselineNum; i += 1) {
         total += sleepList[numSleep - 1 - i].y;
       }
       info.sleepTailAvg = (total / baselineNum).toFixed(1);
@@ -185,13 +185,13 @@ class PetDetail extends React.Component {
 
     if (numRest > baselineNum) {
       let total = 0;
-      for (let i = 0; i < baselineNum; i++) {
+      for (let i = 0; i < baselineNum; i += 1) {
         total += restList[i].y;
       }
       info.restHeadAvg = (total / baselineNum).toFixed(1);
 
       total = 0;
-      for (let i = 0; i < baselineNum; i++) {
+      for (let i = 0; i < baselineNum; i += 1) {
         total += restList[numSleep - 1 - i].y;
       }
       info.restTailAvg = (total / baselineNum).toFixed(1);
