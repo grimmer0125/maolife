@@ -40,7 +40,7 @@ function addPetToUserFireBaseData(petIDList, newPetId, ownerPath) {
 
   return firebase.database().ref(ownerPath).child('petIDList').set(petIDList)
     .then(() => {
-      console.log('add pet to petIDList ok !!!:');
+      console.log('add pet to petIDList ok !!!');
     })
     .catch((error) => {
       console.log('add pet to petIDList failed:', error);
@@ -94,6 +94,10 @@ export function addNewOwner(petID, ownerKID) {
         const state = getState();
 
         const owners = state.pets[petID].owners.slice(0);
+        if (owners.indexOf(matchID) > -1) {
+          console.log('that user is already authorized yet, not add again');
+          return;
+        }
         owners.push(matchID);
 
         const petPath = `pets/${petID}`;
@@ -245,8 +249,6 @@ function liveQueryPetInfo(petID) {
   return (dispatch) => {
     firebase.database().ref('pets').child(petID).on('value', (snapshot) => {
       const petInfo = snapshot.val();
-
-      // console.log('pet info changed:', petID);
 
       dispatch(updatePetInfo(petID, petInfo));
     });
