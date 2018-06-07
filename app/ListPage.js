@@ -66,6 +66,8 @@ class ListMain extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log('listpage componentWillReceiveProps');
+
     const { pets } = newProps;
 
     const petsArray = [];

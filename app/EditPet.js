@@ -17,14 +17,17 @@ class EditPet extends Component {
    this.state = { name: null, age: null };
  }
 
- // navigation change will not trgger this
- // componentWillReceiveProps(newProps) {
- //   const {
- //     title, petID, name, age,
- //   } = newProps.navigation.state.params;
- //
- //   this.setState({ name });
- // }
+ static getDerivedStateFromProps(newProps) {
+   console.log('editpage getDerivedStateFromProps:', newProps);
+
+   const { name, age } = newProps.navigation.state.params;
+
+   // https://medium.com/@baphemot/whats-new-in-react-16-3-d2c9b7b6193b
+   return {
+     name,
+     age,
+   };
+ }
 
   onSave = () => {
     const { petID } = this.props.navigation.state.params;
@@ -88,8 +91,11 @@ class EditPet extends Component {
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
   render() {
     const {
-      petID, name, age,
+      petID, // , name, age,
     } = this.props.navigation.state.params;
+
+    const { name, age } = this.state;
+
     // NOTE: native-base's
     // Input's value is not the normal defitnion, more like initialValue
 
