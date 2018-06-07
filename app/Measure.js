@@ -193,8 +193,8 @@ class Measure extends React.Component {
             </Right>
           </ListItem>
           <Text>
-            Direct input measured per minute breath rate or click
-            the assisting countdown which will trigger a vibration
+            Directly input measured per minute breath rate or click
+            the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate
           </Text>
           <View style={{
   flex: 1, flexDirection: 'row',

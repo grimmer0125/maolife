@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import { registerKID, skipRegistration } from './actions/userAction';
 import CommonStyles from './styles/common';
 
-
 class Registration extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +42,7 @@ class Registration extends Component {
         {/* <Content padder> */}
         {currentUser.displayName ? <Text>{currentUser.displayName}</Text> : null}
         <Text style={CommonStyles.welcome}>
-            Please Choose a ID to let other people can find you and authorize you to manage their pets' health.
+            Please choose a ID (named KID internally) to let other people can find you and authorize you to manage their pets' health.
           { inMainPage ? null : 'This step is optional.'}
         </Text>
         <Text>

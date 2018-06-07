@@ -384,6 +384,7 @@ export function getUserData(result, userData) {
 
 export function connectDBtoCheckUser() {
   return (dispatch, getState) => {
+    console.log('setup firebase, connectDBtoCheckUser');
     firebase.initializeApp(firebaseConfig);
 
     // https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js

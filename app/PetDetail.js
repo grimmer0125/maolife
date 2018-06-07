@@ -21,6 +21,9 @@ import { deleteBreathRecord } from './actions/petAction';
 
 const moment = require('moment');
 
+// TODO: also change the name of sleepHeadAvg etc
+const baselineNum = 15;
+
 function extractPetInfo(petID, pets) {
   if (petID && pets && pets.hasOwnProperty(petID)) {
     return { petID, ...pets[petID] };
@@ -159,39 +162,39 @@ class PetDetail extends React.Component {
       sleepAvg: numSleep ? sleepTotal / numSleep : 0,
       restAvg: numRest ? restTotal / numRest : 0,
       mixAvg: numTotal ? (sleepTotal + restTotal) / numTotal : 0,
-      sleepFirst20Avg: '',
-      sleepLast20Avg: '',
-      restFirst20Avg: '',
-      restLast20Avg: '',
+      sleepHeadAvg: '',
+      sleepTailAvg: '',
+      restHeadAvg: '',
+      restTailAvg: '',
     };
 
     // TODO: become a function
-    if (numSleep > 20) {
+    if (numSleep > baselineNum) {
       let total = 0;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < baselineNum; i++) {
         total += sleepList[i].y;
       }
-      info.sleepFirst20Avg = (total / 20).toFixed(1);
+      info.sleepHeadAvg = (total / baselineNum).toFixed(1);
 
       total = 0;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < baselineNum; i++) {
         total += sleepList[numSleep - 1 - i].y;
       }
-      info.sleepLast20Avg = (total / 20).toFixed(1);
+      info.sleepTailAvg = (total / baselineNum).toFixed(1);
     }
 
-    if (numRest > 20) {
+    if (numRest > baselineNum) {
       let total = 0;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < baselineNum; i++) {
         total += restList[i].y;
       }
-      info.restFirst20Avg = (total / 20).toFixed(1);
+      info.restHeadAvg = (total / baselineNum).toFixed(1);
 
       total = 0;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < baselineNum; i++) {
         total += restList[numSleep - 1 - i].y;
       }
-      info.restLast20Avg = (total / 20).toFixed(1);
+      info.restTailAvg = (total / baselineNum).toFixed(1);
     }
 
 
@@ -284,6 +287,7 @@ class PetDetail extends React.Component {
             labelComponent={<VictoryTooltip />}
             style={{
             data: { stroke: 'tomato' },
+            parent: { border: '20px solid #ccc' },
           }}
             data={dataRest}
           />) : null}
@@ -386,10 +390,10 @@ class PetDetail extends React.Component {
                 <Text>{stats ? `Mix Avg: ${stats.mixAvg.toFixed(1)}` : 'no stats data'}</Text>
             </ListItem> */}
             {/* <ListItem>
-              <Text>{stats ? `Rest count:${stats.numRest}, first20AVG:${stats.restFirst20Avg}, last20AVG:${stats.restLast20Avg}, AVG:${stats.restAvg.toFixed(1)}` : ''}</Text>
+              <Text>{stats ? `Rest count:${stats.numRest}, first20AVG:${stats.restHeadAvg}, last20AVG:${stats.restTailAvg}, AVG:${stats.restAvg.toFixed(1)}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text>{stats ? `Sleep count:${stats.numSleep}, first20AVG:${stats.sleepFirst20Avg}, last20AVG:${stats.sleepLast20Avg}, AVG: ${stats.sleepAvg.toFixed(1)}` : ''}</Text>
+              <Text>{stats ? `Sleep count:${stats.numSleep}, first20AVG:${stats.sleepHeadAvg}, last20AVG:${stats.sleepTailAvg}, AVG: ${stats.sleepAvg.toFixed(1)}` : ''}</Text>
             </ListItem> */}
           </List>
           <Separator bordered>
@@ -397,10 +401,10 @@ class PetDetail extends React.Component {
           </Separator>
           <View>
             <ListItem>
-              <Text style={{ color: '#FF6347' }}>{stats ? `Rest CNT:${stats.numRest}, first20AVG:${stats.restFirst20Avg}, last20AVG:${stats.restLast20Avg}` : ''}</Text>
+              <Text style={{ color: '#FF6347' }}>{stats ? `Rest CNT:${stats.numRest}, first${baselineNum}AVG:${stats.restHeadAvg}, last${baselineNum}AVG:${stats.restTailAvg}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.numSleep}, first20AVG:${stats.sleepFirst20Avg}, last20AVG:${stats.sleepLast20Avg}` : ''}</Text>
+              <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.numSleep}, first${baselineNum}AVG:${stats.sleepHeadAvg}, last${baselineNum}AVG:${stats.sleepTailAvg}` : ''}</Text>
             </ListItem>
             {stats ? this.getChartUI(stats) : null}
           </View>
