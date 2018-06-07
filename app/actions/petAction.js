@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 
 /**
- * @param  {string} mode "sleep" or "rest"
+ * @param  {string} mode  0(rest) or 1(sleep)
  */
 export function newBreathRecord(petID, breathRate, mode, recordTime) {
   return () => {
@@ -21,7 +21,7 @@ export function newBreathRecord(petID, breathRate, mode, recordTime) {
   };
 }
 
-export function updateInfo(petID, info) {
+export function updatePetInfo(petID, info) {
   return () => {
     const petPath = `pets/${petID}`;
 

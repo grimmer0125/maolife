@@ -26,8 +26,10 @@ import {
 import { connect } from 'react-redux';
 
 import { newBreathRecord } from './actions/petAction';
+import Constant from './Constant';
 
 const moment = require('moment');
+
 
 const BUTTON_STATUS_INIT = 'Start Countdown';
 const BUTTON_STATUS_RUNNING = 'Cancel';
@@ -70,7 +72,7 @@ class Measure extends React.Component {
   }
 
   inputNumberOfBreach = (text) => {
-    this.setState({ numberOfBreath: text });
+    this.setState({ numberOfBreath: parseInt(text, 10) });
   }
 
   onSave = () => {
@@ -81,9 +83,9 @@ class Measure extends React.Component {
       time = moment(this.inputTime).unix();
     }
 
-    let mode = 'sleep';
-    if (!this.state.sleepRadio) {
-      mode = 'rest';
+    let mode = Constant.MODE_REST;
+    if (this.state.sleepRadio) {
+      mode = Constant.MODE_SLEEP;
     }
 
     const { petID } = this.props.navigation.state.params;
@@ -181,15 +183,15 @@ class Measure extends React.Component {
       <Container>
         <Content>
           <ListItem onPress={() => this.toggleRadio()}>
-            <Text>sleep mode</Text>
-            <Right>
-              <Radio selected={this.state.sleepRadio} />
-            </Right>
-          </ListItem>
-          <ListItem onPress={() => this.toggleRadio()}>
             <Text>rest mode</Text>
             <Right>
               <Radio selected={!this.state.sleepRadio} />
+            </Right>
+          </ListItem>
+          <ListItem onPress={() => this.toggleRadio()}>
+            <Text>sleep mode</Text>
+            <Right>
+              <Radio selected={this.state.sleepRadio} />
             </Right>
           </ListItem>
           <Text>

@@ -4,7 +4,7 @@ import { Container, Form, Item, Input, Button, Text, Label } from 'native-base';
 import { connect } from 'react-redux';
 
 import { addNewPet, removeSelfFromPetOwners } from './actions/userAction';
-import { updateInfo } from './actions/petAction';
+import { updatePetInfo } from './actions/petAction';
 
 class EditPet extends Component {
  static navigationOptions = ({ navigation }) => ({
@@ -14,7 +14,7 @@ class EditPet extends Component {
  constructor(props) {
    super(props);
 
-   this.state = { name: '', age: '' };
+   this.state = { name: '', age: null };
  }
 
  // navigation change will not trgger this
@@ -45,7 +45,7 @@ class EditPet extends Component {
         info.age = this.state.age;
       }
 
-      this.props.dispatch(updateInfo(petID, info));
+      this.props.dispatch(updatePetInfo(petID, info));
     }
 
     this.props.navigation.goBack(null);
@@ -67,13 +67,13 @@ class EditPet extends Component {
   }
 
   handleChangeAge = (text) => {
-    this.setState({ age: text });
+    this.setState({ age: parseInt(text, 10) });
   }
 
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
   render() {
     const {
-      title, petID, name, age,
+      petID, name, age,
     } = this.props.navigation.state.params;
     // native-base's Input's value is not the normal defitnion, more like initialValue
 
@@ -92,7 +92,7 @@ class EditPet extends Component {
             <Label>Age</Label>
             <Input
               onChangeText={this.handleChangeAge}
-              value={age}
+              value={age ? age.toString() : null}
             />
           </Item>
         </Form>

@@ -7,7 +7,7 @@ import { deleteBreathRecord } from './actions/petAction';
 // import { connect } from 'react-redux';
 
 // import { addNewPet, removeSelfFromPetOwners } from './actions/userAction';
-// import { updateInfo } from './actions/petAction';
+// import { updatePetInfo } from './actions/petAction';
 
 class EditRecord extends Component {
  static navigationOptions = ({ navigation }) => ({

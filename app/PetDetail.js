@@ -17,12 +17,13 @@ import {
 // import CommonStyles from './styles/common';
 import { connect } from 'react-redux';
 import { addNewOwner } from './actions/userAction';
-import { deleteBreathRecord } from './actions/petAction';
+import Constant from './Constant';
 
 const moment = require('moment');
 
 // TODO: also change the name of sleepHeadAvg etc
 const baselineNum = 15;
+
 
 function extractPetInfo(petID, pets) {
   if (petID && pets && pets.hasOwnProperty(petID)) {
@@ -47,8 +48,6 @@ class PetDetail extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
       active: false,
@@ -88,8 +87,12 @@ class PetDetail extends React.Component {
     if (moment(time * 1000).isSame(moment(), 'day')) {
       prefixToday = ', Today';
     }
+    let modeText = 'rest';
+    if (pet.breathRecord[time].mode === Constant.MODE_SLEEP) {
+      modeText = 'sleep';
+    }
     const text = `${moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday
-    } \n${pet.breathRecord[time].breathRate}/min, mode:${pet.breathRecord[time].mode}`;
+    } \n${pet.breathRecord[time].breathRate}/min, mode:${modeText}`;
 
     return (
     // <Card transparent style={{ flex: 0 }}>
@@ -125,9 +128,9 @@ class PetDetail extends React.Component {
     // const t0 = performance.now();
 
     let sleepTotal = 0;
-    let numSleep = 0;
+    let countSleep = 0;
     let restTotal = 0;
-    let numRest = 0;
+    let countRest = 0;
 
     const sleepList = [];
     const restList = [];
@@ -135,41 +138,41 @@ class PetDetail extends React.Component {
     if (breathRecord) {
       for (const key of recordTimeList) {
         const record = breathRecord[key];
-        if (record.mode === 'sleep') {
-          sleepList.push({
-            x: new Date(key * 1000),
-            y: parseInt(record.breathRate, 10),
-          });
-          numSleep++;
-          sleepTotal += parseInt(record.breathRate, 10);
-        } else if (record.mode === 'rest') {
+        if (record.mode === Constant.MODE_REST) {
           restList.push({
             x: new Date(key * 1000),
-            y: parseInt(record.breathRate, 10),
+            y: record.breathRate,
           });
-          numRest++;
-          restTotal += parseInt(record.breathRate, 10);
+          countRest += 1;
+          restTotal += record.breathRate;
+        } else if (record.mode === Constant.MODE_SLEEP) {
+          sleepList.push({
+            x: new Date(key * 1000),
+            y: record.breathRate,
+          });
+          countSleep += 1;
+          sleepTotal += record.breathRate;
         }
       }
     }
 
-    const numTotal = numRest + numSleep;
+    const numTotal = countRest + countSleep;
     const info = {
       dataSleep: sleepList,
       dataRest: restList,
-      numRest,
-      numSleep,
-      sleepAvg: numSleep ? sleepTotal / numSleep : 0,
-      restAvg: numRest ? restTotal / numRest : 0,
+      countRest,
+      countSleep,
+      sleepAvg: countSleep ? sleepTotal / countSleep : 0,
+      restAvg: countRest ? restTotal / countRest : 0,
       mixAvg: numTotal ? (sleepTotal + restTotal) / numTotal : 0,
-      sleepHeadAvg: '',
-      sleepTailAvg: '',
-      restHeadAvg: '',
-      restTailAvg: '',
+      sleepHeadAvg: 0,
+      sleepTailAvg: 0,
+      restHeadAvg: 0,
+      restTailAvg: 0,
     };
 
     // TODO: become a function
-    if (numSleep > baselineNum) {
+    if (countSleep > baselineNum) {
       let total = 0;
       for (let i = 0; i < baselineNum; i += 1) {
         total += sleepList[i].y;
@@ -178,12 +181,12 @@ class PetDetail extends React.Component {
 
       total = 0;
       for (let i = 0; i < baselineNum; i += 1) {
-        total += sleepList[numSleep - 1 - i].y;
+        total += sleepList[countSleep - 1 - i].y;
       }
       info.sleepTailAvg = (total / baselineNum).toFixed(1);
     }
 
-    if (numRest > baselineNum) {
+    if (countRest > baselineNum) {
       let total = 0;
       for (let i = 0; i < baselineNum; i += 1) {
         total += restList[i].y;
@@ -192,7 +195,7 @@ class PetDetail extends React.Component {
 
       total = 0;
       for (let i = 0; i < baselineNum; i += 1) {
-        total += restList[numSleep - 1 - i].y;
+        total += restList[countSleep - 1 - i].y;
       }
       info.restTailAvg = (total / baselineNum).toFixed(1);
     }
@@ -390,10 +393,10 @@ class PetDetail extends React.Component {
                 <Text>{stats ? `Mix Avg: ${stats.mixAvg.toFixed(1)}` : 'no stats data'}</Text>
             </ListItem> */}
             {/* <ListItem>
-              <Text>{stats ? `Rest count:${stats.numRest}, first20AVG:${stats.restHeadAvg}, last20AVG:${stats.restTailAvg}, AVG:${stats.restAvg.toFixed(1)}` : ''}</Text>
+              <Text>{stats ? `Rest count:${stats.countRest}, first20AVG:${stats.restHeadAvg}, last20AVG:${stats.restTailAvg}, AVG:${stats.restAvg.toFixed(1)}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text>{stats ? `Sleep count:${stats.numSleep}, first20AVG:${stats.sleepHeadAvg}, last20AVG:${stats.sleepTailAvg}, AVG: ${stats.sleepAvg.toFixed(1)}` : ''}</Text>
+              <Text>{stats ? `Sleep count:${stats.countSleep}, first20AVG:${stats.sleepHeadAvg}, last20AVG:${stats.sleepTailAvg}, AVG: ${stats.sleepAvg.toFixed(1)}` : ''}</Text>
             </ListItem> */}
           </List>
           <Separator bordered>
@@ -401,10 +404,10 @@ class PetDetail extends React.Component {
           </Separator>
           <View>
             <ListItem>
-              <Text style={{ color: '#FF6347' }}>{stats ? `Rest CNT:${stats.numRest}, first${baselineNum}AVG:${stats.restHeadAvg}, last${baselineNum}AVG:${stats.restTailAvg}` : ''}</Text>
+              <Text style={{ color: '#FF6347' }}>{stats ? `Rest CNT:${stats.countRest}, first${baselineNum}AVG:${stats.restHeadAvg}, last${baselineNum}AVG:${stats.restTailAvg}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.numSleep}, first${baselineNum}AVG:${stats.sleepHeadAvg}, last${baselineNum}AVG:${stats.sleepTailAvg}` : ''}</Text>
+              <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.countSleep}, first${baselineNum}AVG:${stats.sleepHeadAvg}, last${baselineNum}AVG:${stats.sleepTailAvg}` : ''}</Text>
             </ListItem>
             {stats ? this.getChartUI(stats) : null}
           </View>
