@@ -14,7 +14,7 @@ class EditPet extends Component {
  constructor(props) {
    super(props);
 
-   this.state = { name: '', age: null };
+   this.state = { name: null, age: null };
  }
 
  // navigation change will not trgger this
@@ -31,17 +31,32 @@ class EditPet extends Component {
 
     if (!petID) {
       if (!this.state.name || !this.state.age) {
-        console.log('no name/age, return');
+        console.log('no name/age, skip');
         return;
       }
+
+      if (Number.isNaN(this.state.age)) {
+        alert('input age is not invalid'); // eslint-disable-line no-alert
+        return;
+      }
+
       this.props.dispatch(addNewPet(this.state.name, this.state.age));
     } else {
+      if (this.state.name === '') {
+        console.log('change name to empty is invalid');
+        return;
+      }
+
       const info = {};
       if (this.state.name) {
         info.name = this.state.name;
       }
 
-      if (this.state.age) {
+      if (this.state.age !== null) {
+        if (Number.isNaN(this.state.age)) {
+          alert('input age is not invalid'); // eslint-disable-line no-alert
+          return;
+        }
         info.age = this.state.age;
       }
 
@@ -75,7 +90,8 @@ class EditPet extends Component {
     const {
       petID, name, age,
     } = this.props.navigation.state.params;
-    // native-base's Input's value is not the normal defitnion, more like initialValue
+    // NOTE: native-base's
+    // Input's value is not the normal defitnion, more like initialValue
 
     return (
       <Container>

@@ -21,6 +21,7 @@ import {
   View,
   Vibration,
   Platform,
+  Alert,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -72,10 +73,24 @@ class Measure extends React.Component {
   }
 
   inputNumberOfBreach = (text) => {
-    this.setState({ numberOfBreath: parseInt(text, 10) });
+    if (text) {
+      this.setState({ numberOfBreath: parseInt(text, 10) });
+    } else {
+      this.setState({ numberOfBreath: null });
+    }
   }
 
   onSave = () => {
+    if (this.state.numberOfBreath === null) {
+      console.log('no input breateRate');
+      return;
+    }
+
+    if (Number.isNaN(this.state.numberOfBreath)) {
+      alert('input is not invalid'); // eslint-disable-line no-alert
+      return;
+    }
+
     let time;
     if (!this.inputTime) {
       time = moment().unix();
