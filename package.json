@@ -22,7 +22,7 @@
     "native-base": "^2.4.5",
     "react": "^16.3.1",
     "react-native": "^0.55.4",
-    "react-native-fbsdk": "^0.6.3",
+    "react-native-fbsdk": "^0.7.0",
     "react-native-svg": "^6.3.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^2.0.4",
