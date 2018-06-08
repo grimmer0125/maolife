@@ -73,6 +73,10 @@ ref: https://Firebase.google.com/docs/web/setup
 
 ### Installation
 
+**Node 10 can not be used since one of dependent package, grpc will fail to install**
+**It seems that firebae 5.0.4 will let Android built app can not start (Objects are not valid as a React child) but "debug JS remotely" works**
+**It seems that if Android Gradle upgrades to 3.1.3 from 3.0.1 and gradle to 4.4 from 4.1, Android Studio will fail to build. (react-native run-android is OK)
+
 Reference:
 https://facebook.github.io/react-native/docs/getting-started.html
 
@@ -86,7 +90,6 @@ Summary Step:
 7. cd into this project folder, `npm install`
 8. (optional) `node node_modules/native-base/ejectTheme.js` (native-base)
 9. `react-native link` (required by native-base, react-native-vector-icons, react-native-fbsdk, react-native-svg)
-
 
 ### Download Facebook SDK on iOS
 
