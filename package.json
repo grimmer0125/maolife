@@ -7,7 +7,10 @@
     "test": "jest",
     "ios": "react-native run-ios",
     "qemu": "emulator @Nexus_5X_API_23 &",
-    "android": "react-native run-android"
+    "android-bundle-offline": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "android-dev-live": "adb reverse tcp:8081 tcp:8081",
+    "package-only": "react-native start",
+    "android": "react-native run-android",
   },
   "dependencies": {
     "firebase": "^4.8.1",
