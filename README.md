@@ -112,13 +112,16 @@ https://facebook.github.io/react-native/docs/running-on-device.html
 Start from xcode 7, no need paid developer account to run on real device !! Guide:
 http://blog.ionic.io/deploying-to-a-device-without-an-apple-developer-account/
 
-
 ## Android + Mac (will complement later)
 
 Keypoint to setup Facebook:
 1. Follow https://developers.facebook.com/docs/android/getting-started
-2. Need *a development key hash for the development environment of each person who works on your app.* (cover in 1.)
+2. Need *a development key hash for the development environment of each person who works on your app (cover in 1.).* Release key is needed, too.
 3. Enable single sign https://developers.facebook.com/docs/facebook-login/android/#expresslogin
+
+## Register test users or developers/testers on Facebook developer site
+
+Only the Facebook accounts which are registered on Facebook developer site can login successfully.
 
 ### Tips on Android
 
