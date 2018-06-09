@@ -43,8 +43,6 @@ class Home extends Component {
         <View style={CommonStyles.container}>
           <Registration />
         </View>);
-
-      // undefine
     }
     return <Login />;
   }

@@ -73,7 +73,7 @@ class ListMain extends Component {
     // https://v1.reactnavigation.org/docs/navigating-without-navigation-prop.html
     const naviAction = NavigationActions.navigate({
       routeName: 'PetDetail',
-      params: { petID, name },
+      params: { petID },
     });
 
     this.props.navigation.dispatch(naviAction);

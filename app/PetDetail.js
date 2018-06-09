@@ -7,12 +7,6 @@ import {
 } from 'react-native';
 
 import {
-  VictoryLegend, VictoryVoronoiContainer, VictoryTooltip,
-  VictoryLine, VictoryChart,
-  // VictoryGroup,
-} from 'victory-native';
-
-import {
   Container, Content, Button, Icon, Fab, Card, CardItem,
   Body, List, ListItem, Item, Input, Left, Right, Text, Separator,
 } from 'native-base';
@@ -21,6 +15,7 @@ import {
 import { connect } from 'react-redux';
 import { addNewOwner } from './actions/userAction';
 import Constant from './Constant';
+import RecordChart from './RecordChart';
 
 const moment = require('moment');
 
@@ -34,9 +29,25 @@ function extractPetInfo(petID, pets) {
   return {};
 }
 
+const MyTitle = ({ navigation, pets }) => {
+  const { petID } = navigation.state.params;
+  const pet = pets[petID];
+
+  return (
+    <Text>
+      {pet.name}
+    </Text>
+  );
+};
+const MyConnectedTitle = connect(state => ({ pets: state.pets }))(MyTitle);
+
 class PetDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.name,
+    headerTitle: (
+      <MyConnectedTitle
+        navigation={navigation}
+      />
+    ),
     headerRight: (
       <SystemButton
         title="Measure"
@@ -192,57 +203,6 @@ class PetDetail extends Component {
     return info;
   }
 
-  getChartUI(stats) {
-    const { dataSleep, dataRest } = stats;
-
-    return (
-      // example:
-      // http://formidable.com/open-source/victory/docs/victory-line/
-      // https://formidable.com/open-source/victory/gallery/brush-zoom/
-      // https://codesandbox.io/embed/vyykx3jp77
-
-      <VictoryChart
-        scale={{ x: 'time' }}
-        containerComponent={
-          <VictoryVoronoiContainer
-            labels={d => `x:${d.x}\ny:${d.y}`}
-          />
-        }
-      >
-        <VictoryLegend
-          title="AVG"
-          x={200}
-          y={50}
-          centerTitle
-          orientation="horizontal"
-          gutter={20}
-          style={{ title: { fontSize: 10 } }}
-          data={[
-            { name: stats.restAvg.toFixed(1), symbol: { fill: 'tomato', type: 'star' } },
-            { name: stats.sleepAvg.toFixed(1), symbol: { fill: 'blue' } },
-          ]}
-        />
-        {(dataSleep && dataSleep.length >= 2) ? (
-          <VictoryLine
-            labelComponent={<VictoryTooltip />}
-            style={{
-            data: { stroke: 'blue' },
-          }}
-            data={dataSleep}
-          />) : null}
-        {(dataRest && dataRest.length >= 2) ? (
-          <VictoryLine
-            labelComponent={<VictoryTooltip />}
-            style={{
-            data: { stroke: 'tomato' },
-            parent: { border: '20px solid #ccc' },
-          }}
-            data={dataRest}
-          />) : null}
-      </VictoryChart>
-    );
-  }
-
   keyExtractor = item => item;
 
   render() {
@@ -339,7 +299,7 @@ class PetDetail extends Component {
             <ListItem>
               <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.countSleep}, first${baselineNum}AVG:${stats.sleepHeadAvg}, last${baselineNum}AVG:${stats.sleepTailAvg}` : ''}</Text>
             </ListItem>
-            {stats ? this.getChartUI(stats) : null}
+            {stats ? <RecordChart stats={stats} /> : null}
           </View>
           <Separator bordered>
             <Text>Records</Text>

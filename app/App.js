@@ -7,8 +7,10 @@ import Home from './Home';
 
 const store = configureStore();
 
-export default () => (
+const App = () => (
   <Provider store={store}>
     <Home />
   </Provider>
 );
+
+export default App;
