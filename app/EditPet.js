@@ -124,14 +124,14 @@ class EditPet extends Component {
             <Item>
               <Label>{`Owner (KID): ${ownerList}`}</Label>
             </Item>) : null}
-          <Item stackedLabel>
+          <Item inlineLabel>
             <Label>Name</Label>
             <Input
               onChangeText={this.handleChangeUsername}
               value={name}
             />
           </Item>
-          <Item stackedLabel>
+          <Item inlineLabel>
             <Label>Age</Label>
             <Input
               keyboardType="numeric"

@@ -1,19 +1,15 @@
-// 1. login in FB
-// 2. At least people need to register a unique KID for sharing pets. May change later, add "ignore"
-
-// FB SDK Ref:
-// https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
 import React, { Component } from 'react';
 import {
   Text,
   View,
 } from 'react-native';
-
 import { connect } from 'react-redux';
 
 import { handleFBLogin, handleFBLogout } from './actions/userAction';
 import CommonStyles from './styles/common';
 
+// FB SDK Ref:
+// https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
 const FBSDK = require('react-native-fbsdk');
 
 const {

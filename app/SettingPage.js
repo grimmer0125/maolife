@@ -49,12 +49,6 @@ function TutorialLinks() {
 }
 
 class SettingsScreen extends Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   // this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
-  // }
-
   // handleFBLogoutResult() {
   //   this.props.dispatch(handleFBLogout());
   // }

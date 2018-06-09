@@ -54,6 +54,7 @@ class PetDetail extends Component {
       <SystemButton
         title="Measure"
         onPress={() => navigation.navigate('Measure', {
+          title: 'Measure',
           petID: navigation.state.params.petID,
         })}
       />
@@ -83,18 +84,6 @@ class PetDetail extends Component {
   handleChangeAuthID = (text) => {
     this.setState({ authID: text });
   }
-
-  // removeItem(petID, recordTime) {
-  //   this.props.dispatch(deleteBreathRecord(petID, recordTime));
-  // }
-  //
-  // // s1, index(0~x), key=s1+index
-  // deleteRow = (petID, secId, rowId, rowMap) => {
-  //   rowMap[`${secId}${rowId}`].props.closeRow();
-  //   const recordTime = rowMap[`${secId}${rowId}`].props.body.key;
-  //
-  //   this.props.dispatch(deleteBreathRecord(petID, recordTime));
-  // }
 
   eachRowItem = (pet, time) => {
     let prefixToday = '';

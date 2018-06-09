@@ -1,5 +1,3 @@
-// record number of breath per minute
-
 import React from 'react';
 import {
   Container,
@@ -15,15 +13,15 @@ import {
   ListItem,
   Radio,
   Label,
-  Form,
   List,
+  Separator,
+  Form,
 } from 'native-base';
 
 import {
   View,
   Vibration,
   Platform,
-  Alert,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -32,7 +30,6 @@ import { newBreathRecord } from './actions/petAction';
 import Constant from './Constant';
 
 const moment = require('moment');
-
 
 const BUTTON_STATUS_INIT = 'Start Countdown';
 const BUTTON_STATUS_RUNNING = 'Cancel';
@@ -47,7 +44,7 @@ const initialState = {
 };
 
 class Measure extends React.Component {
-  static navigationOptions = ({ navigation }) => ({ title: 'Measure' });
+  static navigationOptions = () => ({ title: 'Measure' });
 
   constructor(props) {
     super(props);
@@ -169,19 +166,21 @@ class Measure extends React.Component {
       const labelStr = `Record time (default is currentTime, ${this.endTime}) Modify it if need be`;
       inputUI = (
       // <Container>
-        <Card>
-          <CardItem>
-            <Body>
-              <Item stackedLabel>
-                <Label>{labelStr}</Label>
-                <Input onChangeText={(text) => { this.inputTime = text; }} />
-              </Item>
-              <Item>
-                <Input keyboardType="numeric" placeholder="Input Number of breath" onChangeText={this.inputNumberOfBreach} />
-              </Item>
-            </Body>
-          </CardItem>
-          <CardItem>
+        <View style={{ marginTop: 10 }}>
+          {/* <Separator bordered> */}
+          <Text>{labelStr}</Text>
+          {/* </Separator> */}
+          <Form>
+            <Item inlineLabel>
+              <Label>Time:</Label>
+              <Input onChangeText={(text) => { this.inputTime = text; }} />
+            </Item>
+            <Item inlineLabel>
+              <Label>Breath Count:</Label>
+              <Input keyboardType="numeric" onChangeText={this.inputNumberOfBreach} />
+            </Item>
+          </Form>
+          <ListItem>
             <Button onPress={this.onCancel}>
               <Text>Cancel</Text>
             </Button>
@@ -190,8 +189,8 @@ class Measure extends React.Component {
                 <Text>Save</Text>
               </Button>
             </Right>
-          </CardItem>
-        </Card>);
+          </ListItem>
+        </View>);
     }
 
     return (
@@ -222,8 +221,8 @@ class Measure extends React.Component {
             </Text>
           </View>
           <View style={{
-  flex: 1, flexDirection: 'row',
-}}
+            flex: 1, flexDirection: 'row',
+          }}
           >
             <Button onPress={this.startCalibration}>
               <Text>{this.state.buttonStatus}</Text>
