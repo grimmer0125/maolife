@@ -1,19 +1,22 @@
-import _ from 'lodash';
+import update from 'immutability-helper';
+
 import { ActionTypes } from '../actions/userAction';
 
 export function pets(state = {}, action) {
   switch (action.type) {
     case ActionTypes.REMOVE_CAT:
       if (action.payload.petID) {
-        const newState = _.cloneDeep(state);
-        delete newState[action.payload.petID];
+        const newState = update(state, {
+          $unset: [action.payload.petID],
+        });
         return newState;
       }
       return state;
     case ActionTypes.UPDATE_CAT_INFO:
       if (action.payload.petID) {
-        const newState = _.cloneDeep(state);
-        newState[action.payload.petID] = action.payload.petInfo;
+        const newState = update(state, {
+          [action.payload.petID]: { $set: action.payload.petInfo },
+        });
 
         return newState;
       }

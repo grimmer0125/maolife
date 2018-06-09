@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import update from 'immutability-helper';
+
 import { ActionTypes } from '../actions/userAction';
 
 const initialState = {
@@ -24,8 +25,10 @@ export function authenticatingWithFirebase(state = true, action = {}) {
 export function users(state = {}, action = {}) {
   switch (action.type) {
     case ActionTypes.OWNER_DATA: {
-      const newState = _.cloneDeep(state);
-      newState[action.payload.userID] = action.payload.userInfo;
+      const newState = update(state, {
+        [action.payload.userID]: { $set: action.payload.userInfo },
+      });
+
       return newState;
     }
     default:

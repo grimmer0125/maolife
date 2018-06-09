@@ -203,7 +203,7 @@ export function removeSelfFromPetOwners(petID) {
           console.log('update pet owner failed:', error);
         });
     } else {
-      // case 1-b
+      // case 1-b: will trigger a UPDATE_CAT_INFO but value is null
       firebase.database().ref(petPath).remove()
         .then(() => {
           console.log('remove pet ok');
