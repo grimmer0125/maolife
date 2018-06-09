@@ -85,7 +85,7 @@ class EditPet extends Component {
   }
 
   handleChangeAge = (text) => {
-    this.setState({ age: parseInt(text, 10) });
+    this.setState({ age: parseFloat(text, 10) });
   }
 
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
@@ -96,8 +96,8 @@ class EditPet extends Component {
 
     const { name, age } = this.state;
 
-    // NOTE: native-base's
-    // Input's value is not the normal defitnion, more like initialValue
+    // NOTE:
+    // NativeBase Input's value is not the normal definition is iOS, more like initialValue
 
     return (
       <Container>

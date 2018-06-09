@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 
 import {
-  ListView,
   Button as SystemButton,
   View,
   FlatList,
 } from 'react-native';
 
-import { VictoryLegend, VictoryVoronoiContainer, VictoryTooltip, VictoryGroup, VictoryBar, VictoryLine, VictoryChart, VictoryTheme } from 'victory-native';
+import {
+  VictoryLegend, VictoryVoronoiContainer, VictoryTooltip,
+  VictoryLine, VictoryChart,
+  // VictoryGroup,
+} from 'victory-native';
 
 import {
   Container, Content, Button, Icon, Fab, Card, CardItem,
-  Body, List, ListItem, SwipeRow, Item, Input, Left, Right, Text, Separator,
+  Body, List, ListItem, Item, Input, Left, Right, Text, Separator,
 } from 'native-base';
 
 // import CommonStyles from './styles/common';
@@ -21,9 +24,7 @@ import Constant from './Constant';
 
 const moment = require('moment');
 
-// TODO: also change the name of sleepHeadAvg etc
 const baselineNum = 15;
-
 
 function extractPetInfo(petID, pets) {
   if (petID && pets && pets.hasOwnProperty(petID)) {
@@ -33,7 +34,7 @@ function extractPetInfo(petID, pets) {
   return {};
 }
 
-class PetDetail extends React.Component {
+class PetDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.name,
     headerRight: (
@@ -95,10 +96,7 @@ class PetDetail extends React.Component {
     } \n${pet.breathRecord[time].breathRate}/min, mode:${modeText}`;
 
     return (
-    // <Card transparent style={{ flex: 0 }}>
-    // key is not necessary in NativeBase's listItem but it can be used in deleteRow(body.key)
       <ListItem
-        key={time}
         onPress={() => {
         this.props.navigation.navigate('EditRecord', {
           petID: pet.petID,
@@ -106,21 +104,9 @@ class PetDetail extends React.Component {
         });
       }}
       >
-        {/* <CardItem header>
-    //     <Text>{moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}</Text>
-    //   </CardItem> */}
-        {/* <CardItem> */}
-        {/* Instead of Body, View can be used too */}
-        {/* <View> */}
         <Text>{text}
         </Text>
-        {/* <Text>
-        </Text> */}
-        {/* </View> */}
-        {/* </CardItem> */}
-        {/* </Card> */}
       </ListItem>
-
     );
   }
 
@@ -171,7 +157,6 @@ class PetDetail extends React.Component {
       restTailAvg: 0,
     };
 
-    // TODO: become a function
     if (countSleep > baselineNum) {
       let total = 0;
       for (let i = 0; i < baselineNum; i += 1) {
@@ -186,6 +171,7 @@ class PetDetail extends React.Component {
       info.sleepTailAvg = (total / baselineNum).toFixed(1);
     }
 
+    // TODO: two similar blocks become a function
     if (countRest > baselineNum) {
       let total = 0;
       for (let i = 0; i < baselineNum; i += 1) {
@@ -200,7 +186,6 @@ class PetDetail extends React.Component {
       info.restTailAvg = (total / baselineNum).toFixed(1);
     }
 
-
     // const t1 = performance.now();
     // console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
 
@@ -209,52 +194,12 @@ class PetDetail extends React.Component {
 
   getChartUI(stats) {
     const { dataSleep, dataRest } = stats;
-    // pet.breathRecord
-    // const dataSleep = [];
-    // const dataRest = [];
-    // if (pet.breathRecord) {
-    //   for (const key in pet.breathRecord) {
-    //     const record = pet.breathRecord[key];
-    //
-    //     if (record.mode === 'sleep') {
-    //       dataSleep.push({
-    //         x: new Date(key * 1000),
-    //         y: parseInt(record.breathRate, 10),
-    //       });
-    //     } else if (record.mode === 'rest') {
-    //       dataRest.push({
-    //         x: new Date(key * 1000),
-    //         y: parseInt(record.breathRate, 10),
-    //       });
-    //     }
-    //   }
-    // }
-
-    // console.log('getChartUI, data count:', dataSleep.length, dataRest.length);
 
     return (
       // example:
       // http://formidable.com/open-source/victory/docs/victory-line/
       // https://formidable.com/open-source/victory/gallery/brush-zoom/
       // https://codesandbox.io/embed/vyykx3jp77
-
-      // <VictoryChart
-      //   theme={VictoryTheme.material}
-      // >
-      //   <VictoryLine
-      //     style={{
-      //       data: { stroke: '#c43a31' },
-      //       parent: { border: '1px solid #ccc' },
-      //     }}
-      //     data={[
-      //       { x: 1, y: 2 },
-      //       { x: 2, y: 3 },
-      //       { x: 3, y: 5 },
-      //       { x: 4, y: 4 },
-      //       { x: 5, y: 7 },
-      //     ]}
-      //   />
-      // </VictoryChart>
 
       <VictoryChart
         scale={{ x: 'time' }}
@@ -298,22 +243,21 @@ class PetDetail extends React.Component {
     );
   }
 
-  _keyExtractor = (item, index) => item;
+  keyExtractor = item => item;
 
   render() {
     const { pets, navigation } = this.props;
-    const petID = navigation.state.params.petID;
+    const { petID } = navigation.state.params;
     const pet = extractPetInfo(petID, pets);
 
     if (this.state.shareDialog) {
       return (
         <Container>
-          {/* <View> */}
           <Card>
             <CardItem>
               <Body>
                 <Text>
-                    Input your friend's KID to authorize him/her
+                  {"Input your friend's KID to authorize him/her"}
                 </Text>
               </Body>
             </CardItem>
@@ -321,7 +265,6 @@ class PetDetail extends React.Component {
               {/* <Form> */}
               <Item regular>
                 <Input
-                  // placeholder="your friend's kid"
                   onChangeText={this.handleChangeAuthID}
                   onSubmitEditing={() => {
                               this.onSave();
@@ -343,7 +286,6 @@ class PetDetail extends React.Component {
             </CardItem>
 
           </Card>
-          {/* </View> */}
         </Container>
       );
     }
@@ -370,9 +312,6 @@ class PetDetail extends React.Component {
     return (
       <Container>
         <Content>
-          {/* <Separator bordered>
-            <Text>Stats & Setting</Text>
-          </Separator> */}
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditPet', {
@@ -389,15 +328,6 @@ class PetDetail extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-            {/* <ListItem>
-                <Text>{stats ? `Mix Avg: ${stats.mixAvg.toFixed(1)}` : 'no stats data'}</Text>
-            </ListItem> */}
-            {/* <ListItem>
-              <Text>{stats ? `Rest count:${stats.countRest}, first20AVG:${stats.restHeadAvg}, last20AVG:${stats.restTailAvg}, AVG:${stats.restAvg.toFixed(1)}` : ''}</Text>
-            </ListItem>
-            <ListItem>
-              <Text>{stats ? `Sleep count:${stats.countSleep}, first20AVG:${stats.sleepHeadAvg}, last20AVG:${stats.sleepTailAvg}, AVG: ${stats.sleepAvg.toFixed(1)}` : ''}</Text>
-            </ListItem> */}
           </List>
           <Separator bordered>
             <Text>Stats & Chart </Text>
@@ -416,18 +346,12 @@ class PetDetail extends React.Component {
           </Separator>
           <View>
             <FlatList
-              keyExtractor={this._keyExtractor}
+              keyExtractor={this.keyExtractor}
               data={recordTimeList}
               renderItem={({ item }) => (
                 this.eachRowItem(pet, item)
                 // <SwipeRow
-                //   // leftOpenValue={75}
                 //   rightOpenValue={-75}
-                //   // left={
-                //   //   <Button success onPress={() => alert(item.value)} >
-                //   //     <Icon active name="add" />
-                //   //   </Button>
-                //   //         }
                 //   body={this.eachRowItem(pet, item)}
                 //   right={
                 //     <Button danger onPress={() => this.removeItem(pet.petID, item)}>
@@ -437,25 +361,6 @@ class PetDetail extends React.Component {
                 // />
               )}
             />
-
-            {/* // TODO: it seems to be slow when number of Row is 122.
-            // Use Flatlist/pagination instead. */}
-            {/* <List
-              dataSource={this.ds.cloneWithRows(recordTimeList)}
-              renderRow={record =>
-              this.eachRowItem(pet, record)}
-            // renderLeftHiddenRow={record =>
-            //   (<Button full onPress={() => alert(record)}>
-            //     <Icon active name="information-circle" />
-            //    </Button>)}
-              disableRightSwipe
-              renderRightHiddenRow={(record, secId, rowId, rowMap) =>
-              (<Button full danger onPress={_ => this.deleteRow(pet.petID, secId, rowId, rowMap)}>
-                <Icon active name="trash" />
-               </Button>)}
-            // leftOpenValue={275}
-              rightOpenValue={-75}
-            /> */}
           </View>
         </Content>
 

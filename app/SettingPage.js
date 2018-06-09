@@ -62,10 +62,10 @@ class MySettingsScreen extends Component {
         {currentUser.KID === '' ? (<Registration />) : (
           <View>
             <Text>
-              {`hi,${currentUser.displayName}`}
+              {`name: ${currentUser.displayName}`}
             </Text>
             <Text>
-              {`Self's KID: ${currentUser.KID}`}
+              {`KID: ${currentUser.KID}`}
             </Text>
           </View>
         )}

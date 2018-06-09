@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
   Button,
-  View,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 
 import {
@@ -22,7 +22,6 @@ import PetDetail from './PetDetail';
 import EditPet from './EditPet';
 import EditRecord from './EditRecord';
 import Measure from './Measure';
-// import { liveQueryOwnPets, naviToPet } from './actions/userAction';
 
 class ListMain extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -40,19 +39,34 @@ class ListMain extends Component {
   constructor(props) {
     super(props);
 
-    // TODO: Try to use flatlist or list of native-base
-    // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: [], // ds.cloneWithRows([]),
+      dataSource: [],
     };
 
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    console.log('listpage componentWillReceiveProps');
+
+    const { pets } = newProps;
+
+    const petsArray = [];
+
+    // instead "for in", prevent prototype chain
+    Object.keys(pets).forEach((key) => {
+      petsArray.push({ key, ...pets[key] });
+    });
+
+    this.setState({
+      dataSource: petsArray,
+    });
+  }
+
   onButtonPress(rowData) {
     const { name } = rowData;
     const petID = rowData.key;
-    // three ways
+    // three ways to navigate
     // 1. navigation.navigate
     // 2. react navigation redux integration
     // 3. NavigationActions.navigate
@@ -65,58 +79,33 @@ class ListMain extends Component {
     this.props.navigation.dispatch(naviAction);
   }
 
-  componentWillReceiveProps(newProps) {
-    console.log('listpage componentWillReceiveProps');
-
-    const { pets } = newProps;
-
-    const petsArray = [];
-    for (const key in pets) {
-      petsArray.push({ key, ...pets[key] });
-    }
-
-    this.setState({
-      dataSource: petsArray, // this.state.dataSource.cloneWithRows(petsArray),
-    });
-  }
-
   render() {
-    // console.log('render list page, data:', this.state.dataSource);
     return (
       <Container>
         <Content>
           {/* <View style={{ flex: 1, paddingTop: 22 }}> */}
-          {this.state.dataSource.map(item => (
-            <TouchableOpacity key={item.key} onPress={() => this.onButtonPress(item)}>
-              <Card>
-                <CardItem header >
-                  <Text>
-                    {item.name}
-                  </Text>
-                </CardItem>
-                <CardItem >
-                  <Body>
+          <FlatList
+            data={this.state.dataSource}
+            renderItem={({ item }) => (
+              <TouchableOpacity key={item.key} onPress={() => this.onButtonPress(item)}>
+                <Card>
+                  <CardItem header >
                     <Text>
-                      {item.age ? `age:${item.age}` : null}
+                      {item.name}
                     </Text>
-                  </Body>
-                </CardItem>
-              </Card>
-            </TouchableOpacity>
-          ))}
-          {/* <FlatList
-          data={this.state.dataSource}
-          renderItem={({ item }) => (
-            <View>
-              <Button
-                onPress={() => this.onButtonPress(item)}
-                title={item.name ? item.name : ''}
-                accessibilityLabel="See an informative alert"
-              />
-            </View>
+                  </CardItem>
+                  <CardItem >
+                    <Body>
+                      <Text>
+                        {item.age ? `age:${item.age}` : null}
+                      </Text>
+                    </Body>
+                  </CardItem>
+                </Card>
+              </TouchableOpacity>
             )
           }
-        /> */}
+          />
           {/* </View> */}
         </Content>
 
@@ -143,9 +132,6 @@ export const ListPage = createStackNavigator({
   },
   PetDetail: {
     screen: PetDetail,
-    // navigationOptions: {
-    //   title: 'PetDetail',
-    // },
   },
   Measure: {
     screen: Measure,

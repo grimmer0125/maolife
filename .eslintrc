@@ -13,8 +13,12 @@
     "extends": ["airbnb"],
 
     "rules": {
+      "guard-for-in":0, # whatever prototpye chain
+      "no-prototype-builtins":0, # whatever prototpye chain
+      "no-restricted-syntax":0,
+      "react/sort-comp":0,
       "react/prop-types": 0,
-      "no-prototype-builtins":0,
+      "class-methods-use-this":0,
       "no-console":0,
       "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }] # jax syntac in js
     }
