@@ -275,7 +275,7 @@ class PetDetail extends Component {
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
               onPress={() => this.props.navigation.navigate('EditPet', {
-                title: 'Edit Pet',
+                title: '',
                 petID,
                 age: pet.age,
                 name: pet.name,

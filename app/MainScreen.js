@@ -10,7 +10,7 @@ export default createBottomTabNavigator({
   Home: {
     screen: ListPage,
     navigationOptions: {
-      tabBarLabel: 'List',
+      tabBarLabel: 'Pets',
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={focused ? 'ios-home' : 'ios-home-outline'}
