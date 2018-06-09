@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import { userRoot } from './user';
 import { petsRoot } from './pets';
-import { ListPage } from '../ListPage';
+// import { ListPage } from '../ListPage';
 
 // redux + react navigation 1
 // https://reactnavigation.org/docs/navigators/navigation-actions
@@ -14,28 +14,28 @@ import { ListPage } from '../ListPage';
 // this example does not use react-navigation-redux-helpers which is mentioned in react-navigation's
 // redux integration section
 // NOTE: not used
-const initialState = ListPage.router.getStateForAction(ListPage.router.getActionForPathAndParams('List'));
-const listNav = (state = initialState, action) => {
-  let nextState;
-  switch (action.type) {
-    // we can trigger navigation here !!! example:
-    // case 'Login':
-    //   nextState = AppNavigator.router.getStateForAction(NavigationActions.back(), state);
-    //   break;
-    // case 'Logout':
-    //   nextState = AppNavigator.router.getStateForAction(NavigationActions.navigate({ routeName: 'Login' }), state);
-    //   break;
-    default:
-      nextState = ListPage.router.getStateForAction(action, state);
-      break;
-  }
-
-  // Simply return the original `state` if `nextState` is null or undefined.
-  return nextState || state;
-};
+// const initialState = ListPage.router.getStateForAction(ListPage.router.getActionForPathAndParams('List'));
+// const listNav = (state = initialState, action) => {
+//   let nextState;
+//   switch (action.type) {
+//     // we can trigger navigation here !!! example:
+//     // case 'Login':
+//     //   nextState = AppNavigator.router.getStateForAction(NavigationActions.back(), state);
+//     //   break;
+//     // case 'Logout':
+//     //   nextState = AppNavigator.router.getStateForAction(NavigationActions.navigate({ routeName: 'Login' }), state);
+//     //   break;
+//     default:
+//       nextState = ListPage.router.getStateForAction(action, state);
+//       break;
+//   }
+//
+//   // Simply return the original `state` if `nextState` is null or undefined.
+//   return nextState || state;
+// };
 
 const rootReducer = combineReducers({
-  listNav,
+  // listNav,
   ...userRoot,
   ...petsRoot,
 });

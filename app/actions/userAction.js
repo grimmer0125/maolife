@@ -7,6 +7,7 @@ const FBSDK = require('react-native-fbsdk');
 
 const {
   AccessToken,
+  LoginManager,
 } = FBSDK;
 
 const LOGIN_DATA = 'LOGIN_DATA';
@@ -353,59 +354,69 @@ export function handleFBLogout(error) {
   };
 }
 
-export function handleFBLogin(error, result) {
+export function handleFBLogin() {
   return (dispatch) => {
-    if (error) {
-      // TODO handle FB login error on UI
-      // alert("login has error: " + result.error);
-      console.log(`login has error: ${result.error}`);
-    } else if (result.isCancelled) {
-      console.log('login is cancelled.');
-      // alert("login is cancelled.");
-    } else {
-      console.log('login ok, result:', result);// not much info
+    LoginManager.logInWithReadPermissions(['public_profile'])
+      .then(
+        (result) => {
+        // this.props.dispatch(handleFBLogin(null, result));
 
-      // FB login ok by users
-      dispatch(LoginSuccess(''));
+          if (result.isCancelled) {
+            console.log('login is cancelled.');
 
-      // NOTE:
-      // dispatch(LoginSuccess('')) here ->
-      // login button-ui change (logined status)
-      // -> signIn callback ->auth callback
+          // alert('Login cancelled');
+          } else {
+            console.log(`Login success with permissions: ${
+              result.grantedPermissions.toString()}`);
 
-      AccessToken.getCurrentAccessToken()
-        .then((data) => {
-          console.log('access token data:', data);
+            console.log('login ok, result:', result);// not much info
 
-          const token = data.accessToken.toString();
+            // FB login ok by users
+            dispatch(LoginSuccess(''));
 
-          // Try FB auth by this app, not users
-          return firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token));
-          // alert(data.accessToken.toString());
-        }).then((result) => {
-          console.log('login FB ok. Firebae result:', result);
+            // NOTE:
+            // dispatch(LoginSuccess('')) here ->
+            // login button-ui change (logined status)
+            // -> signIn callback ->auth callback
 
-          if (result.displayName) {
-            console.log(`try saving displayName ${result.displayName}`);
-            // alert("welcome! " + result.displayName);
+            AccessToken.getCurrentAccessToken()
+              .then((data) => {
+                console.log('access token data:', data);
 
-            const dataPath = `/users/${result.uid}`;
+                const token = data.accessToken.toString();
 
-            // https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
-            firebase.database().ref(dataPath).update({
-              displayName: result.displayName,
-            }).then(() => {
-              console.log('save displayName ok');
-            });
+                // Try FB auth by this app, not users
+                return firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token));
+                // alert(data.accessToken.toString());
+              }).then((result) => {
+                console.log('login FB ok. Firebae result:', result);
+
+                if (result.displayName) {
+                  console.log(`try saving displayName ${result.displayName}`);
+                  // alert("welcome! " + result.displayName);
+
+                  const dataPath = `/users/${result.uid}`;
+
+                  // https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
+                  firebase.database().ref(dataPath).update({
+                    displayName: result.displayName,
+                  }).then(() => {
+                    console.log('save displayName ok');
+                  });
+                }
+
+                // dispatch(LoginSuccess('')); // displayName can be gotten from auth+data callback
+              }).catch((error) => {
+                // TODO handle firebase login fail or
+                // getCurrentAccessToken fail
+                console.log("use fb's token to login firebase error:", error);
+              });
           }
-
-          // dispatch(LoginSuccess('')); // displayName can be gotten from auth+data callback
-        }).catch((error) => {
-        // TODO handle firebase login fail or
-        // getCurrentAccessToken fail
-          console.log("use fb's token to login firebase error:", error);
-        });
-    }
+        },
+        (error) => {
+          console.log(`login has error: ${error}`);
+        },
+      );
   };
 }
 

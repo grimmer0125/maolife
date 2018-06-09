@@ -5,12 +5,13 @@ import { createBottomTabNavigator } from 'react-navigation';
 
 import ListPage from './ListPage';
 import SettingPage from './SettingPage';
+import I18n from './i18n/i18n';
 
 export default createBottomTabNavigator({
   Home: {
     screen: ListPage,
     navigationOptions: {
-      tabBarLabel: 'Pets',
+      tabBarLabel: I18n.t('Pets'),
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={focused ? 'ios-home' : 'ios-home-outline'}
@@ -23,7 +24,7 @@ export default createBottomTabNavigator({
   SettingsTab: {
     screen: SettingPage,
     navigationOptions: {
-      tabBarLabel: 'Settings',
+      tabBarLabel: I18n.t('Settings'),
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={focused ? 'ios-settings' : 'ios-settings-outline'}

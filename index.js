@@ -7,6 +7,4 @@ YellowBox.ignoreWarnings([
   'Module RCTImageLoader requires', // https://github.com/facebook/react-native/issues/17504
   'Class RCTCxxModule']); // https://github.com/facebook/react-native/issues/18201
 
-//  YellowBox.ignoreWarnings(['Setting a timer']);
-
 AppRegistry.registerComponent('maolife', () => App);

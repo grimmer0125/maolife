@@ -1,42 +1,22 @@
 import React, { Component } from 'react';
 import {
-  Text,
+  // Text,
   View,
 } from 'react-native';
+
+import { Text, Button } from 'native-base';
+
 import { connect } from 'react-redux';
 
-import { handleFBLogin, handleFBLogout } from './actions/userAction';
+import { handleFBLogin } from './actions/userAction';
 import CommonStyles from './styles/common';
 
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
-const FBSDK = require('react-native-fbsdk');
-
-const {
-  LoginButton,
-} = FBSDK;
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleFBLoginResult = this.handleFBLoginResult.bind(this);
-    this.handleFBLogoutResult = this.handleFBLogoutResult.bind(this);
-    // this.onButtonPress = this.onButtonPress.bind(this);
-    // this.state = { registerText: '' };
-    //
-  }
-
-  // onButtonPress() {
-  //   this.props.dispatch(registerKID(this.state.registerText));
-  // }
-
-  handleFBLoginResult(error, result) {
-    this.props.dispatch(handleFBLogin(error, result));
-  }
-
-  handleFBLogoutResult() {
-    this.props.dispatch(handleFBLogout());
+  loginPress() {
+    this.props.dispatch(handleFBLogin());
   }
 
   // TODO: instead of using native TextInput,
@@ -61,15 +41,34 @@ class Login extends Component {
 
     return (
       <View style={CommonStyles.container}>
+
         <Text style={CommonStyles.instruction}>
           This app is to daily record pet's (usually cat/dog) breath rate.
           Monitoring this can avoid some diseases (e.g. cat's HCM) happen or become worse.
           Higher breath rate is a kind of alert. The app uses Facebook authentication.
         </Text>
-        <LoginButton
+
+        {/* <LoginButton
           onLoginFinished={this.handleFBLoginResult}
           onLogoutFinished={this.handleFBLogoutResult}
-        />
+        /> */}
+
+        <View>
+          <Button
+            warning
+            onPress={() => {
+            this.loginPress();
+            // LoginManager.logOut();
+
+            // this.props.dispatch(handleFBLogout());
+          }}
+          >
+            <Text>
+            Log in
+            </Text>
+          </Button>
+        </View>
+
 
         {/* {registerUI} */}
       </View>

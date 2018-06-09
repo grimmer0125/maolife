@@ -25,7 +25,7 @@ import Measure from './Measure';
 
 class ListMain extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Pet List',
+    title: 'Pets',
     headerRight: (
       <Button
         title="Add"
@@ -62,7 +62,6 @@ class ListMain extends Component {
   }
 
   onButtonPress(rowData) {
-    const { name } = rowData;
     const petID = rowData.key;
     // three ways to navigate
     // 1. navigation.navigate
@@ -118,7 +117,7 @@ const mapStateToProps = state => ({
 
 const ListMainReduxState = connect(mapStateToProps)(ListMain);
 
-export const ListPage = createStackNavigator({
+const ListPage = createStackNavigator({
   List: {
     screen: ListMainReduxState,
   },
@@ -135,15 +134,5 @@ export const ListPage = createStackNavigator({
     screen: Measure,
   },
 });
-
-// the below api usage is v1 of react navigation. if we still want to use it in v2, need change
-// https://v1.reactnavigation.org/docs/redux-integration.html
-// const ListPageWithNavState = ({ dispatch, nav }) => (
-//   <ListPage navigation={navigationPropConstructor({ dispatch, state: nav })} />
-// );
-//
-// const mapStateToPropsListPage = state => ({
-//   nav: state.listNav,
-// });
 
 export default ListPage;
