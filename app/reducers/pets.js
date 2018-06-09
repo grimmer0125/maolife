@@ -1,6 +1,5 @@
-import { ActionTypes } from '../actions/userAction';
-import { combineReducers } from 'redux';
 import _ from 'lodash';
+import { ActionTypes } from '../actions/userAction';
 
 export function pets(state = {}, action) {
   switch (action.type) {

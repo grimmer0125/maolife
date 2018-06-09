@@ -1,6 +1,5 @@
-
+import _ from 'lodash';
 import { ActionTypes } from '../actions/userAction';
-import { combineReducers } from 'redux';
 
 const initialState = {
   displayName: '',
@@ -17,6 +16,18 @@ export function authenticatingWithFirebase(state = true, action = {}) {
       // show loading... (authenticating: true)
       // then auth+data callback should be triggerd later (authenticating: false)
       return true;
+    default:
+      return state;
+  }
+}
+
+export function users(state = {}, action = {}) {
+  switch (action.type) {
+    case ActionTypes.OWNER_DATA: {
+      const newState = _.cloneDeep(state);
+      newState[action.payload.userID] = action.payload.userInfo;
+      return newState;
+    }
     default:
       return state;
   }
@@ -57,5 +68,5 @@ export function registerStatus(state = '', action) {
 }
 
 export const userRoot = {
-  currentUser, authenticatingWithFirebase, registerStatus,
+  users, currentUser, authenticatingWithFirebase, registerStatus,
 };

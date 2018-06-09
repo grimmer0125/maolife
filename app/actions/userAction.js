@@ -11,6 +11,7 @@ const {
 
 const LOGIN_DATA = 'LOGIN_DATA';
 const USER_DATA = 'USER_DATA';
+const OWNER_DATA = 'OWNER_DATA';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_FAIL';
 const LOGOUT = 'LOGOUT';
@@ -26,6 +27,7 @@ export const ActionTypes = {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   USER_DATA,
+  OWNER_DATA,
   LOGOUT,
   INVALID_REGISTERID,
   EXISTING_REGISTERID,
@@ -63,6 +65,39 @@ function removePetFromUserFields(petIDList, petID, ownerPath) {
     .catch((error) => {
       console.log('reset petIDList (remove) failed:', error);
     });
+}
+
+export function getOwnerData(userID, userInfo) {
+  return {
+    type: OWNER_DATA,
+    payload: {
+      userID,
+      userInfo,
+    },
+  };
+}
+
+export function fetchOwnerData(owners) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selfID = firebase.auth().currentUser.uid;
+    for (const ownerID of owners) {
+      if (ownerID !== selfID) {
+        if (!state.users[ownerID]) {
+          console.log('fetch owner data:', ownerID);
+          const userPath = `users/${ownerID}`;
+          firebase.database().ref(userPath).once('value', (snapshot) => {
+            const data = snapshot.val();
+
+            dispatch(getOwnerData(ownerID, data));
+          })
+            .catch((error) => {
+              console.log('fetch owner failed:', error);
+            });
+        }
+      }
+    }
+  };
 }
 
 export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
@@ -104,7 +139,7 @@ export function addNewOwner(petID, ownerKID) {
 
         firebase.database().ref(petPath).child('owners').set(owners)
           .then(() => {
-            console.log('add ownerID into owners ok !!!');
+            console.log('add ownerID into pet\'s owners ok !!!');
 
             const userPath = `users/${matchID}`;
             firebase.database().ref(userPath).child('petIDList').once('value', (snapshot) => {
@@ -454,3 +489,9 @@ export function connectDBtoCheckUser() {
     });
   };
 }
+
+const actions = {
+  fetchOwnerData,
+};
+
+export default actions;

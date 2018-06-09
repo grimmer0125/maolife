@@ -13,6 +13,7 @@ import { ListPage } from '../ListPage';
 // https://github.com/react-community/react-navigation/blob/master/examples/ReduxExample/src/reducers/index.js
 // this example does not use react-navigation-redux-helpers which is mentioned in react-navigation's
 // redux integration section
+// NOTE: not used
 const initialState = ListPage.router.getStateForAction(ListPage.router.getActionForPathAndParams('List'));
 const listNav = (state = initialState, action) => {
   let nextState;

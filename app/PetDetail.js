@@ -12,8 +12,10 @@ import {
 } from 'native-base';
 
 // import CommonStyles from './styles/common';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addNewOwner } from './actions/userAction';
+
+import actions, { addNewOwner } from './actions/userAction';
 import Constant from './Constant';
 import RecordChart from './RecordChart';
 
@@ -203,6 +205,18 @@ class PetDetail extends Component {
     return info;
   }
 
+  naviToEditPet(pet) {
+    // Fetch each owner's displayName
+    if (pet.owners) {
+      this.props.actions.fetchOwnerData(pet.owners);
+    }
+
+    this.props.navigation.navigate('EditPet', {
+      title: '',
+      pet,
+    });
+  }
+
   keyExtractor = item => item;
 
   render() {
@@ -274,12 +288,7 @@ class PetDetail extends Component {
         <Content>
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
-              onPress={() => this.props.navigation.navigate('EditPet', {
-                title: '',
-                petID,
-                age: pet.age,
-                name: pet.name,
-              })}
+              onPress={() => this.naviToEditPet(pet)}
             >
               <Left>
                 <Text>Edit</Text>
@@ -347,4 +356,8 @@ const mapStateToProps = state => ({
   pets: state.pets,
 });
 
-export default connect(mapStateToProps)(PetDetail);
+function mapDispatchToProps(dispatch) {
+  return { actions: bindActionCreators(actions, dispatch) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PetDetail);

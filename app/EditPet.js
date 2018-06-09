@@ -18,21 +18,21 @@ class EditPet extends Component {
  }
 
  static getDerivedStateFromProps(newProps) {
-   console.log('editpage getDerivedStateFromProps:', newProps);
-
-   const { name, age } = newProps.navigation.state.params;
-
+   const { pet } = newProps.navigation.state.params;
+   if (pet) {
+     return {
+       name: pet.name,
+       age: pet.age,
+     };
+   }
    // https://medium.com/@baphemot/whats-new-in-react-16-3-d2c9b7b6193b
-   return {
-     name,
-     age,
-   };
+   return null;
  }
 
   onSave = () => {
-    const { petID } = this.props.navigation.state.params;
+    const { pet } = this.props.navigation.state.params;
 
-    if (!petID) {
+    if (!pet || !pet.petID) {
       if (!this.state.name || !this.state.age) {
         console.log('no name/age, skip');
         return;
@@ -63,17 +63,17 @@ class EditPet extends Component {
         info.age = this.state.age;
       }
 
-      this.props.dispatch(updatePetInfo(petID, info));
+      this.props.dispatch(updatePetInfo(pet.petID, info));
     }
 
     this.props.navigation.goBack(null);
   }
 
   onDelete = () => {
-    const { petID } = this.props.navigation.state.params;
+    const { pet } = this.props.navigation.state.params;
 
-    if (petID) {
-      this.props.dispatch(removeSelfFromPetOwners(petID));
+    if (pet && pet.petID) {
+      this.props.dispatch(removeSelfFromPetOwners(pet.petID));
     }
 
     this.props.navigation.pop(2);
@@ -91,8 +91,25 @@ class EditPet extends Component {
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
   render() {
     const {
-      petID, // , name, age,
+      pet, // , name, age,
     } = this.props.navigation.state.params;
+
+    // petID,
+    // age: pet.age,
+    // name: pet.name,
+    // pet.owners idlist -> name list
+    //
+    const { users, currentUser } = this.props;
+
+    const ownerList = [];
+    ownerList.push(currentUser.KID);
+    if (users && pet && pet.owners) {
+      for (const ownerID of pet.owners) {
+        if (users[ownerID]) {
+          ownerList.push(users[ownerID].KID);
+        }
+      }
+    }
 
     const { name, age } = this.state;
 
@@ -103,6 +120,10 @@ class EditPet extends Component {
       <Container>
         {/* <Content> */}
         <Form>
+          {(pet && pet.petID) ? (
+            <Item>
+              <Label>{`Owner (KID): ${ownerList}`}</Label>
+            </Item>) : null}
           <Item stackedLabel>
             <Label>Name</Label>
             <Input
@@ -127,7 +148,7 @@ class EditPet extends Component {
           <Text>Save</Text>
         </Button>
 
-        {petID ? (
+        {(pet && pet.petID) ? (
           <View>
             <Button
               style={{ margin: 15, marginTop: 100 }}
@@ -144,4 +165,9 @@ class EditPet extends Component {
   }
 }
 
-export default connect()(EditPet);
+const mapStateToProps = state => ({
+  users: state.users,
+  currentUser: state.currentUser,
+});
+
+export default connect(mapStateToProps)(EditPet);
