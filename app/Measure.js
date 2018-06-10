@@ -86,7 +86,7 @@ class Measure extends React.Component {
     }
 
     if (Number.isNaN(this.state.numberOfBreath)) {
-      alert('input is not invalid'); // eslint-disable-line no-alert
+      alert('input numOfbreath is not invalid'); // eslint-disable-line no-alert
       return;
     }
 
@@ -95,6 +95,10 @@ class Measure extends React.Component {
       time = moment().unix();
     } else {
       time = moment(this.inputTime).unix();
+    }
+    if (Number.isNaN(time)) {
+      alert('input time is not invalid'); // eslint-disable-line no-alert
+      return;
     }
 
     let mode = Constant.MODE_REST;

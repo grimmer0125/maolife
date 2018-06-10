@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Button,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
 
 import {
+  Button,
   Container,
   Content, // ~ ScrollView of react-native
   Card,
@@ -28,11 +28,15 @@ class ListMain extends Component {
     title: 'Pets',
     headerRight: (
       <Button
-        title="Add"
+        transparent
         onPress={() => navigation.navigate('EditPet', {
           title: 'New Pet',
         })}
-      />
+      >
+        <Text>
+          {'Add'}
+        </Text>
+      </Button>
     ),
   });
 

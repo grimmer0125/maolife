@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  // Text,
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 
 import { Text, Button } from 'native-base';
 
@@ -24,16 +21,6 @@ class Login extends Component {
   // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
 
   render() {
-    // const { user } = this.props;
-    // const registerUI = null;
-
-    // TODO improve <TextInput style={{width: 150}}> width part later
-    // if (user.isLogin) {
-    //   registerUI = (
-    //
-    //   );
-    // }
-
     // const instructionText =
     // "This app is to daily record pet's (usually cat/dog) breath rate.\
     // Monitoring this can avoid some diseases (e.g. cat's HCM) happen or become worse.\
@@ -59,7 +46,6 @@ class Login extends Component {
             onPress={() => {
             this.loginPress();
             // LoginManager.logOut();
-
             // this.props.dispatch(handleFBLogout());
           }}
           >
@@ -68,9 +54,6 @@ class Login extends Component {
             </Text>
           </Button>
         </View>
-
-
-        {/* {registerUI} */}
       </View>
     );
   }

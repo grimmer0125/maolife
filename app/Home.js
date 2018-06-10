@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-} from 'react-native';
+import { View } from 'react-native';
+import { Text } from 'native-base';
+
 import { connect } from 'react-redux';
 
 import CommonStyles from './styles/common';

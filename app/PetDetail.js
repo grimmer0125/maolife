@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {
-  Button as SystemButton,
+  // Button as SystemButton,
   View,
   FlatList,
 } from 'react-native';
@@ -51,13 +51,17 @@ class PetDetail extends Component {
       />
     ),
     headerRight: (
-      <SystemButton
-        title="Measure"
+      <Button
+        transparent
         onPress={() => navigation.navigate('Measure', {
           title: 'Measure',
           petID: navigation.state.params.petID,
         })}
-      />
+      >
+        <Text>
+          {'Measure'}
+        </Text>
+      </Button>
     ),
   });
 
@@ -247,7 +251,6 @@ class PetDetail extends Component {
                 </Button>
               </Right>
             </CardItem>
-
           </Card>
         </Container>
       );

@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Footer } from 'native-base';
-import {
-  Button,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Item, Input, Text, Button, Container, Header, Content, Footer } from 'native-base';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { registerKID, skipRegistration } from './actions/userAction';
@@ -14,8 +9,6 @@ import CommonStyles from './styles/common';
 class Registration extends Component {
   constructor(props) {
     super(props);
-
-    // this.onButtonPress = this.onButtonPress.bind(this);
 
     this.state = { registerText: '' };
   }
@@ -48,25 +41,45 @@ class Registration extends Component {
         <Text>
           {registerStatus}
         </Text>
-        <TextInput
-          style={{ height: 40, width: 300, textAlign: 'center' }}
-          placeholder="Please type an ID to register here!"
+        <Item
+          regular
+          style={{ width: 300 }}
+        >
+          <Input
+            placeholder="Please type an ID to register here!"
+            onChangeText={registerText => this.setState({ registerText })}
+          />
+        </Item>
+
+        {/* <TextInput
           onChangeText={registerText => this.setState({ registerText })}
-        />
-        <Button
-          onPress={this.registerButtonPress}
-          title="Register"
-          color="#841584"
-        />
-        {inMainPage ? null : (
+        /> */}
+        <View
+          style={{ marginTop: 10 }}
+        >
           <Button
-            onPress={this.skipButtonPress}
-            title="Skip"
-            color="#841584"
-          />)}
+            onPress={this.registerButtonPress}
+          >
+            <Text>
+              {'Register'}
+            </Text>
+          </Button>
+        </View>
+        <View
+          style={{ marginTop: 10 }}
+        >
+          {inMainPage ? null : (
+            <Button
+              onPress={this.skipButtonPress}
+            >
+              <Text>
+                {'Skip'}
+              </Text>
+            </Button>
+          )}
+        </View>
       </View>
-    //   {/* <Footer />
-    // </Container> */}
+
     );
   }
 }
