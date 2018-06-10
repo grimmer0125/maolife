@@ -1,8 +1,8 @@
 import * as firebase from 'firebase';
 import Mailer from 'react-native-mail';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
-import { Platform } from 'react-native';
+import I18n from '../i18n/i18n';
 
 const RNFS = require('react-native-fs');
 const moment = require('moment');
@@ -58,7 +58,7 @@ export function deleteBreathRecord(petID, recordTime) {
   };
 }
 
-function exportRecords() {
+export function exportRecords() {
   return (dispatch, getState) => {
     console.log('export records');
 
@@ -109,11 +109,11 @@ function exportRecords() {
         }, (error, event) => {
           console.log('error:', error, ';ev:', event);
           Alert.alert(
-            error === 'not_available' ? 'Email app is not availabe' : error,
+            error === 'not_available' ? I18n.t('Email app is not availabe') : error,
             event,
             [
               { text: 'Ok', onPress: () => console.log('OK: Email Error Response') },
-              { text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response') },
+              { text: I18n.t('Cancel'), onPress: () => console.log('CANCEL: Email Error Response') },
             ],
             { cancelable: true },
           );
@@ -124,9 +124,3 @@ function exportRecords() {
       });
   };
 }
-
-const actions = {
-  exportRecords,
-};
-
-export default actions;

@@ -43,4 +43,6 @@ export default {
   last: 'last',
   AVG: 'AVG',
   Delete: 'Delete',
+  'Export data via Email': 'Export data via Email',
+  'Email app is not availabe': 'Email app is not availabe',
 };

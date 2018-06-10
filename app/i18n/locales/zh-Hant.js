@@ -43,4 +43,6 @@ export default {
   last: '最後',
   AVG: '平均',
   Delete: '移除',
+  'Export data via Email': '使用電子郵件備份資料',
+  'Email app is not availabe': '無法使用電子郵件程式',
 };
