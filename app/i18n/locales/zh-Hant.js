@@ -42,4 +42,5 @@ export default {
   first: '前',
   last: '最後',
   AVG: '平均',
+  Delete: '移除',
 };

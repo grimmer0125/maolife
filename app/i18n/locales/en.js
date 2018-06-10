@@ -42,4 +42,5 @@ export default {
   first: 'first',
   last: 'last',
   AVG: 'AVG',
+  Delete: 'Delete',
 };
