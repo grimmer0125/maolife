@@ -54,7 +54,6 @@ class PetDetail extends Component {
       <Button
         transparent
         onPress={() => navigation.navigate('Measure', {
-          title: I18n.t('Measure'),
           petID: navigation.state.params.petID,
         })}
       >

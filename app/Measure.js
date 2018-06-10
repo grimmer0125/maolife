@@ -41,7 +41,7 @@ const initialState = {
 };
 
 class Measure extends React.Component {
-  static navigationOptions = () => ({ title: 'Measure' });
+  static navigationOptions = () => ({ title: I18n.t('Measure') });
 
   constructor(props) {
     super(props);
