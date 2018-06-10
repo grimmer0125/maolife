@@ -24,6 +24,7 @@
     "react-native": "^0.55.4",
     "react-native-fbsdk": "^0.7.0",
     "react-native-i18n": "^2.0.12",
+    "react-native-mail": "^3.0.6",
     "react-native-svg": "^6.3.1",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^2.0.4",
