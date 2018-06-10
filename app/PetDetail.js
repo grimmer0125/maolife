@@ -305,7 +305,7 @@ class PetDetail extends Component {
             {stats ? <RecordChart stats={stats} /> : null}
           </View>
           <Separator bordered>
-            <Text>{I18n.t('Records (1:mode 2:frequency per minute)')}</Text>
+            <Text>{I18n.t('Records (1: mode 2: # breaths per minute)')}</Text>
           </Separator>
           <View>
             <FlatList

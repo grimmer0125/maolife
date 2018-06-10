@@ -40,7 +40,7 @@ class Login extends Component {
           }}
           >
             <Text>
-              {I18n.t('Log in')}
+              {I18n.t('Log in to Facebook')}
             </Text>
           </Button>
         </View>

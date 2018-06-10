@@ -217,7 +217,7 @@ class Measure extends React.Component {
             style={{ marginTop: 10 }}
           >
             <Text>
-              {I18n.t('Directly input measured per minute breath rate or click the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate')}
+              {I18n.t('Directly input measured # breaths per minute or click the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate')}
             </Text>
           </View>
           <View style={{
