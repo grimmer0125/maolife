@@ -2,6 +2,8 @@ import * as firebase from 'firebase';
 import Mailer from 'react-native-mail';
 import { Alert } from 'react-native';
 
+import { Platform } from 'react-native';
+
 const RNFS = require('react-native-fs');
 const moment = require('moment');
 
@@ -70,14 +72,25 @@ function exportRecords() {
     const data = JSON.stringify(pets, null, 2);
     const today = moment().format('YYYY-MM-DD');
     const fileName = `maolife-backup-${today}.json`;
-    const path = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+
+    let path;
+    if (Platform.OS === 'android') {
+      console.log('use android specific path');
+      path = `${RNFS.ExternalCachesDirectoryPath}/${fileName}`;
+    } else {
+      // on android: /data/data/
+      // ios: /var/xxx/
+      path = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+    }
+
+    console.log('FILE WRITE TO!:', path);
 
     const body = 'Something like 1480949880 is Unix time (from 1970) and the file lists the oldest to the newest';
 
     // write the file
     RNFS.writeFile(path, data, 'utf8')
       .then((success) => {
-        console.log('FILE WRITTEN!:', path);
+        console.log('FILE WRITTEN!');
 
         console.log('Mailer tries to send');
 
