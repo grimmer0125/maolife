@@ -157,7 +157,7 @@ class EditPet extends Component {
             >
               <Text>{I18n.t('Remove self from Owners')}</Text>
             </Button>
-            <Text style={{ color: 'red' }}> {'The pet data will be removed too, if you are the only one owner.'}</Text>
+            <Text style={{ color: 'red' }}> {I18n.t('The pet data will be removed too, if you are the only one owner')}</Text>
           </View>
           ) : null}
         {/* </Content> */}

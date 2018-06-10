@@ -24,37 +24,19 @@ class Login extends Component {
     this.props.dispatch(handleFBLogin());
   }
 
-  // TODO: instead of using native TextInput,
-  // use https://github.com/halilb/react-native-textinput-effects
-  // example: https://github.com/JamesMarino/Firebase-ReactNative/blob/master/includes/views/login.js
-
   render() {
-    // const instructionText =
-    // "This app is to daily record pet's (usually cat/dog) breath rate.\
-    // Monitoring this can avoid some diseases (e.g. cat's HCM) happen or become worse.\
-    // Higher breath rate is a kind of alert";
-
     return (
       <View style={CommonStyles.container}>
 
         <Text style={CommonStyles.instruction}>
-          This app is to daily record pet's (usually cat/dog) breath rate.
-          Monitoring this can avoid some diseases (e.g. cat's HCM) happen or become worse.
-          Higher breath rate is a kind of alert. The app uses Facebook authentication.
+          {I18n.t('APP_INTRODUCTION')}
         </Text>
-
-        {/* <LoginButton
-          onLoginFinished={this.handleFBLoginResult}
-          onLogoutFinished={this.handleFBLogoutResult}
-        /> */}
 
         <View>
           <Button
             warning
             onPress={() => {
             this.loginPress();
-            // LoginManager.logOut();
-            // this.props.dispatch(handleFBLogout());
           }}
           >
             <Text>
@@ -66,10 +48,5 @@ class Login extends Component {
     );
   }
 }
-
-// const mapStateToProps = state => ({
-//   user: state.currentUser,
-//   registerStatus: state.registerStatus,
-// });
 
 export default connect()(Login);

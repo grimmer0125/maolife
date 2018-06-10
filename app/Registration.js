@@ -36,8 +36,8 @@ class Registration extends Component {
         {/* <Content padder> */}
         {currentUser.displayName ? <Text>{currentUser.displayName}</Text> : null}
         <Text style={CommonStyles.welcome}>
-          {"Please choose a ID (named KID internally) to let other people can find you and authorize you to manage their pets' health."}
-          { inMainPage ? null : 'This step is optional.'}
+          {/* { inMainPage ? null : `(${I18n.t('Optional')})`} */}
+          {I18n.t('REGISTER_INTRODUCTION')}
         </Text>
         <Text>
           {registerStatus ? I18n.t(registerStatus) : null}

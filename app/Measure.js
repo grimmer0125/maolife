@@ -164,7 +164,7 @@ class Measure extends React.Component {
 
     if (this.state.buttonStatus !== BUTTON_STATUS_RUNNING) {
       // show input text
-      const labelStr = `Record time (default is currentTime, ${this.endTime}) Modify it if need be`;
+      const labelStr = `${I18n.t('Input record time is optoinal and by default it will use currentime')}:${this.endTime}`;
       inputUI = (
       // <Container>
         <View style={{ marginTop: 10 }}>
