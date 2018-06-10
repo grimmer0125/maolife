@@ -22,19 +22,20 @@ import PetDetail from './PetDetail';
 import EditPet from './EditPet';
 import EditRecord from './EditRecord';
 import Measure from './Measure';
+import I18n from './i18n/i18n';
 
 class ListMain extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Pets',
+    title: I18n.t('Pets'),
     headerRight: (
       <Button
         transparent
         onPress={() => navigation.navigate('EditPet', {
-          title: 'New Pet',
+          title: I18n.t('New Pet'),
         })}
       >
         <Text>
-          {'Add'}
+          {I18n.t('Add')}
         </Text>
       </Button>
     ),
@@ -98,7 +99,7 @@ class ListMain extends Component {
                   <CardItem >
                     <Body>
                       <Text>
-                        {item.age ? `age:${item.age}` : null}
+                        {item.age ? `${I18n.t('Age')}:${item.age}` : null}
                       </Text>
                     </Body>
                   </CardItem>

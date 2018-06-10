@@ -3,9 +3,6 @@ import {
   Container,
   Content,
   Button,
-  Card,
-  CardItem,
-  Body,
   Item,
   Input,
   Right,
@@ -14,7 +11,6 @@ import {
   Radio,
   Label,
   List,
-  Separator,
   Form,
 } from 'native-base';
 
@@ -28,6 +24,7 @@ import { connect } from 'react-redux';
 
 import { newBreathRecord } from './actions/petAction';
 import Constant from './Constant';
+import I18n from './i18n/i18n';
 
 const moment = require('moment');
 
@@ -86,7 +83,7 @@ class Measure extends React.Component {
     }
 
     if (Number.isNaN(this.state.numberOfBreath)) {
-      alert('input numOfbreath is not invalid'); // eslint-disable-line no-alert
+      alert(I18n.t('input breath count is invalid')); // eslint-disable-line no-alert
       return;
     }
 
@@ -97,7 +94,7 @@ class Measure extends React.Component {
       time = moment(this.inputTime).unix();
     }
     if (Number.isNaN(time)) {
-      alert('input time is not invalid'); // eslint-disable-line no-alert
+      alert(I18n.t('input time is invalid')); // eslint-disable-line no-alert
       return;
     }
 
@@ -176,21 +173,21 @@ class Measure extends React.Component {
           {/* </Separator> */}
           <Form>
             <Item inlineLabel>
-              <Label>Time:</Label>
+              <Label>{`${I18n.t('time')}:`}</Label>
               <Input onChangeText={(text) => { this.inputTime = text; }} />
             </Item>
             <Item inlineLabel>
-              <Label>Breath Count:</Label>
+              <Label>{`${I18n.t('breath count')}:`}</Label>
               <Input keyboardType="numeric" onChangeText={this.inputNumberOfBreach} />
             </Item>
           </Form>
           <ListItem>
             <Button onPress={this.onCancel}>
-              <Text>Cancel</Text>
+              <Text>{I18n.t('Cancel')}</Text>
             </Button>
             <Right>
               <Button onPress={this.onSave}>
-                <Text>Save</Text>
+                <Text>{I18n.t('Save')}</Text>
               </Button>
             </Right>
           </ListItem>
@@ -204,13 +201,13 @@ class Measure extends React.Component {
             style={{ backgroundColor: 'white' }}
           >
             <ListItem onPress={() => this.toggleRadio()}>
-              <Text>rest mode</Text>
+              <Text>{I18n.t('rest mode')}</Text>
               <Right>
                 <Radio selected={!this.state.sleepRadio} />
               </Right>
             </ListItem>
             <ListItem onPress={() => this.toggleRadio()}>
-              <Text>sleep mode</Text>
+              <Text>{I18n.t('sleep mode')}</Text>
               <Right>
                 <Radio selected={this.state.sleepRadio} />
               </Right>
@@ -220,8 +217,7 @@ class Measure extends React.Component {
             style={{ marginTop: 10 }}
           >
             <Text>
-              Directly input measured per minute breath rate or click
-              the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate
+              {I18n.t('Directly input measured per minute breath rate or click the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate')}
             </Text>
           </View>
           <View style={{
@@ -229,7 +225,7 @@ class Measure extends React.Component {
           }}
           >
             <Button onPress={this.startCalibration}>
-              <Text>{this.state.buttonStatus}</Text>
+              <Text>{I18n.t(this.state.buttonStatus)}</Text>
             </Button>
             <Text>
               {` ${this.state.seconds}s`}

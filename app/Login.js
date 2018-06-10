@@ -7,6 +7,14 @@ import { connect } from 'react-redux';
 
 import { handleFBLogin } from './actions/userAction';
 import CommonStyles from './styles/common';
+import I18n from './i18n/i18n';
+
+// import { getLanguages } from 'react-native-i18n';
+//
+// getLanguages().then((languages) => {
+//   console.log('languages:');
+//   console.log(languages); // ['en-US', 'en']
+// });
 
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
@@ -50,7 +58,7 @@ class Login extends Component {
           }}
           >
             <Text>
-            Log in
+              {I18n.t('Log in')}
             </Text>
           </Button>
         </View>

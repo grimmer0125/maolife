@@ -9,6 +9,7 @@ import { connectDBtoCheckUser } from './actions/userAction';
 import Login from './Login';
 import MainScreen from './MainScreen';
 import Registration from './Registration';
+import I18n from './i18n/i18n';
 
 class Home extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Home extends Component {
       return (
         <View style={CommonStyles.container}>
           <Text style={CommonStyles.welcome}>
-            Loading...
+            {`${I18n.t('Loading')}...`}
           </Text>
         </View>
       );
@@ -46,10 +47,6 @@ class Home extends Component {
     return <Login />;
   }
 }
-
-// function debugState(state) {
-//   return state.currentUser;
-// }
 
 const mapStateToProps = state => ({
   currentUser: state.currentUser,

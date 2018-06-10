@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { addNewPet, removeSelfFromPetOwners } from './actions/userAction';
 import { updatePetInfo } from './actions/petAction';
+import I18n from './i18n/i18n';
 
 class EditPet extends Component {
  static navigationOptions = ({ navigation }) => ({
@@ -39,7 +40,7 @@ class EditPet extends Component {
       }
 
       if (Number.isNaN(this.state.age)) {
-        alert('input age is not invalid'); // eslint-disable-line no-alert
+        alert(I18n.t('input age is invalid')); // eslint-disable-line no-alert
         return;
       }
 
@@ -57,7 +58,7 @@ class EditPet extends Component {
 
       if (this.state.age !== null) {
         if (Number.isNaN(this.state.age)) {
-          alert('input age is not invalid'); // eslint-disable-line no-alert
+          alert(I18n.t('input age is invalid')); // eslint-disable-line no-alert
           return;
         }
         info.age = this.state.age;
@@ -122,17 +123,17 @@ class EditPet extends Component {
         <Form>
           {(pet && pet.petID) ? (
             <Item>
-              <Label>{`Owner (KID): ${ownerList}`}</Label>
+              <Label>{`${I18n.t('Owner')} KID: ${ownerList}`}</Label>
             </Item>) : null}
           <Item inlineLabel>
-            <Label>Name</Label>
+            <Label>{I18n.t('Name')}</Label>
             <Input
               onChangeText={this.handleChangeUsername}
               value={name}
             />
           </Item>
           <Item inlineLabel>
-            <Label>Age</Label>
+            <Label>{I18n.t('Age')}</Label>
             <Input
               keyboardType="numeric"
               onChangeText={this.handleChangeAge}
@@ -145,7 +146,7 @@ class EditPet extends Component {
           style={{ margin: 15, marginTop: 20 }}
           onPress={this.onSave}
         >
-          <Text>Save</Text>
+          <Text>{I18n.t('Save')}</Text>
         </Button>
 
         {(pet && pet.petID) ? (
@@ -154,9 +155,9 @@ class EditPet extends Component {
               style={{ margin: 15, marginTop: 100 }}
               onPress={this.onDelete}
             >
-              <Text>Remove self from Owners</Text>
+              <Text>{I18n.t('Remove self from Owners')}</Text>
             </Button>
-            <Text style={{ color: 'red' }}>The pet data will be removed too, if you are the only one owner</Text>
+            <Text style={{ color: 'red' }}> {'The pet data will be removed too, if you are the only one owner.'}</Text>
           </View>
           ) : null}
         {/* </Content> */}

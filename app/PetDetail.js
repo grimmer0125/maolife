@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import {
-  // Button as SystemButton,
   View,
   FlatList,
 } from 'react-native';
@@ -18,6 +17,7 @@ import { connect } from 'react-redux';
 import actions, { addNewOwner } from './actions/userAction';
 import Constant from './Constant';
 import RecordChart from './RecordChart';
+import I18n from './i18n/i18n';
 
 const moment = require('moment');
 
@@ -54,12 +54,12 @@ class PetDetail extends Component {
       <Button
         transparent
         onPress={() => navigation.navigate('Measure', {
-          title: 'Measure',
+          title: I18n.t('Measure'),
           petID: navigation.state.params.petID,
         })}
       >
         <Text>
-          {'Measure'}
+          {I18n.t('Measure')}
         </Text>
       </Button>
     ),
@@ -99,7 +99,7 @@ class PetDetail extends Component {
       modeText = 'sleep';
     }
     const text = `${moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday
-    } \n${pet.breathRecord[time].breathRate}/min, mode:${modeText}`;
+    } \n${I18n.t(modeText)}                           ${pet.breathRecord[time].breathRate}`;
 
     return (
       <ListItem
@@ -224,7 +224,7 @@ class PetDetail extends Component {
             <CardItem>
               <Body>
                 <Text>
-                  {"Input your friend's KID to authorize him/her"}
+                  {I18n.t("Input your friend's KID to authorize him/her")}
                 </Text>
               </Body>
             </CardItem>
@@ -243,11 +243,11 @@ class PetDetail extends Component {
 
             <CardItem>
               <Button onPress={this.onCancel}>
-                <Text>Cancel</Text>
+                <Text>{I18n.t('Cancel')}</Text>
               </Button>
               <Right>
                 <Button onPress={this.onSave}>
-                  <Text>Save</Text>
+                  <Text>{I18n.t('Save')}</Text>
                 </Button>
               </Right>
             </CardItem>
@@ -275,6 +275,9 @@ class PetDetail extends Component {
     // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/master/js/components/fab/basic.js
     // https://github.com/GeekyAnts/NativeBase/issues/372
     // fab should be outside content
+    const firstText = I18n.t('first');
+    const lastText = I18n.t('last');
+    const avgText = I18n.t('AVG');
     return (
       <Container>
         <Content>
@@ -283,7 +286,7 @@ class PetDetail extends Component {
               onPress={() => this.naviToEditPet(pet)}
             >
               <Left>
-                <Text>Edit</Text>
+                <Text>{I18n.t('Edit')}</Text>
               </Left>
               <Right>
                 <Icon name="arrow-forward" />
@@ -291,19 +294,19 @@ class PetDetail extends Component {
             </ListItem>
           </List>
           <Separator bordered>
-            <Text>Stats & Chart </Text>
+            <Text>{I18n.t('Stats & Chart')}</Text>
           </Separator>
           <View>
             <ListItem>
-              <Text style={{ color: '#FF6347' }}>{stats ? `Rest CNT:${stats.countRest}, first${baselineNum}AVG:${stats.restHeadAvg}, last${baselineNum}AVG:${stats.restTailAvg}` : ''}</Text>
+              <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.countRest}, ${firstText}${baselineNum}${avgText}:${stats.restHeadAvg}, ${lastText}${baselineNum}${avgText}:${stats.restTailAvg}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text style={{ color: 'blue' }}>{stats ? `Sleep CNT:${stats.countSleep}, first${baselineNum}AVG:${stats.sleepHeadAvg}, last${baselineNum}AVG:${stats.sleepTailAvg}` : ''}</Text>
+              <Text style={{ color: 'blue' }}>{stats ? `${I18n.t('Sleep CNT')}:${stats.countSleep}, ${firstText}${baselineNum}${avgText}:${stats.sleepHeadAvg}, ${lastText}${baselineNum}${avgText}:${stats.sleepTailAvg}` : ''}</Text>
             </ListItem>
             {stats ? <RecordChart stats={stats} /> : null}
           </View>
           <Separator bordered>
-            <Text>Records</Text>
+            <Text>{I18n.t('Records (1:mode 2:frequency per minute)')}</Text>
           </Separator>
           <View>
             <FlatList

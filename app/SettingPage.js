@@ -7,6 +7,7 @@ import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { handleFBLogout } from './actions/userAction';
 import Registration from './Registration';
+import I18n from './i18n/i18n';
 
 const FBSDK = require('react-native-fbsdk');
 
@@ -67,7 +68,7 @@ class SettingsScreen extends Component {
           <List>
             <ListItem>
               <Text>
-                {`name: ${currentUser.displayName}`}
+                {`${I18n.t('Name')}: ${currentUser.displayName}`}
               </Text>
             </ListItem>
             <ListItem>
@@ -79,7 +80,7 @@ class SettingsScreen extends Component {
               onPress={() => this.props.navigation.navigate('TutorialLinks')}
             >
               <Text style={{ color: 'red' }}>
-                {'Tutorial video links'}
+                {I18n.t('Tutorial Video Links')}
               </Text>
             </ListItem>
           </List>
@@ -89,7 +90,6 @@ class SettingsScreen extends Component {
         /> */}
         <View >
           <Button
-            style={{ marginTop: 15 }}
             warning
             onPress={() => {
               // it seems that it will also expire deactivate the same token used with Firebase
@@ -101,7 +101,7 @@ class SettingsScreen extends Component {
             }}
           >
             <Text>
-              Log out
+              {I18n.t('Log out')}
             </Text>
           </Button>
         </View>
@@ -122,13 +122,13 @@ const SettingPage = createStackNavigator({
     screen: ConnectedSettingsScreen,
     // path: '/',
     navigationOptions: () => ({
-      title: 'Settings',
+      title: I18n.t('Settings'),
     }),
   },
   TutorialLinks: {
     screen: TutorialLinks,
     navigationOptions: {
-      title: 'Tutorial Links',
+      title: I18n.t('Tutorial Video Links'),
     },
   },
 });

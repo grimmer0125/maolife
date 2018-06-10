@@ -62,7 +62,7 @@ export function registerStatus(state = '', action) {
     case ActionTypes.INVALID_REGISTERID:
       return 'invalid KID';
     case ActionTypes.EXISTING_REGISTERID:
-      return 'existing KID';
+      return 'used KID';
     case ActionTypes.LOGOUT:
       return '';
     default:

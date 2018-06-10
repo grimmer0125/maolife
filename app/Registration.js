@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { registerKID, skipRegistration } from './actions/userAction';
 import CommonStyles from './styles/common';
+import I18n from './i18n/i18n';
 
 class Registration extends Component {
   constructor(props) {
@@ -35,18 +36,18 @@ class Registration extends Component {
         {/* <Content padder> */}
         {currentUser.displayName ? <Text>{currentUser.displayName}</Text> : null}
         <Text style={CommonStyles.welcome}>
-            Please choose a ID (named KID internally) to let other people can find you and authorize you to manage their pets' health.
+          {"Please choose a ID (named KID internally) to let other people can find you and authorize you to manage their pets' health."}
           { inMainPage ? null : 'This step is optional.'}
         </Text>
         <Text>
-          {registerStatus}
+          {registerStatus ? I18n.t(registerStatus) : null}
         </Text>
         <Item
           regular
           style={{ width: 300 }}
         >
           <Input
-            placeholder="Please type an ID to register here!"
+            placeholder="KID"
             onChangeText={registerText => this.setState({ registerText })}
           />
         </Item>
@@ -58,10 +59,11 @@ class Registration extends Component {
           style={{ marginTop: 10 }}
         >
           <Button
+            warning
             onPress={this.registerButtonPress}
           >
             <Text>
-              {'Register'}
+              {I18n.t('Register')}
             </Text>
           </Button>
         </View>
@@ -73,7 +75,7 @@ class Registration extends Component {
               onPress={this.skipButtonPress}
             >
               <Text>
-                {'Skip'}
+                {I18n.t('Skip')}
               </Text>
             </Button>
           )}
