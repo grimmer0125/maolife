@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-fs')
     compile project(':react-native-mail')
     compile project(':react-native-i18n')
     compile project(':react-native-svg')

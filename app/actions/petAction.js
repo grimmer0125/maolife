@@ -1,4 +1,9 @@
 import * as firebase from 'firebase';
+import Mailer from 'react-native-mail';
+import { Alert } from 'react-native';
+
+const RNFS = require('react-native-fs');
+const moment = require('moment');
 
 /**
  * @param  {string} mode  0(rest) or 1(sleep)
@@ -50,3 +55,65 @@ export function deleteBreathRecord(petID, recordTime) {
       });
   };
 }
+
+function exportRecords() {
+  return (dispatch, getState) => {
+    console.log('export records');
+
+    if (!Mailer) {
+      console.log('Mailer is undefined, may be you need to clean the native build cache and try again');
+      return;
+    }
+
+    const state = getState();
+    const { pets } = state;
+    const data = JSON.stringify(pets, null, 2);
+    const today = moment().format('YYYY-MM-DD');
+    const fileName = `maolife-backup-${today}.json`;
+    const path = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+
+    const body = 'Something like 1480949880 is Unix time (from 1970) and the file lists the oldest to the newest';
+
+    // write the file
+    RNFS.writeFile(path, data, 'utf8')
+      .then((success) => {
+        console.log('FILE WRITTEN!:', path);
+
+        console.log('Mailer tries to send');
+
+        Mailer.mail({
+          subject: 'backup pet data of maolife',
+          recipients: [''],
+          // ccRecipients: ['supportCC@example.com'],
+          // bccRecipients: ['supportBCC@example.com'],
+          body,
+          isHTML: true,
+          attachment: {
+            path, // : '', // The absolute path of the file from which to read data.
+            type: 'text', // Mime Type: jpg, png, doc, ppt, html, pdf, csv
+            name: fileName, // Optional: Custom filename for attachment
+          },
+        }, (error, event) => {
+          console.log('error:', error, ';ev:', event);
+          Alert.alert(
+            error === 'not_available' ? 'Email app is not availabe' : error,
+            event,
+            [
+              { text: 'Ok', onPress: () => console.log('OK: Email Error Response') },
+              { text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response') },
+            ],
+            { cancelable: true },
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err.message, err.code);
+      });
+  };
+}
+
+const actions = {
+  exportRecords,
+};
+
+export default actions;

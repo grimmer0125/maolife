@@ -4,10 +4,13 @@ import { View, Linking } from 'react-native';
 import { Text, Button, List, ListItem } from 'native-base';
 
 import { createStackNavigator } from 'react-navigation';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import { handleFBLogout } from './actions/userAction';
 import Registration from './Registration';
 import I18n from './i18n/i18n';
+import actions from './actions/petAction';
 
 const FBSDK = require('react-native-fbsdk');
 
@@ -53,6 +56,10 @@ class SettingsScreen extends Component {
   // handleFBLogoutResult() {
   //   this.props.dispatch(handleFBLogout());
   // }
+
+  handleEmail = () => {
+    this.props.actions.exportRecords();
+  }
 
   render() {
     const { currentUser } = this.props;
@@ -105,6 +112,14 @@ class SettingsScreen extends Component {
             </Text>
           </Button>
         </View>
+        <View>
+          <Button onPress={this.handleEmail}>
+            <Text>
+              Test email
+            </Text>
+          </Button>
+        </View>
+
       </View>
     // {/* // </ScrollView> */}
     );
@@ -115,7 +130,12 @@ const mapStateToProps = state => ({
   currentUser: state.currentUser,
 });
 
-const ConnectedSettingsScreen = connect(mapStateToProps)(SettingsScreen);
+
+function mapDispatchToProps(dispatch) {
+  return { actions: bindActionCreators(actions, dispatch) };
+}
+
+const ConnectedSettingsScreen = connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
 
 const SettingPage = createStackNavigator({
   Settings: {
