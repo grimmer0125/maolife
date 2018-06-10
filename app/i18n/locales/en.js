@@ -1,6 +1,6 @@
 export default {
   Loading: 'Loading',
-  APP_INTRODUCTION: 'This app is to daily/weekly record pet\'s (usually cat/dog) respiratoinry rate (# Breaths per Minute) and allow multiple people to manage the same pet or share your records to others. The resting respiratory rate is the indicator of some Heart and lung diseases (e.g. cat\'s HCM). Monitoring this can give you better long-term prognosis so you can have better client-veterinarian communciation and medication adjustments.',
+  APP_INTRODUCTION: 'This app is to daily/weekly record pet\'s (usually cat/dog) respiratory rate (# Breaths per Minute) and allow multiple people to manage the same pet or share your records to others. The resting respiratory rate is the indicator of some Heart and lung diseases (e.g. cat\'s HCM). Monitoring this can give you better long-term prognosis so you can have better client-veterinarian communciation and medication adjustments.',
   'Log in to Facebook': 'LLog in to Facebook',
   'Log out': 'Log out',
   REGISTER_INTRODUCTION: 'Please choose a ID (named KID internally) to let other people can find you and authorize you to manage their pets\' health.',
@@ -18,7 +18,7 @@ export default {
   Measure: 'Measure',
   Cancel: 'Cancel',
   Owner: 'Owner',
-  "Input your friend's KID to authorize him/her": 'Input your friend\'s KID to authorize him/her',
+  "Input your friend's KID to authorize him/her to manage this pet": 'Input your friend\'s KID to authorize him/her to manage this pet',
   'Remove self from Owners': 'Remove self from Owners',
   'The pet data will be removed too, if you are the only one owner': 'The pet data will be removed too, if you are the only one owner',
   'rest mode': 'rest mode',
