@@ -166,11 +166,8 @@ class Measure extends React.Component {
       // show input text
       const labelStr = `${I18n.t('Input record time is optoinal and by default it will use currentime')}:${this.endTime}`;
       inputUI = (
-      // <Container>
         <View style={{ marginTop: 10 }}>
-          {/* <Separator bordered> */}
           <Text>{labelStr}</Text>
-          {/* </Separator> */}
           <Form>
             <Item inlineLabel>
               <Label>{`${I18n.t('time')}:`}</Label>

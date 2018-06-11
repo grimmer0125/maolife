@@ -27,16 +27,11 @@ class Registration extends Component {
     const inMainPage = currentUser.KID || currentUser.KID === '';
     return (
       <View style={{
-        // flex: 1,
-        // flexDirection: 'column',
         alignItems: 'center',
       }}
       >
-        {/* <Header /> */}
-        {/* <Content padder> */}
         {currentUser.displayName ? <Text>{currentUser.displayName}</Text> : null}
         <Text style={CommonStyles.welcome}>
-          {/* { inMainPage ? null : `(${I18n.t('Optional')})`} */}
           {I18n.t('REGISTER_INTRODUCTION')}
         </Text>
         <Text>
@@ -51,10 +46,6 @@ class Registration extends Component {
             onChangeText={registerText => this.setState({ registerText })}
           />
         </Item>
-
-        {/* <TextInput
-          onChangeText={registerText => this.setState({ registerText })}
-        /> */}
         <View
           style={{ marginTop: 10 }}
         >

@@ -26,7 +26,6 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      // <View style={CommonStyles.container}>
       <Container style={{
           flex: 1,
           justifyContent: 'center',

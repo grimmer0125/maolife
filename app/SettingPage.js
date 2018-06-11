@@ -65,27 +65,18 @@ class SettingsScreen extends Component {
     const { currentUser } = this.props;
 
     return (
-    // <ScrollView>
-    //   {/* <Button
-    //     onPress={() => navigation.navigate('NotifSettings')}
-    //     title="Go to notification settings"
-    //   />
       <Container style={{
           flex: 1,
           alignItems: 'center',
           backgroundColor: '#F5FCFF',
          }}
       >
-        {/* <ListItem
-          onPress={() => this.props.navigation.navigate('TutorialLinks')}
-        > */}
         <ListItem onPress={() => this.props.navigation.navigate('TutorialLinks')}>
           <Text style={{ color: 'blue', margin: 10 }}>
             {I18n.t('Tutorial Video Links')}
           </Text>
         </ListItem>
 
-        {/* </ListItem> */}
         {currentUser.KID === '' ? (<Registration />) : (
           <List>
             <ListItem>
@@ -113,9 +104,6 @@ class SettingsScreen extends Component {
           <Button
             warning
             onPress={() => {
-              // it seems that it will also expire deactivate the same token used with Firebase
-              // even if we do not call firebase.auth().signOut,
-              // firebase's auth callback will fail for next startup
               LoginManager.logOut();
 
               this.props.dispatch(handleFBLogout());

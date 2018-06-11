@@ -225,7 +225,6 @@ class PetDetail extends Component {
               </Body>
             </CardItem>
             <CardItem cardBody>
-              {/* <Form> */}
               <Item regular>
                 <Input
                   onChangeText={this.handleChangeAuthID}
@@ -234,7 +233,6 @@ class PetDetail extends Component {
                             }}
                 />
               </Item>
-              {/* </Form> */}
             </CardItem>
 
             <CardItem>
@@ -310,15 +308,6 @@ class PetDetail extends Component {
               data={recordTimeList}
               renderItem={({ item }) => (
                 this.eachRowItem(pet, item)
-                // <SwipeRow
-                //   rightOpenValue={-75}
-                //   body={this.eachRowItem(pet, item)}
-                //   right={
-                //     <Button danger onPress={() => this.removeItem(pet.petID, item)}>
-                //       <Icon active name="trash" />
-                //     </Button>
-                //           }
-                // />
               )}
             />
           </View>

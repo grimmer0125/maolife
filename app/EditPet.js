@@ -121,7 +121,7 @@ class EditPet extends Component {
       <Container style={{
           backgroundColor: '#F5FCFF',
          }}
-      >        {/* <Content> */}
+      >
         <Form>
           {(pet && pet.petID) ? (
             <Item>
@@ -162,7 +162,6 @@ class EditPet extends Component {
             <Text style={{ color: 'red' }}> {I18n.t('The pet data will be removed too, if you are the only one owner')}</Text>
           </View>
           ) : null}
-        {/* </Content> */}
       </Container>
     );
   }

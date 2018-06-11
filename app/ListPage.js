@@ -76,7 +76,6 @@ class ListMain extends Component {
     return (
       <Container style={{ backgroundColor: '#F5FCFF' }}>
         <Content>
-          {/* <View style={{ flex: 1, paddingTop: 22 }}> */}
           <FlatList
             data={petsArray}
             renderItem={({ item }) => (
@@ -99,9 +98,7 @@ class ListMain extends Component {
             )
           }
           />
-          {/* </View> */}
         </Content>
-
       </Container>
     );
   }
