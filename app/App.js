@@ -48,11 +48,7 @@ class App extends Component {
         return <MainScreen />;
       }
 
-      return (
-
-        <Container>
-          <RegistrationScreen />
-        </Container>);
+      return <RegistrationScreen />;
     }
     console.log('app render4');
 
