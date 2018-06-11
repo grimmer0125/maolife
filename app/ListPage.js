@@ -44,22 +44,9 @@ class ListMain extends Component {
       dataSource: [],
     };
 
+    console.log('list page constructor');
+
     this.onButtonPress = this.onButtonPress.bind(this);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { pets } = newProps;
-
-    const petsArray = [];
-
-    // instead "for in", prevent prototype chain
-    Object.keys(pets).forEach((key) => {
-      petsArray.push({ key, ...pets[key] });
-    });
-
-    this.setState({
-      dataSource: petsArray,
-    });
   }
 
   onButtonPress(rowData) {
@@ -78,12 +65,20 @@ class ListMain extends Component {
   }
 
   render() {
+    const { pets } = this.props;
+    const petsArray = [];
+
+    // instead "for in", prevent prototype chain
+    Object.keys(pets).forEach((key) => {
+      petsArray.push({ key, ...pets[key] });
+    });
+
     return (
       <Container style={{ backgroundColor: '#F5FCFF' }}>
         <Content>
           {/* <View style={{ flex: 1, paddingTop: 22 }}> */}
           <FlatList
-            data={this.state.dataSource}
+            data={petsArray}
             renderItem={({ item }) => (
               <TouchableOpacity key={item.key} onPress={() => this.onButtonPress(item)}>
                 <Card>
