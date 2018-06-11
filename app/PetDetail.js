@@ -12,7 +12,6 @@ import {
   Body, List, ListItem, Item, Input, Left, Right, Text, Separator,
 } from 'native-base';
 
-// import CommonStyles from './styles/common';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -216,7 +215,7 @@ class PetDetail extends Component {
 
     if (this.state.shareDialog) {
       return (
-        <Container>
+        <Container style={{ backgroundColor: '#F5FCFF' }}>
           <Card>
             <CardItem>
               <Body>

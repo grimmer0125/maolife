@@ -118,8 +118,10 @@ class EditPet extends Component {
     // NativeBase Input's value is not the normal definition is iOS, more like initialValue
 
     return (
-      <Container>
-        {/* <Content> */}
+      <Container style={{
+          backgroundColor: '#F5FCFF',
+         }}
+      >        {/* <Content> */}
         <Form>
           {(pet && pet.petID) ? (
             <Item>

@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 
 import {
-  Button,
   Container,
   Content, // ~ ScrollView of react-native
   Card,
@@ -80,7 +79,7 @@ class ListMain extends Component {
 
   render() {
     return (
-      <Container>
+      <Container style={{ backgroundColor: '#F5FCFF' }}>
         <Content>
           {/* <View style={{ flex: 1, paddingTop: 22 }}> */}
           <FlatList

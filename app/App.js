@@ -24,7 +24,6 @@ class App extends Component {
   }
 
   render() {
-    console.log('app render');
     const { authenticatingWithFirebase, currentUser } = this.props;
     if (authenticatingWithFirebase) {
       // nativebase's text seems to be block so it does not need another <View> to alignItems
@@ -34,6 +33,7 @@ class App extends Component {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+            backgroundColor: '#F5FCFF',
            }}
         >
           <Text style={CommonStyles.welcome}>
@@ -50,7 +50,6 @@ class App extends Component {
 
       return <RegistrationScreen />;
     }
-    console.log('app render4');
 
     return <LoginScreen />;
   }

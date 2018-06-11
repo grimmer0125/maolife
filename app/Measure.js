@@ -195,7 +195,7 @@ class Measure extends React.Component {
     }
 
     return (
-      <Container>
+      <Container style={{ backgroundColor: '#F5FCFF' }}>
         <Content>
           <List
             style={{ backgroundColor: 'white' }}

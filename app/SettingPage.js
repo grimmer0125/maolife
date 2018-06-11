@@ -38,7 +38,7 @@ function TutorialLinks() {
     },
   ];
   return (
-    <Container>
+    <Container style={{ backgroundColor: '#F5FCFF' }}>
       <List>
         {links.map(item => (
           <ListItem key={item.url}>
@@ -73,6 +73,7 @@ class SettingsScreen extends Component {
       <Container style={{
           flex: 1,
           alignItems: 'center',
+          backgroundColor: '#F5FCFF',
          }}
       >
         {/* <ListItem
@@ -125,7 +126,6 @@ class SettingsScreen extends Component {
             </Text>
           </Button>
         </View>
-
       </Container>
     );
   }
