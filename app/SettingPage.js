@@ -75,6 +75,16 @@ class SettingsScreen extends Component {
           alignItems: 'center',
          }}
       >
+        {/* <ListItem
+          onPress={() => this.props.navigation.navigate('TutorialLinks')}
+        > */}
+        <ListItem onPress={() => this.props.navigation.navigate('TutorialLinks')}>
+          <Text style={{ color: 'blue', margin: 10 }}>
+            {I18n.t('Tutorial Video Links')}
+          </Text>
+        </ListItem>
+
+        {/* </ListItem> */}
         {currentUser.KID === '' ? (<Registration />) : (
           <List>
             <ListItem>
@@ -87,17 +97,10 @@ class SettingsScreen extends Component {
                 {`KID: ${currentUser.KID}`}
               </Text>
             </ListItem>
-            <ListItem
-              onPress={() => this.props.navigation.navigate('TutorialLinks')}
-            >
-              <Text style={{ color: 'red' }}>
-                {I18n.t('Tutorial Video Links')}
-              </Text>
-            </ListItem>
           </List>
         )}
 
-        <View>
+        <View style={{ marginTop: 10 }}>
           <Button onPress={this.handleEmail}>
             <Text>
               {I18n.t('Export data via Email')}
@@ -105,7 +108,7 @@ class SettingsScreen extends Component {
           </Button>
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: 10 }}>
           <Button
             warning
             onPress={() => {
