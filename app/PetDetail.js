@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {
   View,
   FlatList,
+  Text as SystemText,
+  Button as SystemButton,
 } from 'react-native';
 
 import {
@@ -36,9 +38,9 @@ const MyTitle = ({ navigation, pets }) => {
   const pet = pets[petID];
 
   return (
-    <Text>
+    <SystemText>
       {pet.name}
-    </Text>
+    </SystemText>
   );
 };
 const MyConnectedTitle = connect(state => ({ pets: state.pets }))(MyTitle);
@@ -51,16 +53,12 @@ class PetDetail extends Component {
       />
     ),
     headerRight: (
-      <Button
-        transparent
+      <SystemButton
         onPress={() => navigation.navigate('Measure', {
           petID: navigation.state.params.petID,
         })}
-      >
-        <Text>
-          {I18n.t('Measure')}
-        </Text>
-      </Button>
+        title={I18n.t('Measure')}
+      />
     ),
   });
 
@@ -223,7 +221,7 @@ class PetDetail extends Component {
             <CardItem>
               <Body>
                 <Text>
-                  {I18n.t("Input your friend's KID to authorize him/her")}
+                  {I18n.t("Input your friend's KID to authorize him/her to manage this pet")}
                 </Text>
               </Body>
             </CardItem>

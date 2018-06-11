@@ -1,5 +1,5 @@
 import { AppRegistry, YellowBox } from 'react-native';
-import App from './app/App';
+import App from './App';
 
 YellowBox.ignoreWarnings([
   'Setting a timer', // firebase uses a long timer, https://github.com/facebook/react-native/issues/12981#issuecomment-292947299

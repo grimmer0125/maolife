@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   TouchableOpacity,
   FlatList,
+  Button as SystemButton,
 } from 'react-native';
 
 import {
@@ -28,16 +29,12 @@ class ListMain extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: I18n.t('Pets'),
     headerRight: (
-      <Button
-        transparent
+      <SystemButton
         onPress={() => navigation.navigate('EditPet', {
           title: I18n.t('New Pet'),
         })}
-      >
-        <Text>
-          {I18n.t('Add')}
-        </Text>
-      </Button>
+        title={I18n.t('Add')}
+      />
     ),
   });
 

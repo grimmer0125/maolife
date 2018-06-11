@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 
-import { Text, Button } from 'native-base';
+import { Container, Text, Button } from 'native-base';
 
 import { connect } from 'react-redux';
 
@@ -19,19 +19,23 @@ import I18n from './i18n/i18n';
 // FB SDK Ref:
 // https://github.com/facebook/react-native-fbsdk/blob/master/sample/HelloFacebook/index.ios.js
 
-class Login extends Component {
+class LoginScreen extends Component {
   loginPress() {
     this.props.dispatch(handleFBLogin());
   }
 
   render() {
     return (
-      <View style={CommonStyles.container}>
-
+      // <View style={CommonStyles.container}>
+      <Container style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+         }}
+      >
         <Text style={CommonStyles.instruction}>
           {I18n.t('APP_INTRODUCTION')}
         </Text>
-
         <View>
           <Button
             warning
@@ -44,9 +48,9 @@ class Login extends Component {
             </Text>
           </Button>
         </View>
-      </View>
+      </Container>
     );
   }
 }
 
-export default connect()(Login);
+export default connect()(LoginScreen);

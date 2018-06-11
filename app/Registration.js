@@ -59,7 +59,6 @@ class Registration extends Component {
           style={{ marginTop: 10 }}
         >
           <Button
-            warning
             onPress={this.registerButtonPress}
           >
             <Text>
@@ -81,7 +80,6 @@ class Registration extends Component {
           )}
         </View>
       </View>
-
     );
   }
 }

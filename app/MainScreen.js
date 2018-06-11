@@ -2,12 +2,13 @@ import React from 'react';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from 'react-navigation';
+import { Root } from 'native-base';
 
 import ListPage from './ListPage';
 import SettingPage from './SettingPage';
 import I18n from './i18n/i18n';
 
-export default createBottomTabNavigator({
+const MainScreenNavigator = createBottomTabNavigator({
   Home: {
     screen: ListPage,
     navigationOptions: {
@@ -39,3 +40,10 @@ export default createBottomTabNavigator({
     activeTintColor: '#e91e63',
   },
 });
+
+const MainScreen = () => (
+  <Root>
+    <MainScreenNavigator />
+  </Root>
+);
+export default MainScreen;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Linking } from 'react-native';
 
-import { Text, Button, List, ListItem } from 'native-base';
+import { Container, Text, Button, List, ListItem } from 'native-base';
 
 import { createStackNavigator } from 'react-navigation';
 // import { bindActionCreators } from 'redux';
@@ -38,7 +38,7 @@ function TutorialLinks() {
     },
   ];
   return (
-    <View>
+    <Container>
       <List>
         {links.map(item => (
           <ListItem key={item.url}>
@@ -48,7 +48,7 @@ function TutorialLinks() {
           </ListItem>
           ))}
       </List>
-    </View>
+    </Container>
   );
 }
 
@@ -70,7 +70,11 @@ class SettingsScreen extends Component {
     //     onPress={() => navigation.navigate('NotifSettings')}
     //     title="Go to notification settings"
     //   />
-      <View style={{ alignItems: 'center' }}>
+      <Container style={{
+          flex: 1,
+          alignItems: 'center',
+         }}
+      >
         {currentUser.KID === '' ? (<Registration />) : (
           <List>
             <ListItem>
@@ -92,10 +96,16 @@ class SettingsScreen extends Component {
             </ListItem>
           </List>
         )}
-        {/* <LoginButton
-          onLogoutFinished={this.handleFBLogoutResult}
-        /> */}
-        <View >
+
+        <View>
+          <Button onPress={this.handleEmail}>
+            <Text>
+              {I18n.t('Export data via Email')}
+            </Text>
+          </Button>
+        </View>
+
+        <View style={{ marginTop: 20 }}>
           <Button
             warning
             onPress={() => {
@@ -112,14 +122,8 @@ class SettingsScreen extends Component {
             </Text>
           </Button>
         </View>
-        <View>
-          <Button onPress={this.handleEmail}>
-            <Text>
-              {I18n.t('Export data via Email')}
-            </Text>
-          </Button>
-        </View>
-      </View>
+
+      </Container>
     );
   }
 }

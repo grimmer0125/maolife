@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Button, Text } from 'native-base';
+import { Container, Button, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { deleteBreathRecord } from './actions/petAction';
+import CommonStyles from './styles/common';
 import I18n from './i18n/i18n';
 
 class EditRecord extends Component {
@@ -20,14 +21,14 @@ class EditRecord extends Component {
 
  render() {
    return (
-     <View style={{
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-     }}
+
+     <Container style={{
+         flex: 1,
+         justifyContent: 'center',
+         alignItems: 'center',
+        }}
      >
-       <View style={{ width: 100, height: 100 }} >
+       <View >
          <Button
            warning
            onPress={this.onDelete}
@@ -35,7 +36,7 @@ class EditRecord extends Component {
            <Text>{I18n.t('Delete')}</Text>
          </Button>
        </View>
-     </View>
+     </Container>
    );
  }
 }
