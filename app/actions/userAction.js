@@ -78,7 +78,7 @@ export function getOwnerData(userID, userInfo) {
   };
 }
 
-export function fetchOwnerData(owners) {
+function fetchOwnerData(owners) {
   return (dispatch, getState) => {
     const state = getState();
     const selfID = firebase.auth().currentUser.uid;
@@ -110,7 +110,7 @@ export const LogoutAction = createAction(LOGOUT);
  * two steps: 1. add owners to pet's property
  * 2. add pet to owner's petIDList property
  */
-export function addNewOwner(petID, ownerKID) {
+function addNewOwner(petID, ownerKID) {
   return (dispatch, getState) => {
     if (!ownerKID || ownerKID === '') {
       console.log('invalid ownerKID:', ownerKID);
@@ -503,6 +503,7 @@ export function connectDBtoCheckUser() {
 
 const actions = {
   fetchOwnerData,
+  addNewOwner,
 };
 
 export default actions;

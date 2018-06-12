@@ -72,7 +72,7 @@ class PetDetail extends Component {
   }
 
   onSave = () => {
-    this.props.dispatch(addNewOwner(this.props.navigation.state.params.petID, this.state.authID));
+    this.props.actions.addNewOwner(this.props.navigation.state.params.petID, this.state.authID);
 
     this.setState({ shareDialog: false });
   }
