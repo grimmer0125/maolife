@@ -15,14 +15,19 @@ class EditPet extends Component {
  constructor(props) {
    super(props);
 
-   this.state = { name: null, age: null };
+   this.state = { currentName: null, age: null };
+   this.nameRef = React.createRef();
+ }
+
+ getName() {
+   return this.nameRef.current._root._lastNativeText;
  }
 
  static getDerivedStateFromProps(newProps) {
    const { pet } = newProps.navigation.state.params;
    if (pet) {
      return {
-       name: pet.name,
+       currentName: pet.name,
        age: pet.age,
      };
    }
@@ -34,7 +39,8 @@ class EditPet extends Component {
     const { pet } = this.props.navigation.state.params;
 
     if (!pet || !pet.petID) {
-      if (!this.state.name || !this.state.age) {
+      // new pet
+      if (this.getName() === '' || !this.state.age) {
         console.log('no name/age, skip');
         return;
       }
@@ -44,16 +50,18 @@ class EditPet extends Component {
         return;
       }
 
-      this.props.dispatch(addNewPet(this.state.name, this.state.age));
+      this.props.dispatch(addNewPet(this.getName(), this.state.age));
     } else {
-      if (this.state.name === '') {
+      // edit pet
+      if (this.getName() === '') {
         console.log('change name to empty is invalid');
         return;
       }
 
       const info = {};
-      if (this.state.name) {
-        info.name = this.state.name;
+      // if the name field is not ever changed. it will be undefined
+      if (this.getName()) {
+        info.name = this.getName();
       }
 
       if (this.state.age !== null) {
@@ -81,9 +89,9 @@ class EditPet extends Component {
   }
 
   // https://github.com/GeekyAnts/ignite-native-base-boilerplate/blob/42a1cc8a9366b5aed191e7f8fcc660788cedcd64/boilerplate/App/Containers/LoginScreen.js
-  handleChangeUsername = (text) => {
-    this.setState({ name: text });
-  }
+  // handleChangeUsername = (text) => {
+  //   this.setState({ name: text });
+  // }
 
   handleChangeAge = (text) => {
     this.setState({ age: parseFloat(text, 10) });
@@ -107,7 +115,7 @@ class EditPet extends Component {
       }
     }
 
-    const { name, age } = this.state;
+    const { currentName, age } = this.state;
 
     // NOTE:
     // NativeBase Input's value is not the normal definition is iOS, more like initialValue
@@ -125,8 +133,8 @@ class EditPet extends Component {
           <Item inlineLabel>
             <Label>{I18n.t('Name')}</Label>
             <Input
-              onChangeText={this.handleChangeUsername}
-              value={name}
+              defaultValue={this.state.currentName}
+              ref={this.nameRef}
             />
           </Item>
           <Item inlineLabel>

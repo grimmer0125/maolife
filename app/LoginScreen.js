@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, TextInput } from 'react-native';
 
 import { Container, Text, Button, Form, Item, Input, Label } from 'native-base';
 
@@ -24,7 +24,12 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { email: null, password: null, loginMode: true };
+    this.state = { password: null, loginMode: true };
+    this.emailRef = React.createRef();
+  }
+
+  getEmail() {
+    return this.emailRef.current._root._lastNativeText;
   }
 
   loginFBPress() {
@@ -32,8 +37,9 @@ class LoginScreen extends Component {
   }
 
   loginOrSignUpEmail() {
-    // this.props.dispatch(handleFBLogin());
-    const { email, password } = this.state;
+    const { password } = this.state;
+
+    const email = this.getEmail();
 
     if (!email || !password) {
       return;
@@ -47,22 +53,23 @@ class LoginScreen extends Component {
     }
   }
 
-  handleChangeEmail = (text) => {
-    this.setState({ email: text });
-  }
-
   handleChangePassword = (text) => {
     this.setState({ password: text });
   }
 
   handleResetPassword = () => {
-    if (this.state.email) {
-      this.props.actions.resetEmailAccountPassword(this.state.email);
+    const email = this.getEmail();
+
+    console.log('in handleResetPassword email:', email);
+
+    // return;
+    if (email) {
+      this.props.actions.resetEmailAccountPassword(email);
     }
   }
 
   render() {
-    const { email, password, loginMode } = this.state;
+    const { password, loginMode } = this.state;
 
     return (
       <Container style={{
@@ -147,8 +154,7 @@ class LoginScreen extends Component {
             <Item>
               <Label>{I18n.t('Email')}</Label>
               <Input
-                onChangeText={this.handleChangeEmail}
-                value={email}
+                ref={this.emailRef}
               />
             </Item>
             <Item last>
