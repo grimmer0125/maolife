@@ -558,7 +558,7 @@ function resetEmailAccountPassword(email) {
     firebase.auth().sendPasswordResetEmail(email)
       .then(() => {
         Alert.alert(
-          I18n('Password reset email sent'),
+          I18n.t('Password reset email sent'),
           null,
           [
             { text: 'Ok' },
@@ -611,7 +611,7 @@ function signUpEmailAccount(email, password) {
               console.log('Verification email sent');
 
               Alert.alert(
-                I18n('Verification email sent'),
+                I18n.t('Verification email sent'),
                 null,
                 [
                   { text: 'Ok' },
