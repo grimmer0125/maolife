@@ -43,7 +43,7 @@ class App extends Component {
       );
     }
 
-    if (currentUser && currentUser.isLogin) {
+    if (currentUser && currentUser.isLoggedInWithData) {
       if (currentUser.KID || currentUser.KID === '') {
         return <MainScreen />;
       }

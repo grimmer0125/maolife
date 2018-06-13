@@ -3,8 +3,9 @@ import update from 'immutability-helper';
 import { ActionTypes } from '../actions/userAction';
 
 const initialState = {
+  email: '',
   displayName: '',
-  isLogin: false,
+  isLoggedInWithData: false,
 };
 
 // may move to user
@@ -12,11 +13,16 @@ export function authenticatingWithFirebase(state = true, action = {}) {
   switch (action.type) {
     case ActionTypes.USER_DATA:
       return false;
-    case ActionTypes.LOGIN_SUCCESS:
+    case ActionTypes.START_SIGNIN:
       // this Action means users tried to login FB and succeeded,
       // show loading... (authenticating: true)
       // then auth+data callback should be triggerd later (authenticating: false)
       return true;
+    case ActionTypes.LOGIN_FAIL:
+      // this Action means users tried to login FB and succeeded,
+      // show loading... (authenticating: true)
+      // then auth+data callback should be triggerd later (authenticating: false)
+      return false;
     default:
       return state;
   }
@@ -41,7 +47,7 @@ export function currentUser(state = initialState, action = {}) {
     case ActionTypes.USER_DATA:
       return {
         ...state,
-        isLogin: action.payload.result,
+        isLoggedInWithData: action.payload.result,
         ...action.payload.userData,
       };
 

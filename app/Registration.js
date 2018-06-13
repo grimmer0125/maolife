@@ -31,6 +31,8 @@ class Registration extends Component {
       }}
       >
         {currentUser.displayName ? <Text>{currentUser.displayName}</Text> : null}
+        {currentUser.email ? <Text>{currentUser.email}</Text> : null}
+
         <Text style={CommonStyles.welcome}>
           {I18n.t('REGISTER_INTRODUCTION')}
         </Text>

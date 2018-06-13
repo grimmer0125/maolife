@@ -1,7 +1,10 @@
 import { createAction } from 'redux-actions';
+import { Alert } from 'react-native';
+// import validator from 'validator';
 
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
+import I18n from '../i18n/i18n';
 
 const FBSDK = require('react-native-fbsdk');
 
@@ -14,6 +17,7 @@ const LOGIN_DATA = 'LOGIN_DATA';
 const USER_DATA = 'USER_DATA';
 const OWNER_DATA = 'OWNER_DATA';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const START_SIGNIN = 'START_SIGNIN';
 const LOGIN_FAIL = 'LOGIN_FAIL';
 const LOGOUT = 'LOGOUT';
 const INVALID_REGISTERID = 'INVALID_REGISTERID';
@@ -26,6 +30,7 @@ const LEAVE_CAT_DETAIL = 'LEAVE_CAT_DETAIL';
 export const ActionTypes = {
   LOGIN_DATA,
   LOGIN_SUCCESS,
+  START_SIGNIN,
   LOGIN_FAIL,
   USER_DATA,
   OWNER_DATA,
@@ -103,8 +108,9 @@ function fetchOwnerData(owners) {
 
 export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
-export const leavePetDetail = createAction(LEAVE_CAT_DETAIL);
+// export const leavePetDetail = createAction(LEAVE_CAT_DETAIL);
 export const LogoutAction = createAction(LOGOUT);
+export const LoginFailAction = createAction(LOGIN_FAIL);
 
 /**
  * two steps: 1. add owners to pet's property
@@ -157,15 +163,6 @@ function addNewOwner(petID, ownerKID) {
           });
       }
     });
-  };
-}
-
-export function naviToPet(petID) {
-  return {
-    type: NAVI_TO_CAT,
-    payload: {
-      petID,
-    },
   };
 }
 
@@ -334,18 +331,18 @@ export function registerKID(registerID) {
   };
 }
 
-export function LoginSuccess(displayName) {
+export function StartSignIn() {
   return {
-    type: LOGIN_SUCCESS,
-    payload: {
-      displayName,
-    },
+    type: START_SIGNIN,
   };
 }
 
 export function handleFBLogout(error) {
   return (dispatch, getState) => {
-    // https://firebase.google.com/docs/reference/node/firebase.auth.Auth#signOut
+    // NOTE:
+    // https://stackoverflow.com/questions/38043998/is-there-any-way-to-off-all-listeners-when-a-user-is-de-authorized#comment63528231_38043998
+    // All listeners to nodes that require authentication will automatically be cancelled when the user becomes unauthenticated.
+    // You can easily check that by listening for errors, those will fire in that scenario. – Frank van Puffelen Jun 26 '16 at 23:39
     firebase.auth().signOut()
       .then(() => {
         console.log('firebase auth signOut ok');
@@ -354,17 +351,13 @@ export function handleFBLogout(error) {
   };
 }
 
-export function handleFBLogin() {
+function handleFBLogin() {
   return (dispatch) => {
     LoginManager.logInWithReadPermissions(['public_profile'])
       .then(
         (result) => {
-        // this.props.dispatch(handleFBLogin(null, result));
-
           if (result.isCancelled) {
             console.log('login is cancelled.');
-
-          // alert('Login cancelled');
           } else {
             console.log(`Login success with permissions: ${
               result.grantedPermissions.toString()}`);
@@ -372,10 +365,11 @@ export function handleFBLogin() {
             console.log('login ok, result:', result);// not much info
 
             // FB login ok by users
-            dispatch(LoginSuccess(''));
+            // will trigger a loading.... screen
+            dispatch(StartSignIn());
 
             // NOTE:
-            // dispatch(LoginSuccess('')) here ->
+            // dispatch(StartSignIn('')) here ->
             // login button-ui change (logined status)
             // -> signIn callback ->auth callback
 
@@ -387,13 +381,11 @@ export function handleFBLogin() {
 
                 // Try FB auth by this app, not users
                 return firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token));
-                // alert(data.accessToken.toString());
               }).then((result) => {
-                console.log('login FB ok. Firebae result:', result);
+                console.log('login FB ok. Firebase result:', result);
 
                 if (result.displayName) {
                   console.log(`try saving displayName ${result.displayName}`);
-                  // alert("welcome! " + result.displayName);
 
                   const dataPath = `/users/${result.uid}`;
 
@@ -405,10 +397,10 @@ export function handleFBLogin() {
                   });
                 }
 
-                // dispatch(LoginSuccess('')); // displayName can be gotten from auth+data callback
+              // dispatch(StartSignIn('')); // displayName can be gotten from auth+data callback
               }).catch((error) => {
-                // TODO handle firebase login fail or
-                // getCurrentAccessToken fail
+              // TODO handle firebase login fail or
+              // getCurrentAccessToken fail
                 console.log("use fb's token to login firebase error:", error);
               });
           }
@@ -435,15 +427,39 @@ export function connectDBtoCheckUser() {
     console.log('setup firebase, connectDBtoCheckUser');
     firebase.initializeApp(firebaseConfig);
 
-    // https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
+    // mm https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
     // https://github.com/JamesMarino/Firebase-ReactNative/blob/master/index.ios.js
-    firebase.auth().onAuthStateChanged((authUser) => {
-      console.log('got auth user change in DB:', authUser);
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log('auth got user change in DB:', user);
 
-      if (authUser) {
-        const dataPath = `/users/${authUser.uid}`;
+      // Testing
+      // const testDataPath = '/cars3/grimmer2';
+      // firebase.database().ref(testDataPath).on('value', (snap) => {
+      //   const testValue = snap.val();
+      //   console.log('testValue:', testValue);
+      //
+      //   // setTimeout(() => {
+      //   //   console.log('test write');
+      //   //   firebase.database().ref(testDataPath).update({
+      //   //     displayName: 'kk',
+      //   //   }).then(() => {
+      //   //     console.log('save kk ok');
+      //   //   });
+      //   // }, 3000);
+      // });
 
-        // TODO check: will not trigger two times ?? !!!
+      if (user) {
+        // emailVerified:falsue
+        // providerId :"facebook.com"
+        const emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId != 'password' || user.emailVerified;
+        if (emailVerified) {
+          console.log('user email is not needed or verified');
+        } else {
+          console.log('user email is not verified:', user);
+        }
+
+        const dataPath = `/users/${user.uid}`;
+
         firebase.database().ref(dataPath).on('value', (snap) => {
           const userValue = snap.val();
 
@@ -490,20 +506,154 @@ export function connectDBtoCheckUser() {
             dispatch(removePet(id));
           }
 
+          // after get the data, login -> MainScreen
           dispatch(getUserData(true, userValue));
         });
       } else {
         console.log('auth becomes null');
 
         dispatch(getUserData(false, null));
+
+        // TODO: empty redux's cats to have better code logic
       }
     });
+  };
+}
+
+function signinEmailAccount(email, password) {
+  return (dispatch, getState) => {
+    if (email && password) {
+      dispatch(StartSignIn(''));
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((user) => {
+          console.log('sign in ok, get the user:', user);
+        })
+        .catch((error) => {
+          dispatch(LoginFailAction());
+
+          // Handle Errors here.
+          console.log('sign in fail');
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // alert(errorMessage);
+          //
+          Alert.alert(
+            errorCode,
+            errorMessage,
+            [
+              { text: 'Ok' },
+            ],
+            { cancelable: true },
+          );
+        });
+    } else {
+      // alert('empty email/pwd');
+    }
+  };
+}
+
+function resetEmailAccountPassword(email) {
+  return () => {
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        Alert.alert(
+          I18n('Password reset email sent'),
+          null,
+          [
+            { text: 'Ok' },
+          ],
+          { cancelable: true },
+        );
+      })
+      .catch((error) => {
+      // Error occurred. Inspect error.code.
+        Alert.alert(
+          error.code,
+          error.message,
+          [
+            { text: 'Ok' },
+          ],
+          { cancelable: true },
+        );
+      });
+  };
+}
+
+
+function signUpEmailAccount(email, password) {
+  return (dispatch, getState) => {
+    // signUpEmailAccount() {
+    if (email && password) {
+      // validator.isEmail('foo@bar.com');
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+          console.log('signup & auto login get the user:', user);
+
+          // e.g.
+          // displayName:null
+          // email:"grimmer0125@gmail.com"
+          // emailVerified:false
+          //
+
+          const dataPath = `/users/${user.uid}`;// `/users/${firebase.auth().currentUser.uid}`;
+          firebase.database().ref(dataPath).update({
+            email: user.email,
+          }).then(() => {
+            console.log('save email ok !!!:', user.email);
+          });
+
+          // TODO send Email Verification
+          // https://firebase.google.com/docs/auth/web/manage-users
+          user.sendEmailVerification()
+            .then(() => {
+              console.log('Verification email sent');
+
+              Alert.alert(
+                I18n('Verification email sent'),
+                null,
+                [
+                  { text: 'Ok' },
+                ],
+                { cancelable: true },
+              );
+
+            // Email sent.
+            }).catch((error) => {
+            // An error happened.
+              console.log('email failed to send:', error);
+            });
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          // e.g. {code: "auth/weak-password", message: "Password should be at least 6 characters"}
+          const errorMessage = error.message;
+          // alert(errorMessage);
+          Alert.alert(
+            errorCode,
+            errorMessage,
+            [
+              { text: 'Ok' },
+            ],
+            { cancelable: true },
+          );
+        });
+    } else {
+      // alert('empty email/pwd');
+    }
+    // }
   };
 }
 
 const actions = {
   fetchOwnerData,
   addNewOwner,
+  signUpEmailAccount,
+  handleFBLogin,
+  signinEmailAccount,
+  resetEmailAccountPassword,
 };
 
 export default actions;

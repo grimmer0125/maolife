@@ -92,14 +92,9 @@ class EditPet extends Component {
   // https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/baa87754f4607d194dd5fc974677011ae51be931/js/components/form/fixedLabel.js
   render() {
     const {
-      pet, // , name, age,
+      pet,
     } = this.props.navigation.state.params;
 
-    // petID,
-    // age: pet.age,
-    // name: pet.name,
-    // pet.owners idlist -> name list
-    //
     const { users, currentUser } = this.props;
 
     const ownerList = [];

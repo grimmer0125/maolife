@@ -4,6 +4,8 @@ import { ActionTypes } from '../actions/userAction';
 
 export function pets(state = {}, action) {
   switch (action.type) {
+    case ActionTypes.LOGOUT:
+      return {};
     case ActionTypes.REMOVE_CAT:
       if (action.payload.petID) {
         const newState = update(state, {

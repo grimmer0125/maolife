@@ -79,11 +79,18 @@ class SettingsScreen extends Component {
 
         {currentUser.KID === '' ? (<Registration />) : (
           <List>
-            <ListItem>
-              <Text>
-                {`${I18n.t('Name')}: ${currentUser.displayName}`}
-              </Text>
-            </ListItem>
+            {currentUser.displayName ? (
+              <ListItem>
+                <Text>
+                  {`${I18n.t('Name')}: ${currentUser.displayName}`}
+                </Text>
+              </ListItem>) : null}
+            {currentUser.email ? (
+              <ListItem>
+                <Text>
+                  {`${I18n.t('Email')}: ${currentUser.email}`}
+                </Text>
+              </ListItem>) : null}
             <ListItem>
               <Text>
                 {`KID: ${currentUser.KID}`}
