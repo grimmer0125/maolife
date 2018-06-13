@@ -1630,7 +1630,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.overflow.maolife;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lifeoverflow.maolife;
 				PRODUCT_NAME = maolife;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1658,7 +1658,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.overflow.maolife;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lifeoverflow.maolife;
 				PRODUCT_NAME = maolife;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
