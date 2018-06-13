@@ -15,7 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import actions, { addNewOwner } from './actions/userAction';
+import actions from './actions/userAction';
 import Constant from './Constant';
 import RecordChart from './RecordChart';
 import I18n from './i18n/i18n';
@@ -34,11 +34,13 @@ function extractPetInfo(petID, pets) {
 
 const MyTitle = ({ navigation, pets }) => {
   const { petID } = navigation.state.params;
-  const pet = pets[petID];
-
+  let pet = null;
+  if (pets[petID]) {
+    pet = pets[petID];
+  }
   return (
     <SystemText>
-      {pet.name}
+      {(pet && pet.name) ? pet.name : null}
     </SystemText>
   );
 };
