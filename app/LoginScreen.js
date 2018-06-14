@@ -153,6 +153,7 @@ class LoginScreen extends Component {
             <Item>
               <Label>{I18n.t('Email')}</Label>
               <Input
+                autoCapitalize="none"
                 ref={this.emailRef}
               />
             </Item>
@@ -160,6 +161,7 @@ class LoginScreen extends Component {
               <Label>{I18n.t('Password')}</Label>
               <Input
                 onChangeText={this.handleChangePassword}
+                autoCapitalize="none"
                 secureTextEntry
                 value={password}
               />

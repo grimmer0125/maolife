@@ -44,6 +44,7 @@ class Registration extends Component {
           style={{ width: 300 }}
         >
           <Input
+            autoCapitalize="none"
             placeholder="KID"
             onChangeText={registerText => this.setState({ registerText })}
           />

@@ -34,6 +34,7 @@ class ShareDialog extends Component {
           <CardItem cardBody>
             <Item regular>
               <Input
+                autoCapitalize="none"
                 onChangeText={this.handleChangeAuthID}
                 onSubmitEditing={() => this.props.onSave(this.state.authID)}
               />
