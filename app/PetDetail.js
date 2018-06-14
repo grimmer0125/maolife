@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 
 import {
-  Container, Content, Button, Icon, Fab, Card, CardItem,
-  Body, List, ListItem, Item, Input, Left, Right, Text, Separator,
+  Container, Content, Icon, Fab,
+  List, ListItem, Left, Right, Text, Separator,
 } from 'native-base';
 
 import { bindActionCreators } from 'redux';
@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import actions from './actions/userAction';
 import Constant from './Constant';
 import RecordChart from './RecordChart';
+import ShareDialog from './ShareDialog';
 import I18n from './i18n/i18n';
 
 const moment = require('moment');
@@ -68,23 +69,18 @@ class PetDetail extends Component {
 
     this.state = {
       active: false,
-      shareDialog: false,
-      authID: '',
+      showShareDialog: false,
     };
   }
 
-  onSave = () => {
-    this.props.actions.addNewOwner(this.props.navigation.state.params.petID, this.state.authID);
+  onSave = (authID) => {
+    this.props.actions.addNewOwner(this.props.navigation.state.params.petID, authID);
 
-    this.setState({ shareDialog: false });
+    this.setState({ showShareDialog: false });
   }
 
   onCancel = () => {
-    this.setState({ shareDialog: false });
-  }
-
-  handleChangeAuthID = (text) => {
-    this.setState({ authID: text });
+    this.setState({ showShareDialog: false });
   }
 
   eachRowItem = (pet, time) => {
@@ -114,9 +110,28 @@ class PetDetail extends Component {
     );
   }
 
-  calculateStats(breathRecord, recordTimeList) {
-    // const t0 = performance.now();
+  calRegion(count, modeList, numOfBaseline) {
+    let headAvg = 0;
+    let tailAvg = 0;
+    if (count > numOfBaseline) {
+      let total = 0;
+      for (let i = 0; i < numOfBaseline; i += 1) {
+        total += modeList[i].y;
+      }
+      headAvg = (total / numOfBaseline).toFixed(1);
 
+      total = 0;
+      for (let i = 0; i < numOfBaseline; i += 1) {
+        total += modeList[count - 1 - i].y;
+      }
+      tailAvg = (total / numOfBaseline).toFixed(1);
+    }
+
+    return { headAvg, tailAvg };
+  }
+
+  // TODO: use info = {sleep:{}, rest:{}} to avoid similar naming
+  calculateStats(breathRecord, recordTimeList) {
     let sleepTotal = 0;
     let countSleep = 0;
     let restTotal = 0;
@@ -161,37 +176,13 @@ class PetDetail extends Component {
       restTailAvg: 0,
     };
 
-    if (countSleep > baselineNum) {
-      let total = 0;
-      for (let i = 0; i < baselineNum; i += 1) {
-        total += sleepList[i].y;
-      }
-      info.sleepHeadAvg = (total / baselineNum).toFixed(1);
+    const { headAvg, tailAvg } = this.calRegion(countRest, restList, baselineNum);
+    info.restHeadAvg = headAvg;
+    info.restTailAvg = tailAvg;
 
-      total = 0;
-      for (let i = 0; i < baselineNum; i += 1) {
-        total += sleepList[countSleep - 1 - i].y;
-      }
-      info.sleepTailAvg = (total / baselineNum).toFixed(1);
-    }
-
-    // TODO: two similar blocks become a function
-    if (countRest > baselineNum) {
-      let total = 0;
-      for (let i = 0; i < baselineNum; i += 1) {
-        total += restList[i].y;
-      }
-      info.restHeadAvg = (total / baselineNum).toFixed(1);
-
-      total = 0;
-      for (let i = 0; i < baselineNum; i += 1) {
-        total += restList[countSleep - 1 - i].y;
-      }
-      info.restTailAvg = (total / baselineNum).toFixed(1);
-    }
-
-    // const t1 = performance.now();
-    // console.log(`Call to calculateStats took ${t1 - t0} milliseconds.`);
+    const avgSleep = this.calRegion(countSleep, sleepList, baselineNum);
+    info.sleepHeadAvg = avgSleep.headAvg;
+    info.sleepTailAvg = avgSleep.tailAvg;
 
     return info;
   }
@@ -215,41 +206,8 @@ class PetDetail extends Component {
     const { petID } = navigation.state.params;
     const pet = extractPetInfo(petID, pets);
 
-    if (this.state.shareDialog) {
-      return (
-        <Container style={{ backgroundColor: '#F5FCFF' }}>
-          <Card>
-            <CardItem>
-              <Body>
-                <Text>
-                  {I18n.t("Input your friend's KID to authorize him/her to manage this pet")}
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem cardBody>
-              <Item regular>
-                <Input
-                  onChangeText={this.handleChangeAuthID}
-                  onSubmitEditing={() => {
-                              this.onSave();
-                            }}
-                />
-              </Item>
-            </CardItem>
-
-            <CardItem>
-              <Button onPress={this.onCancel}>
-                <Text>{I18n.t('Cancel')}</Text>
-              </Button>
-              <Right>
-                <Button onPress={this.onSave}>
-                  <Text>{I18n.t('Save')}</Text>
-                </Button>
-              </Right>
-            </CardItem>
-          </Card>
-        </Container>
-      );
+    if (this.state.showShareDialog) {
+      return <ShareDialog onSave={this.onSave} onCancel={this.onCancel} />;
     }
 
     let recordTimeList = [];
@@ -257,10 +215,7 @@ class PetDetail extends Component {
     if (pet.hasOwnProperty('breathRecord')) {
       const keys = Object.keys(pet.breathRecord);
 
-      // const t0 = performance.now();
       keys.sort((a, b) => b - a);
-      // const t1 = performance.now();
-      // console.log(`Call to sort took ${t1 - t0} milliseconds.`);
 
       recordTimeList = keys;
 
@@ -314,7 +269,6 @@ class PetDetail extends Component {
             />
           </View>
         </Content>
-
         <Fab
           active={this.state.active}
           direction="up"
@@ -323,13 +277,12 @@ class PetDetail extends Component {
           position="bottomRight"
           onPress={() => {
             this.setState({ active: !this.state.active });
-            this.setState({ shareDialog: true });
+            this.setState({ showShareDialog: true });
           }}
         >
           <Icon name="share" />
         </Fab>
       </Container>
-
     );
   }
 }

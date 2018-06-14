@@ -113,7 +113,6 @@ export function exportRecords() {
             event,
             [
               { text: 'Ok', onPress: () => console.log('OK: Email Error Response') },
-              { text: I18n.t('Cancel'), onPress: () => console.log('CANCEL: Email Error Response') },
             ],
             { cancelable: true },
           );

@@ -22,10 +22,9 @@ const LOGIN_FAIL = 'LOGIN_FAIL';
 const LOGOUT = 'LOGOUT';
 const INVALID_REGISTERID = 'INVALID_REGISTERID';
 const EXISTING_REGISTERID = 'EXISTING_REGISTERID';
-const UPDATE_CAT_INFO = 'UPDATE_CAT_INFO';
-const REMOVE_CAT = 'REMOVE_CAT';
-const NAVI_TO_CAT = 'NAVI_TO_CAT';
-const LEAVE_CAT_DETAIL = 'LEAVE_CAT_DETAIL';
+const UPDATE_PET_INFO = 'UPDATE_PET_INFO';
+const UPDATE_PET = 'UPDATE_PET';
+const NAVI_TO_PET = 'NAVI_TO_PET';
 
 export const ActionTypes = {
   LOGIN_DATA,
@@ -37,10 +36,9 @@ export const ActionTypes = {
   LOGOUT,
   INVALID_REGISTERID,
   EXISTING_REGISTERID,
-  UPDATE_CAT_INFO,
-  REMOVE_CAT,
-  NAVI_TO_CAT,
-  LEAVE_CAT_DETAIL,
+  UPDATE_PET_INFO,
+  UPDATE_PET,
+  NAVI_TO_PET,
 };
 
 function addPetToUserFireBaseData(petIDList, newPetId, ownerPath) {
@@ -108,7 +106,6 @@ function fetchOwnerData(owners) {
 
 export const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
 export const registerExistingIDAction = createAction(EXISTING_REGISTERID);
-// export const leavePetDetail = createAction(LEAVE_CAT_DETAIL);
 export const LogoutAction = createAction(LOGOUT);
 export const LoginFailAction = createAction(LOGIN_FAIL);
 
@@ -201,7 +198,7 @@ export function removeSelfFromPetOwners(petID) {
           console.log('update pet owner failed:', error);
         });
     } else {
-      // case 1-b: will trigger a UPDATE_CAT_INFO but value is null
+      // case 1-b: will trigger a UPDATE_PET_INFO but value is null
       firebase.database().ref(petPath).remove()
         .then(() => {
           console.log('remove pet ok');
@@ -252,7 +249,7 @@ export function addNewPet(name, age) {
 
 export function removePet(petID) {
   return {
-    type: REMOVE_CAT,
+    type: UPDATE_PET,
     payload: {
       petID,
     },
@@ -261,7 +258,7 @@ export function removePet(petID) {
 
 export function updatePetInfo(petID, petInfo) {
   return {
-    type: UPDATE_CAT_INFO,
+    type: UPDATE_PET_INFO,
     payload: {
       petID,
       petInfo,
@@ -370,8 +367,9 @@ function handleFBLogin() {
 
             // NOTE:
             // dispatch(StartSignIn('')) here ->
-            // login button-ui change (logined status)
+            // fb login button-ui change (logined status)
             // -> signIn callback ->auth callback
+            // we have used fb LoginManager instead of fb login button-ui
 
             AccessToken.getCurrentAccessToken()
               .then((data) => {
@@ -396,8 +394,6 @@ function handleFBLogin() {
                     console.log('save displayName ok');
                   });
                 }
-
-              // dispatch(StartSignIn('')); // displayName can be gotten from auth+data callback
               }).catch((error) => {
               // TODO handle firebase login fail or
               // getCurrentAccessToken fail
@@ -432,26 +428,9 @@ export function connectDBtoCheckUser() {
     firebase.auth().onAuthStateChanged((user) => {
       console.log('auth got user change in DB:', user);
 
-      // Testing
-      // const testDataPath = '/cars3/grimmer2';
-      // firebase.database().ref(testDataPath).on('value', (snap) => {
-      //   const testValue = snap.val();
-      //   console.log('testValue:', testValue);
-      //
-      //   // setTimeout(() => {
-      //   //   console.log('test write');
-      //   //   firebase.database().ref(testDataPath).update({
-      //   //     displayName: 'kk',
-      //   //   }).then(() => {
-      //   //     console.log('save kk ok');
-      //   //   });
-      //   // }, 3000);
-      // });
-
       if (user) {
-        // emailVerified:falsue
-        // providerId :"facebook.com"
-        const emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId != 'password' || user.emailVerified;
+        // providerId :"facebook.com", emailVerified:falsue
+        const emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId !== 'password' || user.emailVerified;
         if (emailVerified) {
           console.log('user email is not needed or verified');
         } else {
@@ -499,7 +478,7 @@ export function connectDBtoCheckUser() {
             dispatch(liveQueryPetInfo(id));
           }
 
-          // case: remvoe pet from petIDList
+          // case: remove pet from petIDList
           for (const id of oldPetIDList_copy) {
             console.log('stopquery and remove pet:', id);
             dispatch(stopLiveQueryPetInfo(id));
@@ -521,7 +500,7 @@ export function connectDBtoCheckUser() {
 }
 
 function signinEmailAccount(email, password) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     if (email && password) {
       dispatch(StartSignIn(''));
 
@@ -579,7 +558,6 @@ function resetEmailAccountPassword(email) {
       });
   };
 }
-
 
 function signUpEmailAccount(email, password) {
   return (dispatch, getState) => {

@@ -62,7 +62,6 @@ class LoginScreen extends Component {
 
     console.log('in handleResetPassword email:', email);
 
-    // return;
     if (email) {
       this.props.actions.resetEmailAccountPassword(email);
     }
