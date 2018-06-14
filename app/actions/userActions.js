@@ -13,30 +13,22 @@ const {
   LoginManager,
 } = FBSDK;
 
-// const LOGIN_DATA = 'LOGIN_DATA';
 const USER_DATA = 'USER_DATA';
-// const OWNER_DATA = 'OWNER_DATA';
 // const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const START_SIGNIN = 'START_SIGNIN';
 const LOGIN_FAIL = 'LOGIN_FAIL';
 const LOGOUT = 'LOGOUT';
 const INVALID_REGISTERID = 'INVALID_REGISTERID';
 const EXISTING_REGISTERID = 'EXISTING_REGISTERID';
-// const UPDATE_PET_INFO = 'UPDATE_PET_INFO';
-// const UPDATE_PET = 'UPDATE_PET';
 
 export const ActionTypes = {
-  // LOGIN_DATA,
   // LOGIN_SUCCESS,
   START_SIGNIN,
   LOGIN_FAIL,
   USER_DATA,
-  // OWNER_DATA,
   LOGOUT,
   INVALID_REGISTERID,
   EXISTING_REGISTERID,
-  // UPDATE_PET_INFO,
-  // UPDATE_PET,
 };
 
 const invalidRegisterIDAction = createAction(INVALID_REGISTERID);
@@ -381,8 +373,6 @@ function signUpEmailAccount(email, password) {
 }
 
 const actions = {
-  // fetchOwnerData,
-  // addNewOwner,
   skipRegistration,
   registerKID,
   signUpEmailAccount,

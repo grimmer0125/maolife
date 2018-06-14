@@ -4,7 +4,6 @@ import { View, Linking } from 'react-native';
 import { Container, Text, Button, List, ListItem } from 'native-base';
 
 import { createStackNavigator } from 'react-navigation';
-// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

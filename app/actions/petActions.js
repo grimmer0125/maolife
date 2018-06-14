@@ -18,7 +18,7 @@ export const ActionTypes = {
 };
 
 /**
- * @param  {string} mode  0(rest) or 1(sleep)
+ * @param  {string} mode 0(rest) or 1(sleep)
  */
 function newBreathRecord(petID, breathRate, mode, recordTime) {
   return () => {
@@ -88,7 +88,6 @@ function exportRecords() {
       console.log('use android specific path');
       path = `${RNFS.ExternalCachesDirectoryPath}/${fileName}`;
     } else {
-      // on android: /data/data/
       // ios: /var/xxx/
       path = `${RNFS.DocumentDirectoryPath}/${fileName}`;
     }
@@ -107,8 +106,6 @@ function exportRecords() {
         Mailer.mail({
           subject: 'backup pet data of maolife',
           recipients: [''],
-          // ccRecipients: ['supportCC@example.com'],
-          // bccRecipients: ['supportBCC@example.com'],
           body,
           isHTML: true,
           attachment: {

@@ -242,7 +242,6 @@ class PetDetail extends Component {
         <Content>
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
-              last
               onPress={() => this.naviToEditPet(pet)}
             >
               <Left>
@@ -253,10 +252,10 @@ class PetDetail extends Component {
               </Right>
             </ListItem>
           </List>
-          <Separator bordered>
-            <Text>{I18n.t('Stats & Chart')}</Text>
-          </Separator>
           <List style={{ backgroundColor: 'white' }}>
+            <ListItem itemDivider>
+              <Text>{I18n.t('Stats & Chart')}</Text>
+            </ListItem>
             <ListItem>
               <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.rest.data.length}, ${firstText}${baselineNum}${avgText}:${stats.rest.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.rest.tailAvg}` : ''}</Text>
             </ListItem>
@@ -265,9 +264,9 @@ class PetDetail extends Component {
             </ListItem>
           </List>
           {stats ? <RecordChart stats={stats} /> : null}
-          <Separator bordered>
+          <ListItem itemDivider>
             <Text>{I18n.t('Records (1: mode 2: # breaths per minute)')}</Text>
-          </Separator>
+          </ListItem>
           <View style={{ backgroundColor: 'white' }}>
             <FlatList
               keyExtractor={this.keyExtractor}
