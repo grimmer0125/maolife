@@ -240,10 +240,11 @@ class PetDetail extends Component {
     const lastText = I18n.t('last');
     const avgText = I18n.t('AVG');
     return (
-      <Container>
+      <Container style={{ backgroundColor: '#F5FCFF' }}>
         <Content>
           <List enableemptysections style={{ backgroundColor: 'white' }}>
             <ListItem
+              last
               onPress={() => this.naviToEditPet(pet)}
             >
               <Left>
@@ -257,19 +258,19 @@ class PetDetail extends Component {
           <Separator bordered>
             <Text>{I18n.t('Stats & Chart')}</Text>
           </Separator>
-          <View>
+          <List style={{ backgroundColor: 'white' }}>
             <ListItem>
               <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.rest.data.length}, ${firstText}${baselineNum}${avgText}:${stats.rest.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.rest.tailAvg}` : ''}</Text>
             </ListItem>
-            <ListItem>
+            <ListItem last>
               <Text style={{ color: 'blue' }}>{stats ? `${I18n.t('Sleep CNT')}:${stats.sleep.data.length}, ${firstText}${baselineNum}${avgText}:${stats.sleep.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.sleep.tailAvg}` : ''}</Text>
             </ListItem>
-            {stats ? <RecordChart stats={stats} /> : null}
-          </View>
+          </List>
+          {stats ? <RecordChart stats={stats} /> : null}
           <Separator bordered>
             <Text>{I18n.t('Records (1: mode 2: # breaths per minute)')}</Text>
           </Separator>
-          <View>
+          <View style={{ backgroundColor: 'white' }}>
             <FlatList
               keyExtractor={this.keyExtractor}
               data={recordTimeList}

@@ -155,9 +155,11 @@ class EditPet extends Component {
         </Button>
 
         {(pet && pet.petID) ? (
-          <View>
+          <View
+            style={{ margin: 15 }}
+          >
             <Button
-              style={{ margin: 15, marginTop: 100 }}
+              style={{ marginTop: 50 }}
               onPress={this.onDelete}
             >
               <Text>{I18n.t('Remove self from Owners')}</Text>

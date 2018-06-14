@@ -12,6 +12,7 @@ import {
   Label,
   List,
   Form,
+  Left,
 } from 'native-base';
 
 import {
@@ -47,9 +48,7 @@ class Measure extends React.Component {
     super(props);
 
     this.state = {
-      sleepRadio: true,
-    };
-    this.state = {
+      restRadio: true,
       ...initialState,
     };
 
@@ -62,11 +61,11 @@ class Measure extends React.Component {
     });
   }
 
-  toggleRadio() {
-    this.setState({
-      sleepRadio: !this.state.sleepRadio,
-    });
-  }
+  // toggleRadio() {
+  //   this.setState({
+  //     sleepRadio: !this.state.sleepRadio,
+  //   });
+  // }
 
   inputNumberOfBreach = (text) => {
     if (text) {
@@ -99,7 +98,7 @@ class Measure extends React.Component {
     }
 
     let mode = Constant.MODE_REST;
-    if (this.state.sleepRadio) {
+    if (!this.state.restRadio) {
       mode = Constant.MODE_SLEEP;
     }
 
@@ -161,13 +160,18 @@ class Measure extends React.Component {
 
   render() {
     let inputUI = null;
+    console.log('radio:', this.state);
 
     if (this.state.buttonStatus !== BUTTON_STATUS_RUNNING) {
       // show input text
       const labelStr = `${I18n.t('Input record time is optoinal and by default it will use currentime')}:${this.endTime}`;
       inputUI = (
-        <View style={{ marginTop: 10 }}>
-          <Text>{labelStr}</Text>
+        <View>
+          <Text
+            style={{ margin: 15 }}
+          >
+            {labelStr}
+          </Text>
           <Form>
             <Item inlineLabel>
               <Label>{`${I18n.t('time')}:`}</Label>
@@ -178,16 +182,18 @@ class Measure extends React.Component {
               <Input keyboardType="numeric" onChangeText={this.inputNumberOfBreach} />
             </Item>
           </Form>
-          <ListItem>
-            <Button onPress={this.onCancel}>
-              <Text>{I18n.t('Cancel')}</Text>
-            </Button>
-            <Right>
-              <Button onPress={this.onSave}>
-                <Text>{I18n.t('Save')}</Text>
+          <List>
+            <ListItem last>
+              <Button onPress={this.onCancel}>
+                <Text>{I18n.t('Cancel')}</Text>
               </Button>
-            </Right>
-          </ListItem>
+              <Right>
+                <Button onPress={this.onSave}>
+                  <Text>{I18n.t('Save')}</Text>
+                </Button>
+              </Right>
+            </ListItem>
+          </List>
         </View>);
     }
 
@@ -197,28 +203,48 @@ class Measure extends React.Component {
           <List
             style={{ backgroundColor: 'white' }}
           >
-            <ListItem onPress={() => this.toggleRadio()}>
-              <Text>{I18n.t('rest mode')}</Text>
+            <ListItem
+              onPress={() => {
+                this.setState({
+                  restRadio: true,
+                });
+              }}
+            >
+              <Left>
+                <Text>{I18n.t('rest mode')}</Text>
+              </Left>
+
               <Right>
-                <Radio selected={!this.state.sleepRadio} />
+                <Radio selected={this.state.restRadio} />
               </Right>
             </ListItem>
-            <ListItem onPress={() => this.toggleRadio()}>
-              <Text>{I18n.t('sleep mode')}</Text>
+            <ListItem
+              onPress={() => {
+                this.setState({
+                  restRadio: false,
+                });
+              }}
+            >
+              <Left>
+                <Text>{I18n.t('sleep mode')}</Text>
+              </Left>
+
               <Right>
-                <Radio selected={this.state.sleepRadio} />
+                <Radio selected={!this.state.restRadio} />
               </Right>
             </ListItem>
           </List>
           <View
-            style={{ marginTop: 10 }}
+            style={{ margin: 15 }}
           >
             <Text>
               {I18n.t('Directly input measured # breaths per minute or click the assisting countdown timer which will trigger a vibration after 1 minute to help your measurement accurate')}
             </Text>
           </View>
           <View style={{
-            flex: 1, flexDirection: 'row',
+            margin: 15,
+            flex: 1,
+            flexDirection: 'row',
           }}
           >
             <Button onPress={this.startCalibration}>
