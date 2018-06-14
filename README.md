@@ -1,10 +1,14 @@
-# Kiteretsu (formerly maolife)
+# maolife
 
-**It has only been tested on Mac. However Windows and Linux should work**
+**It has only been developed on Mac. However Windows and Linux should work**
 
 **Features, Possible feature backlog, Screenshots**
 
 See the wiki, https://github.com/grimmer0125/Kiteretsu/wiki
+
+Android store beta link: https://play.google.com/store/apps/details?id=com.maolife
+
+iOS TestFlight beta link: contact me. 
 
 ## UI components
 
