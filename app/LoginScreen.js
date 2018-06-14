@@ -6,7 +6,7 @@ import { Container, Content, Text, Button, Form, Item, Input, Label } from 'nati
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import actions from './actions/userAction';
+import actions from './actions/userActions';
 import CommonStyles from './styles/common';
 import I18n from './i18n/i18n';
 
@@ -33,7 +33,7 @@ class LoginScreen extends Component {
   }
 
   loginFBPress() {
-    this.props.actions.handleFBLogin();
+    this.props.actions.loginFacebook();
   }
 
   loginOrSignUpEmail() {

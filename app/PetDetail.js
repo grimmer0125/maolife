@@ -15,7 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import actions from './actions/userAction';
+import actions from './actions/petActions';
 import Constant from './Constant';
 import RecordChart from './RecordChart';
 import ShareDialog from './ShareDialog';
@@ -199,9 +199,7 @@ class PetDetail extends Component {
 
   naviToEditPet(pet) {
     // Fetch each owner's displayName
-    if (pet.owners) {
-      this.props.actions.fetchOwnerData(pet.owners);
-    }
+    this.props.actions.fetchOwnerData(pet);
 
     this.props.navigation.navigate('EditPet', {
       title: '',

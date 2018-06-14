@@ -1,6 +1,7 @@
 import update from 'immutability-helper';
 
-import { ActionTypes } from '../actions/userAction';
+import { ActionTypes } from '../actions/userActions';
+import { ActionTypes as PetActionTypes } from '../actions/petActions';
 
 const initialState = {
   email: '',
@@ -29,7 +30,7 @@ export function authenticatingWithFirebase(state = true, action = {}) {
 
 export function users(state = {}, action = {}) {
   switch (action.type) {
-    case ActionTypes.OWNER_DATA: {
+    case PetActionTypes.OWNER_DATA: {
       const newState = update(state, {
         [action.payload.userID]: { $set: action.payload.userInfo },
       });

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Button, Text } from 'native-base';
 import { connect } from 'react-redux';
-import { deleteBreathRecord } from './actions/petAction';
-import CommonStyles from './styles/common';
+import { bindActionCreators } from 'redux';
+
+import petActions from './actions/petActions';
 import I18n from './i18n/i18n';
 
 class EditRecord extends Component {
@@ -14,7 +15,7 @@ class EditRecord extends Component {
  onDelete = () => {
    const { petID, recordTime } = this.props.navigation.state.params;
 
-   this.props.dispatch(deleteBreathRecord(petID, recordTime));
+   this.props.petActions.deleteBreathRecord(petID, recordTime);
 
    this.props.navigation.goBack(null); // .pop(1);
  }
@@ -42,4 +43,9 @@ class EditRecord extends Component {
  }
 }
 
-export default connect()(EditRecord);
+
+function mapDispatchToProps(dispatch) {
+  return { petActions: bindActionCreators(petActions, dispatch) };
+}
+
+export default connect(null, mapDispatchToProps)(EditRecord);

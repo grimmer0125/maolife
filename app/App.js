@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import { Container, Text } from 'native-base';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import CommonStyles from './styles/common';
-import { connectDBtoCheckUser } from './actions/userAction';
+
+import actions from './actions/userActions';
 import LoginScreen from './LoginScreen';
 import MainScreen from './MainScreen';
 import RegistrationScreen from './RegistrationScreen';
@@ -20,7 +22,7 @@ class App extends Component {
     // https://discuss.reactjs.org/t/constructor-vs-componentwillmount-vs-componentdidmount/4287
     // Actually, the rule is: If your initialization depends upon the DOM, use componentDidMount,
     // otherwise use constructor.
-    this.props.dispatch(connectDBtoCheckUser());
+    this.props.actions.connectDBtoCheckUser();
   }
 
   render() {
@@ -60,4 +62,11 @@ const mapStateToProps = state => ({
   authenticatingWithFirebase: state.authenticatingWithFirebase,
 });
 
-export default connect(mapStateToProps)(App);
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

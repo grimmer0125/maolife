@@ -1,12 +1,13 @@
 import update from 'immutability-helper';
 
-import { ActionTypes } from '../actions/userAction';
+import { ActionTypes } from '../actions/petActions';
+import { ActionTypes as UserActionTypes } from '../actions/userActions';
 
 export function pets(state = {}, action) {
   switch (action.type) {
-    case ActionTypes.LOGOUT:
+    case UserActionTypes.LOGOUT:
       return {};
-    case ActionTypes.UPDATE_PET:
+    case ActionTypes.REMOVE_PET:
       if (action.payload.petID) {
         const newState = update(state, {
           $unset: [action.payload.petID],

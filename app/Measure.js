@@ -22,8 +22,9 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { newBreathRecord } from './actions/petAction';
+import petActions from './actions/petActions';
 import Constant from './Constant';
 import I18n from './i18n/i18n';
 
@@ -104,7 +105,7 @@ class Measure extends React.Component {
 
     const { petID } = this.props.navigation.state.params;
 
-    this.props.dispatch(newBreathRecord(petID, this.state.numberOfBreath, mode, time));
+    this.props.petActions.newBreathRecord(petID, this.state.numberOfBreath, mode, time);
 
     this.resetSeconds();
 
@@ -260,4 +261,8 @@ class Measure extends React.Component {
   }
 }
 
-export default connect()(Measure);
+function mapDispatchToProps(dispatch) {
+  return { petActions: bindActionCreators(petActions, dispatch) };
+}
+
+export default connect(null, mapDispatchToProps)(Measure);

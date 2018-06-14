@@ -3,7 +3,8 @@ import { Item, Input, Text, Button, Container, Header, Content, Footer } from 'n
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { registerKID, skipRegistration } from './actions/userAction';
+import { bindActionCreators } from 'redux';
+import actions from './actions/userActions';
 import CommonStyles from './styles/common';
 import I18n from './i18n/i18n';
 
@@ -14,11 +15,11 @@ class Registration extends Component {
     this.state = { registerText: '' };
   }
   registerButtonPress = () => {
-    this.props.dispatch(registerKID(this.state.registerText));
+    this.props.actions.registerKID(this.state.registerText);
   }
 
   skipButtonPress = () => {
-    this.props.dispatch(skipRegistration());
+    this.props.actions.skipRegistration();
   }
 
   render() {
@@ -83,4 +84,8 @@ const mapStateToProps = state => ({
   registerStatus: state.registerStatus,
 });
 
-export default connect(mapStateToProps)(Registration);
+function mapDispatchToProps(dispatch) {
+  return { actions: bindActionCreators(actions, dispatch) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Form, Item, Input, Button, Text, Label } from 'native-base';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { addNewPet, removeSelfFromPetOwners } from './actions/userAction';
-import { updatePetInfo } from './actions/petAction';
+import petActions from './actions/petActions';
 import I18n from './i18n/i18n';
 
 class EditPet extends Component {
@@ -50,7 +50,7 @@ class EditPet extends Component {
         return;
       }
 
-      this.props.dispatch(addNewPet(this.getName(), this.state.age));
+      this.props.petActions.addNewPet(this.getName(), this.state.age);
     } else {
       // edit pet
       if (this.getName() === '') {
@@ -72,7 +72,7 @@ class EditPet extends Component {
         info.age = this.state.age;
       }
 
-      this.props.dispatch(updatePetInfo(pet.petID, info));
+      this.props.petActions.updatePetInfo(pet.petID, info);
     }
 
     this.props.navigation.goBack(null);
@@ -82,7 +82,7 @@ class EditPet extends Component {
     const { pet } = this.props.navigation.state.params;
 
     if (pet && pet.petID) {
-      this.props.dispatch(removeSelfFromPetOwners(pet.petID));
+      this.props.petActions.removeSelfFromPetOwners(pet.petID);
     }
 
     this.props.navigation.pop(2);
@@ -177,4 +177,8 @@ const mapStateToProps = state => ({
   currentUser: state.currentUser,
 });
 
-export default connect(mapStateToProps)(EditPet);
+function mapDispatchToProps(dispatch) {
+  return { petActions: bindActionCreators(petActions, dispatch) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditPet);
