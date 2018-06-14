@@ -8,7 +8,7 @@ import {
 
 function RecordChart(props) {
   const {
-    dataSleep, dataRest, restAvg, sleepAvg,
+    rest, sleep,
   } = props.stats;
 
   // const VictoryZoomVoronoiContainer = createContainer('zoom', 'voronoi');
@@ -36,26 +36,26 @@ function RecordChart(props) {
         gutter={20}
         style={{ title: { fontSize: 10 } }}
         data={[
-          { name: restAvg.toFixed(1), symbol: { fill: 'tomato', type: 'star' } },
-          { name: sleepAvg.toFixed(1), symbol: { fill: 'blue' } },
+          { name: rest.avg.toFixed(1), symbol: { fill: 'tomato', type: 'star' } },
+          { name: sleep.avg.toFixed(1), symbol: { fill: 'blue' } },
         ]}
       />
-      {(dataSleep && dataSleep.length >= 2) ? (
+      {(sleep.data && sleep.data.length >= 2) ? (
         <VictoryLine
           labelComponent={<VictoryTooltip />}
           style={{
           data: { stroke: 'blue' },
         }}
-          data={dataSleep}
+          data={sleep.data}
         />) : null}
-      {(dataRest && dataRest.length >= 2) ? (
+      {(rest.data && rest.data.length >= 2) ? (
         <VictoryLine
           labelComponent={<VictoryTooltip />}
           style={{
           data: { stroke: 'tomato' },
           parent: { border: '20px solid #ccc' },
         }}
-          data={dataRest}
+          data={rest.data}
         />) : null}
     </VictoryChart>
   );

@@ -54,6 +54,7 @@ class PetDetail extends Component {
         navigation={navigation}
       />
     ),
+    // headerBackTitle: '',
     headerRight: (
       <SystemButton
         onPress={() => navigation.navigate('Measure', {
@@ -110,7 +111,8 @@ class PetDetail extends Component {
     );
   }
 
-  calRegion(count, modeList, numOfBaseline) {
+  calRegion(modeList, numOfBaseline) {
+    const count = modeList.length;
     let headAvg = 0;
     let tailAvg = 0;
     if (count > numOfBaseline) {
@@ -132,59 +134,51 @@ class PetDetail extends Component {
 
   // TODO: use info = {sleep:{}, rest:{}} to avoid similar naming
   calculateStats(breathRecord, recordTimeList) {
-    let sleepTotal = 0;
-    let countSleep = 0;
-    let restTotal = 0;
-    let countRest = 0;
-
-    const sleepList = [];
-    const restList = [];
+    const stats = {
+      rest: {
+        data: [],
+        total: 0,
+        avg: 0,
+        headAvg: 0,
+        tailAvg: 0,
+      },
+      sleep: {
+        data: [],
+        total: 0,
+        avg: 0,
+        headAvg: 0,
+        tailAvg: 0,
+      },
+      mixAvg: 0,
+    };
 
     if (breathRecord) {
       for (const key of recordTimeList) {
         const record = breathRecord[key];
+        let target = null;
         if (record.mode === Constant.MODE_REST) {
-          restList.push({
-            x: new Date(key * 1000),
-            y: record.breathRate,
-          });
-          countRest += 1;
-          restTotal += record.breathRate;
+          target = stats.rest;
         } else if (record.mode === Constant.MODE_SLEEP) {
-          sleepList.push({
-            x: new Date(key * 1000),
-            y: record.breathRate,
-          });
-          countSleep += 1;
-          sleepTotal += record.breathRate;
+          target = stats.sleep;
         }
+
+        target.data.push({
+          x: new Date(key * 1000),
+          y: record.breathRate,
+        });
+        target.total += record.breathRate;
       }
     }
 
-    const numTotal = countRest + countSleep;
-    const info = {
-      dataSleep: sleepList,
-      dataRest: restList,
-      countRest,
-      countSleep,
-      sleepAvg: countSleep ? sleepTotal / countSleep : 0,
-      restAvg: countRest ? restTotal / countRest : 0,
-      mixAvg: numTotal ? (sleepTotal + restTotal) / numTotal : 0,
-      sleepHeadAvg: 0,
-      sleepTailAvg: 0,
-      restHeadAvg: 0,
-      restTailAvg: 0,
-    };
 
-    const { headAvg, tailAvg } = this.calRegion(countRest, restList, baselineNum);
-    info.restHeadAvg = headAvg;
-    info.restTailAvg = tailAvg;
+    const countAll = stats.rest.data.length + stats.sleep.data.length;
+    stats.rest.avg = stats.rest.data.length ? (stats.rest.total / stats.rest.data.length) : 0;
+    stats.sleep.avg = stats.sleep.data.length ? (stats.sleep.total / stats.sleep.data.length) : 0;
+    stats.mixAvg = countAll ? (stats.rest.total + stats.sleep.total) / countAll : 0;
 
-    const avgSleep = this.calRegion(countSleep, sleepList, baselineNum);
-    info.sleepHeadAvg = avgSleep.headAvg;
-    info.sleepTailAvg = avgSleep.tailAvg;
-
-    return info;
+    stats.rest = { ...stats.rest, ...this.calRegion(stats.rest.data, baselineNum) };
+    stats.sleep = { ...stats.sleep, ...this.calRegion(stats.sleep.data, baselineNum) };
+    return stats;
   }
 
   naviToEditPet(pet) {
@@ -249,10 +243,10 @@ class PetDetail extends Component {
           </Separator>
           <View>
             <ListItem>
-              <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.countRest}, ${firstText}${baselineNum}${avgText}:${stats.restHeadAvg}, ${lastText}${baselineNum}${avgText}:${stats.restTailAvg}` : ''}</Text>
+              <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.rest.data.length}, ${firstText}${baselineNum}${avgText}:${stats.rest.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.rest.tailAvg}` : ''}</Text>
             </ListItem>
             <ListItem>
-              <Text style={{ color: 'blue' }}>{stats ? `${I18n.t('Sleep CNT')}:${stats.countSleep}, ${firstText}${baselineNum}${avgText}:${stats.sleepHeadAvg}, ${lastText}${baselineNum}${avgText}:${stats.sleepTailAvg}` : ''}</Text>
+              <Text style={{ color: 'blue' }}>{stats ? `${I18n.t('Sleep CNT')}:${stats.sleep.data.length}, ${firstText}${baselineNum}${avgText}:${stats.sleep.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.sleep.tailAvg}` : ''}</Text>
             </ListItem>
             {stats ? <RecordChart stats={stats} /> : null}
           </View>
