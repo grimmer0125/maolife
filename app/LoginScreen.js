@@ -104,7 +104,7 @@ class LoginScreen extends Component {
             <View
               style={{
               margin: 10,
-              width: '66%',
+              width: '60%',
               flexDirection: 'row',
             }}
             >
@@ -157,7 +157,7 @@ class LoginScreen extends Component {
                 </Button>
               </View>
             </View>
-            <Form style={{ width: 300 }}>
+            <Form style={{ width: '78%' }}>
               <Item>
                 <Label>{I18n.t('Email')}</Label>
                 <Input
@@ -175,7 +175,7 @@ class LoginScreen extends Component {
                 />
               </Item>
             </Form>
-            <View>
+            <View style={{ marginTop: 10 }}>
               <Button
                 onPress={() => {
                 this.loginOrSignUpEmail();
@@ -187,7 +187,7 @@ class LoginScreen extends Component {
               </Button>
             </View>
             {loginMode ? (
-              <View>
+              <View style={{ marginTop: 10 }}>
                 <Button
                   small
                   transparent
