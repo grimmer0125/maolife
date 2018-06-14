@@ -89,12 +89,14 @@ class PetDetail extends Component {
     if (moment(time * 1000).isSame(moment(), 'day')) {
       prefixToday = ', Today';
     }
-    let modeText = 'rest';
+    let mode = 'rest';
     if (pet.breathRecord[time].mode === Constant.MODE_SLEEP) {
-      modeText = 'sleep';
+      mode = 'sleep';
     }
-    const text = `${moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday
-    } \n${I18n.t(modeText)}                           ${pet.breathRecord[time].breathRate}`;
+    const timeText = `${moment(time * 1000).format('YYYY-MM-DD HH:mm') + prefixToday}`;
+    // console.log(`time:${timeText}`);
+    const modeText = `${I18n.t(mode)}`;
+    const countText = `${pet.breathRecord[time].breathRate}`;
 
     return (
       <ListItem
@@ -105,8 +107,22 @@ class PetDetail extends Component {
         });
       }}
       >
-        <Text>{text}
-        </Text>
+        <View style={{ alignItems: 'flex-start' }}>
+          <View>
+            <Text>
+              {timeText}
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ width: 210 }}>
+              {modeText}
+            </Text>
+            <Text>
+              {countText}
+            </Text>
+          </View>
+        </View>
+
       </ListItem>
     );
   }
