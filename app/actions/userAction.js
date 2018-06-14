@@ -413,21 +413,8 @@ function handleFBLogin() {
 
                 // Try FB auth by this app, not users
                 return firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(token));
-              }).then((result) => {
-                console.log('login FB ok. Firebase result:', result);
-
-                if (result.displayName) {
-                  console.log(`try saving displayName ${result.displayName}`);
-
-                  const dataPath = `/users/${result.uid}`;
-
-                  // https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
-                  firebase.database().ref(dataPath).update({
-                    displayName: result.displayName,
-                  }).then(() => {
-                    console.log('save displayName ok');
-                  });
-                }
+              }).then((user) => {
+                console.log('login FB ok. Firebase result:', user);
               }).catch((error) => {
                 console.log("use fb's token to auth firebase error:", error);
                 dispatch(getFirebaseSignInFail(error));
@@ -529,6 +516,31 @@ export function connectDBtoCheckUser() {
           dispatch(removePet(id));
         }
 
+        if (user.displayName && (!userValue || !userValue.displayName)) {
+          console.log(`try saving displayName ${user.displayName}`);
+
+          const dataPath = `/users/${user.uid}`;
+
+          // https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
+          firebase.database().ref(dataPath).update({
+            displayName: user.displayName,
+          }).then(() => {
+            console.log('save displayName ok');
+          });
+        }
+
+        if (user.email && (!userValue || !userValue.email)) {
+          console.log('write email:', user.email);
+          const dataPath = `/users/${user.uid}`;// `/users/${firebase.auth().currentUser.uid}`;
+          firebase.database().ref(dataPath).update({
+            email: user.email,
+          }).then(() => {
+            console.log('save email ok !!!:', user.email);
+          });
+        } else {
+          console.log('no write email:', user.email);
+        }
+
         // after get the data, login -> MainScreen
         dispatch(getUserData(true, userValue));
       });
@@ -556,13 +568,6 @@ function signinEmailAccount(email, password) {
               ],
               { cancelable: true },
             );
-          } else {
-            const dataPath = `/users/${user.uid}`;// `/users/${firebase.auth().currentUser.uid}`;
-            firebase.database().ref(dataPath).update({
-              email: user.email,
-            }).then(() => {
-              console.log('save email ok !!!:', user.email);
-            });
           }
         })
         .catch((error) => {
