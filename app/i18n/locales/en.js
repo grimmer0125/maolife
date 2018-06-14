@@ -53,4 +53,5 @@ export default {
   'Password reset email sent': 'Password reset email sent',
   'Verification email sent': 'Verification email sent',
   OR: 'OR',
+  'Facebook Login Fail': 'Facebook Login Fail',
 };

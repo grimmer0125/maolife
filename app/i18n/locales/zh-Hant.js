@@ -53,4 +53,5 @@ export default {
   'Password reset email sent': '重設密碼郵件已寄',
   'Verification email sent': '帳號驗證信已寄',
   OR: '或',
+  'Facebook Login Fail': '臉書登入失敗',
 };

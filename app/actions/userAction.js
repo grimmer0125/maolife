@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
 import { Alert } from 'react-native';
-// import validator from 'validator';
 
 import * as firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
@@ -348,6 +347,41 @@ export function handleFBLogout(error) {
   };
 }
 
+// NOTE: seems this is hard to happen in this step, not seen yet
+function getFacebookSignInFail() {
+  return (dispatch) => {
+    dispatch(LoginFailAction());
+
+    Alert.alert(
+      I18n.t('Facebook Login Fail'),
+      null,
+      [
+        { text: 'Ok' },
+      ],
+      { cancelable: true },
+    );
+  };
+}
+
+function getFirebaseSignInFail(error) {
+  return (dispatch) => {
+    dispatch(LoginFailAction());
+
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+
+    Alert.alert(
+      errorCode,
+      errorMessage,
+      [
+        { text: 'Ok' },
+      ],
+      { cancelable: true },
+    );
+  };
+}
+
 function handleFBLogin() {
   return (dispatch) => {
     LoginManager.logInWithReadPermissions(['public_profile'])
@@ -395,14 +429,14 @@ function handleFBLogin() {
                   });
                 }
               }).catch((error) => {
-              // TODO handle firebase login fail or
-              // getCurrentAccessToken fail
-                console.log("use fb's token to login firebase error:", error);
+                console.log("use fb's token to auth firebase error:", error);
+                dispatch(getFirebaseSignInFail(error));
               });
           }
         },
         (error) => {
-          console.log(`login has error: ${error}`);
+          console.log(`login fb error: ${error}`);
+          dispatch(getFacebookSignInFail());
         },
       );
   };
@@ -506,25 +540,11 @@ function signinEmailAccount(email, password) {
 
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
-          console.log('sign in ok, get the user:', user);
+          console.log('sign in email ok, get the user:', user);
         })
         .catch((error) => {
-          dispatch(LoginFailAction());
-
-          // Handle Errors here.
-          console.log('sign in fail');
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // alert(errorMessage);
-          //
-          Alert.alert(
-            errorCode,
-            errorMessage,
-            [
-              { text: 'Ok' },
-            ],
-            { cancelable: true },
-          );
+          console.log('sign in email fail');
+          dispatch(getFirebaseSignInFail(error));
         });
     } else {
       // alert('empty email/pwd');
@@ -561,19 +581,10 @@ function resetEmailAccountPassword(email) {
 
 function signUpEmailAccount(email, password) {
   return (dispatch, getState) => {
-    // signUpEmailAccount() {
     if (email && password) {
-      // validator.isEmail('foo@bar.com');
-
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
           console.log('signup & auto login get the user:', user);
-
-          // e.g.
-          // displayName:null
-          // email:"grimmer0125@gmail.com"
-          // emailVerified:false
-          //
 
           const dataPath = `/users/${user.uid}`;// `/users/${firebase.auth().currentUser.uid}`;
           firebase.database().ref(dataPath).update({
