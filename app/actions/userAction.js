@@ -327,13 +327,13 @@ export function registerKID(registerID) {
   };
 }
 
-export function StartSignIn() {
+export function startSignIn() {
   return {
     type: START_SIGNIN,
   };
 }
 
-export function handleFBLogout(error) {
+export function logoutFirebase(error) {
   return (dispatch, getState) => {
     // NOTE:
     // https://stackoverflow.com/questions/38043998/is-there-any-way-to-off-all-listeners-when-a-user-is-de-authorized#comment63528231_38043998
@@ -397,10 +397,10 @@ function handleFBLogin() {
 
             // FB login ok by users
             // will trigger a loading.... screen
-            dispatch(StartSignIn());
+            dispatch(startSignIn());
 
             // NOTE:
-            // dispatch(StartSignIn('')) here ->
+            // dispatch(startSignIn('')) here ->
             // fb login button-ui change (logined status)
             // -> signIn callback ->auth callback
             // we have used fb LoginManager instead of fb login button-ui
@@ -462,73 +462,76 @@ export function connectDBtoCheckUser() {
     firebase.auth().onAuthStateChanged((user) => {
       console.log('auth got user change in DB:', user);
 
-      if (user) {
-        // providerId :"facebook.com", emailVerified:falsue
-        const emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId !== 'password' || user.emailVerified;
-        if (emailVerified) {
-          console.log('user email is not needed or verified');
-        } else {
-          console.log('user email is not verified:', user);
-        }
+      const authComplete = false;
 
-        const dataPath = `/users/${user.uid}`;
-
-        firebase.database().ref(dataPath).on('value', (snap) => {
-          const userValue = snap.val();
-
-          console.log('user value changed from firebase:', userValue);
-
-          let petIDList = [];
-          let petIDList_copy = [];
-          let oldPetIDList_copy = [];
-
-          if (userValue && userValue.petIDList) {
-            petIDList = userValue.petIDList.slice(0);
-            petIDList_copy = userValue.petIDList.slice(0);
-          }
-
-          const state = getState();
-          if (state.currentUser.petIDList) {
-            const oldPetIDList = state.currentUser.petIDList;
-
-            for (const id of oldPetIDList) {
-              const index = petIDList.indexOf(id);
-              if (index !== -1) {
-                petIDList.splice(index, 1);
-              }
-            }
-
-            oldPetIDList_copy = oldPetIDList.slice(0);
-            for (const id of petIDList_copy) {
-              const index = oldPetIDList_copy.indexOf(id);
-              if (index !== -1) {
-                oldPetIDList_copy.splice(index, 1);
-              }
-            }
-          }
-
-          // case: add pet to petIDList
-          for (const id of petIDList) {
-            dispatch(liveQueryPetInfo(id));
-          }
-
-          // case: remove pet from petIDList
-          for (const id of oldPetIDList_copy) {
-            console.log('stopquery and remove pet:', id);
-            dispatch(stopLiveQueryPetInfo(id));
-            dispatch(removePet(id));
-          }
-
-          // after get the data, login -> MainScreen
-          dispatch(getUserData(true, userValue));
-        });
-      } else {
-        console.log('auth becomes null');
-
+      if (!user) {
+        console.log('auth user is null, fail');
         dispatch(getUserData(false, null));
 
-        // TODO: empty redux's cats to have better code logic
+        return;
       }
+      // providerId :"facebook.com", emailVerified:falsue
+      const emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId !== 'password' || user.emailVerified;
+      if (!emailVerified) {
+        console.log('user is not null but email is not verified');
+        dispatch(getUserData(false, null));
+
+        // will trigger one time onAuthStateChanged
+        dispatch(logoutFirebase());
+        return;
+      }
+
+      const dataPath = `/users/${user.uid}`;
+
+      firebase.database().ref(dataPath).on('value', (snap) => {
+        const userValue = snap.val();
+
+        console.log('user value changed from firebase:', userValue);
+
+        let petIDList = [];
+        let petIDList_copy = [];
+        let oldPetIDList_copy = [];
+
+        if (userValue && userValue.petIDList) {
+          petIDList = userValue.petIDList.slice(0);
+          petIDList_copy = userValue.petIDList.slice(0);
+        }
+
+        const state = getState();
+        if (state.currentUser.petIDList) {
+          const oldPetIDList = state.currentUser.petIDList;
+
+          for (const id of oldPetIDList) {
+            const index = petIDList.indexOf(id);
+            if (index !== -1) {
+              petIDList.splice(index, 1);
+            }
+          }
+
+          oldPetIDList_copy = oldPetIDList.slice(0);
+          for (const id of petIDList_copy) {
+            const index = oldPetIDList_copy.indexOf(id);
+            if (index !== -1) {
+              oldPetIDList_copy.splice(index, 1);
+            }
+          }
+        }
+
+        // case: add pet to petIDList
+        for (const id of petIDList) {
+          dispatch(liveQueryPetInfo(id));
+        }
+
+        // case: remove pet from petIDList
+        for (const id of oldPetIDList_copy) {
+          console.log('stopquery and remove pet:', id);
+          dispatch(stopLiveQueryPetInfo(id));
+          dispatch(removePet(id));
+        }
+
+        // after get the data, login -> MainScreen
+        dispatch(getUserData(true, userValue));
+      });
     });
   };
 }
@@ -536,11 +539,31 @@ export function connectDBtoCheckUser() {
 function signinEmailAccount(email, password) {
   return (dispatch) => {
     if (email && password) {
-      dispatch(StartSignIn(''));
+      dispatch(startSignIn(''));
 
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
           console.log('sign in email ok, get the user:', user);
+
+          if (!user || !user.emailVerified) {
+            console.log('popup a alert about no verification');
+
+            Alert.alert(
+              I18n.t('Email is not verified'),
+              null,
+              [
+                { text: 'Ok' },
+              ],
+              { cancelable: true },
+            );
+          } else {
+            const dataPath = `/users/${user.uid}`;// `/users/${firebase.auth().currentUser.uid}`;
+            firebase.database().ref(dataPath).update({
+              email: user.email,
+            }).then(() => {
+              console.log('save email ok !!!:', user.email);
+            });
+          }
         })
         .catch((error) => {
           console.log('sign in email fail');
@@ -585,13 +608,6 @@ function signUpEmailAccount(email, password) {
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
           console.log('signup & auto login get the user:', user);
-
-          const dataPath = `/users/${user.uid}`;// `/users/${firebase.auth().currentUser.uid}`;
-          firebase.database().ref(dataPath).update({
-            email: user.email,
-          }).then(() => {
-            console.log('save email ok !!!:', user.email);
-          });
 
           // TODO send Email Verification
           // https://firebase.google.com/docs/auth/web/manage-users

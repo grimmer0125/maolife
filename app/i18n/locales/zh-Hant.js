@@ -54,4 +54,5 @@ export default {
   'Verification email sent': '帳號驗證信已寄',
   OR: '或',
   'Facebook Login Fail': '臉書登入失敗',
+  'Email is not verified': '電子郵件地址尚未驗證',
 };

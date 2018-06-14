@@ -8,7 +8,6 @@ const initialState = {
   isLoggedInWithData: false,
 };
 
-// may move to user
 export function authenticatingWithFirebase(state = true, action = {}) {
   switch (action.type) {
     case ActionTypes.USER_DATA:

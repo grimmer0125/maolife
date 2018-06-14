@@ -7,7 +7,7 @@ import { createStackNavigator } from 'react-navigation';
 // import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { handleFBLogout } from './actions/userAction';
+import { logoutFirebase } from './actions/userAction';
 import Registration from './Registration';
 import I18n from './i18n/i18n';
 import { exportRecords } from './actions/petAction';
@@ -53,8 +53,8 @@ function TutorialLinks() {
 }
 
 class SettingsScreen extends Component {
-  // handleFBLogoutResult() {
-  //   this.props.dispatch(handleFBLogout());
+  // logoutFirebaseResult() {
+  //   this.props.dispatch(logoutFirebase());
   // }
 
   handleEmail = () => {
@@ -113,7 +113,7 @@ class SettingsScreen extends Component {
             onPress={() => {
               LoginManager.logOut();
 
-              this.props.dispatch(handleFBLogout());
+              this.props.dispatch(logoutFirebase());
             }}
           >
             <Text>

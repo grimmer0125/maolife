@@ -40,12 +40,6 @@ class ListMain extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      dataSource: [],
-    };
-
-    console.log('list page constructor');
-
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 

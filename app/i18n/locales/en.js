@@ -54,4 +54,5 @@ export default {
   'Verification email sent': 'Verification email sent',
   OR: 'OR',
   'Facebook Login Fail': 'Facebook Login Fail',
+  'Email is not verified': 'Email is not verified',
 };

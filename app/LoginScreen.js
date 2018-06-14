@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, TextInput } from 'react-native';
+import { View } from 'react-native';
 
-import { Container, Text, Button, Form, Item, Input, Label } from 'native-base';
+import { Container, Content, Text, Button, Form, Item, Input, Label } from 'native-base';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -71,127 +71,136 @@ class LoginScreen extends Component {
     const { password, loginMode } = this.state;
 
     return (
-      <Container style={{
-          flex: 1,
+      <Container
+        style={{
           alignItems: 'center',
           backgroundColor: '#F5FCFF',
          }}
       >
-        <View style={{ marginTop: 70 }}>
-          <Text style={CommonStyles.instruction}>
-            {I18n.t('APP_INTRODUCTION')}
-          </Text>
-        </View>
-        <View>
-          <Button
-            warning
-            onPress={() => {
-            this.loginFBPress();
-          }}
+        <Content>
+          <View
+            style={{
+              alignItems: 'center',
+             }}
           >
-            <Text>
-              {I18n.t('Log in to Facebook')}
-            </Text>
-          </Button>
-        </View>
+            <View style={{ marginTop: 50 }}>
+              <Text style={CommonStyles.instruction}>
+                {I18n.t('APP_INTRODUCTION')}
+              </Text>
+            </View>
+            <View>
+              <Button
+                warning
+                onPress={() => {
+                this.loginFBPress();
+              }}
+              >
+                <Text>
+                  {I18n.t('Log in to Facebook')}
+                </Text>
+              </Button>
+            </View>
 
-        <View
-          style={{
-            margin: 10,
-            width: '66%',
-            flexDirection: 'row',
-          }}
-        >
-          <View style={{
-            flex: 1,
-            borderBottomColor: 'black',
-            borderBottomWidth: 1,
+            <View
+              style={{
+              margin: 10,
+              width: '66%',
+              flexDirection: 'row',
             }}
-          />
-          <View >
-            <Text>
-              {I18n.t('OR')}
-            </Text>
-          </View>
-          <View style={{
-            flex: 1,
-            borderBottomColor: 'black',
-            borderBottomWidth: 1,
+            >
+              <View style={{
+              flex: 1,
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+              }}
+              />
+              <View >
+                <Text>
+                  {I18n.t('OR')}
+                </Text>
+              </View>
+              <View style={{
+              flex: 1,
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
             }}
-          />
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <View style={{ flexDirection: 'row' }}>
-            <View>
-              <Button
-                bordered={loginMode}
-                transparent={!loginMode}
-                onPress={() => {
-                  this.setState({ loginMode: !loginMode });
-                }}
-              >
-                <Text>
-                  {I18n.t('Sign in')}
-                </Text>
-              </Button>
-            </View>
-            <View>
-              <Button
-                bordered={!loginMode}
-                transparent={loginMode}
-                onPress={() => {
-                  this.setState({ loginMode: !loginMode });
-                }}
-              >
-                <Text>
-                  {I18n.t('Sign up')}
-                </Text>
-              </Button>
+              />
             </View>
           </View>
-          <Form style={{ width: 300 }}>
-            <Item>
-              <Label>{I18n.t('Email')}</Label>
-              <Input
-                autoCapitalize="none"
-                ref={this.emailRef}
-              />
-            </Item>
-            <Item last>
-              <Label>{I18n.t('Password')}</Label>
-              <Input
-                onChangeText={this.handleChangePassword}
-                autoCapitalize="none"
-                secureTextEntry
-                value={password}
-              />
-            </Item>
-          </Form>
-          <View>
-            <Button
-              onPress={() => {
+
+          <View style={{ alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row' }}>
+              <View>
+                <Button
+                  bordered={loginMode}
+                  transparent={!loginMode}
+                  onPress={() => {
+                  this.setState({ loginMode: !loginMode });
+                }}
+                >
+                  <Text>
+                    {I18n.t('Sign in')}
+                  </Text>
+                </Button>
+              </View>
+              <View>
+                <Button
+                  bordered={!loginMode}
+                  transparent={loginMode}
+                  onPress={() => {
+                  this.setState({ loginMode: !loginMode });
+                }}
+                >
+                  <Text>
+                    {I18n.t('Sign up')}
+                  </Text>
+                </Button>
+              </View>
+            </View>
+            <Form style={{ width: 300 }}>
+              <Item>
+                <Label>{I18n.t('Email')}</Label>
+                <Input
+                  autoCapitalize="none"
+                  ref={this.emailRef}
+                />
+              </Item>
+              <Item last>
+                <Label>{I18n.t('Password')}</Label>
+                <Input
+                  onChangeText={this.handleChangePassword}
+                  autoCapitalize="none"
+                  secureTextEntry
+                  value={password}
+                />
+              </Item>
+            </Form>
+            <View>
+              <Button
+                onPress={() => {
                 this.loginOrSignUpEmail();
               }}
-            >
-              <Text>
-                {loginMode ? I18n.t('Sign in') : I18n.t('Sign up')}
-              </Text>
-            </Button>
-          </View>
-          {loginMode ? (
-            <View>
-              <Button
-                small
-                transparent
-                onPress={this.handleResetPassword}
               >
                 <Text>
-                  {I18n.t('Reset password')}
+                  {loginMode ? I18n.t('Sign in') : I18n.t('Sign up')}
                 </Text>
               </Button>
             </View>
+            {loginMode ? (
+              <View>
+                <Button
+                  small
+                  transparent
+                  onPress={this.handleResetPassword}
+                >
+                  <Text>
+                    {I18n.t('Reset password')}
+                  </Text>
+                </Button>
+              </View>
           ) : null}
-        </View>
+          </View>
+        </Content>
       </Container>
     );
   }
