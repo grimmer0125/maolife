@@ -56,12 +56,17 @@ class PetDetail extends Component {
     ),
     // headerBackTitle: '',
     headerRight: (
-      <SystemButton
-        onPress={() => navigation.navigate('Measure', {
-          petID: navigation.state.params.petID,
-        })}
-        title={I18n.t('Measure')}
-      />
+      <View
+        style={{ marginRight: 5 }}
+      >
+        <SystemButton
+          onPress={() => navigation.navigate('Measure', {
+            petID: navigation.state.params.petID,
+          })}
+          title={I18n.t('Measure')}
+        />
+      </View>
+
     ),
   });
 
