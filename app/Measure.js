@@ -159,9 +159,21 @@ class Measure extends React.Component {
     }
   }
 
+  selectRestMode=() => {
+    this.setState({
+      restRadio: true,
+    });
+  }
+
+  selectSleepMode=() => {
+    this.setState({
+      restRadio: false,
+    });
+  }
+
+
   render() {
     let inputUI = null;
-    console.log('radio:', this.state);
 
     if (this.state.buttonStatus !== BUTTON_STATUS_RUNNING) {
       // show input text
@@ -205,33 +217,31 @@ class Measure extends React.Component {
             style={{ backgroundColor: 'white' }}
           >
             <ListItem
-              onPress={() => {
-                this.setState({
-                  restRadio: true,
-                });
-              }}
+              onPress={this.selectRestMode}
             >
               <Left>
                 <Text>{I18n.t('rest mode')}</Text>
               </Left>
 
               <Right>
-                <Radio selected={this.state.restRadio} />
+                <Radio
+                  selected={this.state.restRadio}
+                  onPress={this.selectRestMode}
+                />
               </Right>
             </ListItem>
             <ListItem
-              onPress={() => {
-                this.setState({
-                  restRadio: false,
-                });
-              }}
+              onPress={this.selectSleepMode}
             >
               <Left>
                 <Text>{I18n.t('sleep mode')}</Text>
               </Left>
 
               <Right>
-                <Radio selected={!this.state.restRadio} />
+                <Radio
+                  selected={!this.state.restRadio}
+                  onPress={this.selectSleepMode}
+                />
               </Right>
             </ListItem>
           </List>
