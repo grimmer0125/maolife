@@ -55,4 +55,5 @@ export default {
   OR: '或',
   'Facebook Login Fail': '臉書登入失敗',
   'Email is not verified': '電子郵件地址尚未驗證',
+  End: '結束',
 };

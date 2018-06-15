@@ -55,4 +55,5 @@ export default {
   OR: 'OR',
   'Facebook Login Fail': 'Facebook Login Fail',
   'Email is not verified': 'Email is not verified',
+  End: 'End',
 };
