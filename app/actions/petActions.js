@@ -1,6 +1,8 @@
 import * as firebase from 'firebase';
 import Mailer from 'react-native-mail';
 import { Alert, Platform } from 'react-native';
+import _ from 'lodash';
+import Constant from '../Constant';
 
 import I18n from '../i18n/i18n';
 
@@ -79,7 +81,24 @@ function exportRecords() {
 
     const state = getState();
     const { pets } = state;
-    const data = JSON.stringify(pets, null, 2);
+    const petsData = _.cloneDeep(pets);
+
+    Object.keys(petsData).forEach((petID) => {
+      const { breathRecord } = petsData[petID];
+      if (breathRecord) {
+        Object.keys(breathRecord).forEach((unixTime) => {
+          // "Z": https://stackoverflow.com/a/35760294/7354486
+          breathRecord[unixTime].time = moment(unixTime * 1000).format('YYYY-MM-DD HH:mm Z');
+          if (breathRecord[unixTime].mode === Constant.MODE_REST) {
+            breathRecord[unixTime].mode = 'rest';
+          } else {
+            breathRecord[unixTime].mode = 'sleep';
+          }
+        });
+      }
+    });
+    const data = JSON.stringify(petsData, null, 2);
+
     const today = moment().format('YYYY-MM-DD');
     const fileName = `maolife-backup-${today}.json`;
 
