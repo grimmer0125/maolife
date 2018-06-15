@@ -10,10 +10,10 @@
     "ios-offline-jsbundle": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "ios-release": "react-native run-ios --configuration Release",
     "android-offline-jsbundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-    "android-release": "react-native run-android --variant=release",
+    "android-release": "react-native run-android --variant=release --appId com.lifeoverflow.maolife",
     "android-dev-live": "adb reverse tcp:8081 tcp:8081",
     "package": "react-native start",
-    "android": "react-native run-android"
+    "android": "react-native run-android --appId com.lifeoverflow.maolife"
   },
   "dependencies": {
     "firebase": "^4.13.1",
@@ -33,6 +33,7 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.2",
     "redux-thunk": "^2.2.0",
+    "validator": "^10.3.0",
     "victory-native": "^0.17.4"
   },
   "devDependencies": {
