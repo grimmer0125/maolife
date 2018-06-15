@@ -2,7 +2,6 @@ import { createAction } from 'redux-actions';
 import { Alert } from 'react-native';
 
 import * as firebase from 'firebase';
-import firebaseConfig from '../../firebaseConfig';
 import I18n from '../i18n/i18n';
 import petActions from './petActions';
 
@@ -221,7 +220,6 @@ function updateProfileToFirebase(user, userValue) {
 function connectDBtoCheckUser() {
   return (dispatch) => {
     console.log('setup firebase, connectDBtoCheckUser');
-    firebase.initializeApp(firebaseConfig);
 
     // mm https://github.com/SolidStateGroup/react-native-firebase-auth/blob/master/index.js
     // https://github.com/JamesMarino/Firebase-ReactNative/blob/master/index.ios.js
