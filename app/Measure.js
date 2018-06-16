@@ -218,18 +218,20 @@ class Measure extends React.Component {
               />
             </Item>
           </Form>
-          <List>
-            <ListItem last>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ margin: 15 }}>
               <Button onPress={this.onCancel}>
                 <Text>{I18n.t('Cancel')}</Text>
               </Button>
-              <Right>
-                <Button onPress={this.onSave}>
-                  <Text>{I18n.t('Save')}</Text>
-                </Button>
-              </Right>
-            </ListItem>
-          </List>
+            </View>
+            <View style={{ margin: 15 }}>
+              <Button onPress={this.onSave}>
+                <Text>
+                  {I18n.t('Save')}
+                </Text>
+              </Button>
+            </View>
+          </View>
         </View>);
     }
 
