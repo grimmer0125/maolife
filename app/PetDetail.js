@@ -9,7 +9,7 @@ import {
 
 import {
   Container, Content, Icon, Fab,
-  List, ListItem, Left, Right, Text, Separator,
+  List, ListItem, Left, Right, Text,
 } from 'native-base';
 
 import { bindActionCreators } from 'redux';
@@ -23,7 +23,7 @@ import I18n from './i18n/i18n';
 
 const moment = require('moment');
 
-const baselineNum = 15;
+const BASELINE_NUM = 15;
 
 function extractPetInfo(petID, pets) {
   if (petID && pets && pets.hasOwnProperty(petID)) {
@@ -154,7 +154,9 @@ class PetDetail extends Component {
   }
 
   // TODO: use info = {sleep:{}, rest:{}} to avoid similar naming
-  calculateStats(breathRecord, recordTimeList) {
+  calculateStats(breathRecord) {
+    const recordTimeList = Object.keys(breathRecord);
+
     const stats = {
       rest: {
         data: [],
@@ -191,14 +193,13 @@ class PetDetail extends Component {
       }
     }
 
-
     const countAll = stats.rest.data.length + stats.sleep.data.length;
     stats.rest.avg = stats.rest.data.length ? (stats.rest.total / stats.rest.data.length) : 0;
     stats.sleep.avg = stats.sleep.data.length ? (stats.sleep.total / stats.sleep.data.length) : 0;
     stats.mixAvg = countAll ? (stats.rest.total + stats.sleep.total) / countAll : 0;
 
-    stats.rest = { ...stats.rest, ...this.calRegion(stats.rest.data, baselineNum) };
-    stats.sleep = { ...stats.sleep, ...this.calRegion(stats.sleep.data, baselineNum) };
+    stats.rest = { ...stats.rest, ...this.calRegion(stats.rest.data, BASELINE_NUM) };
+    stats.sleep = { ...stats.sleep, ...this.calRegion(stats.sleep.data, BASELINE_NUM) };
     return stats;
   }
 
@@ -232,7 +233,7 @@ class PetDetail extends Component {
 
       recordTimeList = keys;
 
-      stats = this.calculateStats(pet.breathRecord, recordTimeList);
+      stats = this.calculateStats(pet.breathRecord);
     }
 
     // fab:
@@ -262,10 +263,10 @@ class PetDetail extends Component {
               <Text>{I18n.t('Stats & Chart')}</Text>
             </ListItem>
             <ListItem>
-              <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.rest.data.length}, ${firstText}${baselineNum}${avgText}:${stats.rest.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.rest.tailAvg}` : ''}</Text>
+              <Text style={{ color: '#FF6347' }}>{stats ? `${I18n.t('Rest CNT')}:${stats.rest.data.length}, ${firstText}${BASELINE_NUM}${avgText}:${stats.rest.headAvg}, ${lastText}${BASELINE_NUM}${avgText}:${stats.rest.tailAvg}` : ''}</Text>
             </ListItem>
             <ListItem last>
-              <Text style={{ color: 'blue' }}>{stats ? `${I18n.t('Sleep CNT')}:${stats.sleep.data.length}, ${firstText}${baselineNum}${avgText}:${stats.sleep.headAvg}, ${lastText}${baselineNum}${avgText}:${stats.sleep.tailAvg}` : ''}</Text>
+              <Text style={{ color: 'blue' }}>{stats ? `${I18n.t('Sleep CNT')}:${stats.sleep.data.length}, ${firstText}${BASELINE_NUM}${avgText}:${stats.sleep.headAvg}, ${lastText}${BASELINE_NUM}${avgText}:${stats.sleep.tailAvg}` : ''}</Text>
             </ListItem>
           </List>
           {stats ? <RecordChart stats={stats} /> : null}
