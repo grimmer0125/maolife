@@ -19,6 +19,7 @@ import {
   View,
   Vibration,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -49,6 +50,7 @@ class Measure extends React.Component {
     super(props);
 
     this.state = {
+      helpCount: 0,
       restRadio: true,
       ...initialState,
     };
@@ -77,12 +79,16 @@ class Measure extends React.Component {
   }
 
   onSave = () => {
-    if (this.state.numberOfBreath === null) {
-      console.log('no input breateRate');
+    const { numberOfBreath, helpCount } = this.state;
+
+    if (numberOfBreath === null && helpCount === 0) {
+      console.log('can not input zero count');
       return;
     }
 
-    if (Number.isNaN(this.state.numberOfBreath)) {
+    const inputNumber = numberOfBreath || helpCount;
+
+    if (Number.isNaN(inputNumber)) {
       alert(I18n.t('input breath count is invalid')); // eslint-disable-line no-alert
       return;
     }
@@ -105,7 +111,7 @@ class Measure extends React.Component {
 
     const { petID } = this.props.navigation.state.params;
 
-    this.props.petActions.newBreathRecord(petID, this.state.numberOfBreath, mode, time);
+    this.props.petActions.newBreathRecord(petID, inputNumber, mode, time);
 
     this.resetSeconds();
 
@@ -126,6 +132,8 @@ class Measure extends React.Component {
 
   startCalibration = () => {
     if (this.state.buttonStatus === BUTTON_STATUS_INIT) {
+      this.resetHelpCount();
+
       // Start Action
       this.setState({ buttonStatus: BUTTON_STATUS_RUNNING });
 
@@ -171,6 +179,17 @@ class Measure extends React.Component {
     });
   }
 
+  resetHelpCount = () => {
+    this.setState({
+      helpCount: 0,
+    });
+  }
+  addHelpCount = () => {
+    const count = this.state.helpCount + 1;
+    this.setState({
+      helpCount: count,
+    });
+  }
 
   render() {
     let inputUI = null;
@@ -192,7 +211,11 @@ class Measure extends React.Component {
             </Item>
             <Item inlineLabel>
               <Label>{`${I18n.t('breath count')}:`}</Label>
-              <Input keyboardType="numeric" onChangeText={this.inputNumberOfBreach} />
+              <Input
+                keyboardType="numeric"
+                placeholder={this.state.helpCount ? this.state.helpCount.toString() : null}
+                onChangeText={this.inputNumberOfBreach}
+              />
             </Item>
           </Form>
           <List>
@@ -265,6 +288,19 @@ class Measure extends React.Component {
               {` ${this.state.seconds}s`}
             </Text>
           </View>
+          {this.state.buttonStatus === BUTTON_STATUS_RUNNING ? (
+            <View style={{ alignItems: 'center' }}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#84D8D0', borderRadius: 125, width: 250, height: 250,
+                }}
+                onPress={this.addHelpCount}
+              >
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                  <Text>{`${I18n.t('(Optional) Tap here to add 1 count')}:${this.state.helpCount}`}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>) : null}
           {inputUI}
         </Content>
       </Container>);

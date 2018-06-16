@@ -56,4 +56,5 @@ export default {
   'Facebook Login Fail': 'Facebook Login Fail',
   'Email is not verified': 'Email is not verified',
   End: 'End',
+  '(Optional) Tap here to add 1 count': '(Optional) Tap here to add 1 count',
 };
