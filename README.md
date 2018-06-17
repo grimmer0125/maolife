@@ -6,9 +6,11 @@
 
 See the wiki, https://github.com/grimmer0125/Kiteretsu/wiki
 
+## app store link
+
 Android store beta link: https://play.google.com/store/apps/details?id=com.maolife
 
-iOS TestFlight beta link: contact me. 
+iOS TestFlight beta link: https://maolife.herokuapp.com/?token=38jvid8x.
 
 ## UI components
 
@@ -16,25 +18,21 @@ It mainly uses https://nativebase.io/.
 
 ## Library Version and environment requirement
 
-**Not updated to the latest package used, will update soon**
-
 The development was setup on 10.12 and has been upgraded to 10.13 with Xcode 9 and latest React version. 10.12 & 10.11 is not tested for the latest code.
 
-- macOS: 10.13.2 (High Sierra)
-- Xcode: 9.2 (Its version may affect the versions about React Native and some native npm library)
-- Android Studio: 3.0.1
+- macOS: 10.13.5 (High Sierra)
+- Xcode: 9.4 (Its version may affect the versions about React Native and some native npm library)
+- Android Studio: 3.1
 - Gradle version: 4.1
 - Android Gradle plugin version: 3.0.1
-- React Native: 0.51.0 (from v0.49, a breaking change is, there is no more index.Android.js and index.iOS.js, only index.js)
-- React: 16.2.0 (Its version will affect - native-base and react-navigation)
-- native-base: 2.3.5
-- react-navigation: 1.0.0-beta.22.
-- react-native-fbsdk: 0.6.3
-- FacebookSDK-iOS (need manually download): 4.29.0
-- FacebookSDK-Android: 4.22.1  
+- React Native: 0.55.4 (from v0.49, a breaking change is, there is no more index.Android.js and index.iOS.js, only index.js)
+- React: 16.3.1 (Its version will affect - native-base and react-navigation)
+- native-base: 2.4.5
+- react-navigation: 2.0.4.
+- react-native-fbsdk: 0.7.0
+- FacebookSDK-iOS (need manually download): 4.33.0
+- FacebookSDK-Android: 4.33.0  
 - Python: 2.7 (Some native npm libraries need Python to build)
-
-Android FacebookSDK v4.29 has some compatibiliy issue with the latest Android Studio and Gradle, so that this project uses some tricky way to force use older version, setup in build.grade in Android Studio.
 
 ### (optional) Create your Firebase project if you are not using this project's Firebase project
 
@@ -49,7 +47,7 @@ ref: https://Firebase.google.com/docs/web/setup
 ### Firebase web console config
 
 1. Create a project, then choose Realtime Database.
-2. Enable Facebook login in Authentication.
+2. Enable Facebook & Email login in Authentication.
 3. Change Database rule as the following    
     ```
     {
@@ -103,12 +101,12 @@ ref: https://developers.facebook.com/docs/ios/getting-started/#download
 
 Download Facebook SDK and uncompress it to `~/Documents/FacebookSDK`
 
-### (optional) Create & Setup your Facebook project for iOS project if you are not using this project's Facebook application
+### (optional) Config Facebook project on Facebook site and iOS project if you are not using this project's Facebook application settings
 
-Follow this guide: https://developers.facebook.com/docs/ios/getting-started/
+Follow this guide: https://developers.facebook.com/docs/react-native/configure-ios
 
 Keypoint:
-1. After add **Facebook login** in your Facebook Application, need to setup OAuth Redirect URI gotten from **Firebase**.
+1. On https://developers.facebook.com/, after adding **Facebook login** in your Facebook Application, you need to setup OAuth Redirect URI gotten from **Firebase**.
 
 ### How to run in on iDevice simulator
 1. in project folder, `npm run ios` or `react-native run-ios`.
@@ -124,8 +122,8 @@ http://blog.ionic.io/deploying-to-a-device-without-an-apple-developer-account/
 ## Android + Mac (will complement later)
 
 Keypoint to setup Facebook:
-1. Follow https://developers.facebook.com/docs/android/getting-started
-2. Need *a development key hash for the development environment of each person who works on your app (cover in 1.).* Release key is needed, too.
+1. Follow https://developers.facebook.com/docs/react-native/configure-android-current
+2. Need *a development key hash for the development environment of each person who works on your app (cover in 1.).* Release key is needed, too. (This release key is to authorize to use Facebook, not Android release key)
 3. Enable single sign https://developers.facebook.com/docs/facebook-login/android/#expresslogin
 
 ## Register test users or developers/testers on Facebook developer site
@@ -166,3 +164,32 @@ https://github.com/zalmoxisus/remote-redux-devtools supplies a way to use redux 
 ~~You can use `remote-redux-devtools`' guide to prepare your own local server.~~
 
 ~~Or follow https://github.com/jhen0409/remote-redux-devtools-on-debugger to cover the above 1~3. It comes with a local redux server and also integrates redux with react debugger page. So just use http://localhost:8081/debugger-ui to see React's log and Redux's store at the same time.~~
+
+## Offline build on Devices
+
+`offline` means you can run this app without any dev servers/environment/Mac.
+
+### iOS
+
+1. Choose maolife-release scheme.
+2. Connect your iPhone to Mac.
+3. Build
+
+possible step: only extra run `npm run ios-offline-jsbundle` before build step if you see `main.jsbundle does not exist` and build fail.
+
+### Android
+
+1. connect your Android device to Mac.
+2. use `npm run android-release` to build
+
+possible step: only extra run `npm run android-offline-jsbundle` before build step if you see `unable to load script from assets 'index.android bundle'` and build fail.
+
+## Deploy
+
+iOS:
+1. Choose maolife-release scheme.
+2. Prouct -> Archive
+
+Android
+1. cd android
+2. ./gradlew assembleRelease
