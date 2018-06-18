@@ -57,4 +57,5 @@ export default {
   'Email is not verified': '電子郵件地址尚未驗證',
   End: '結束',
   '(Optional) Tap here to add 1 count': '(選擇性的)點擊這裡增加一次計數',
+  Authorize: '授權',
 };

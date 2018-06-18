@@ -7,6 +7,7 @@ import {
 
 import I18n from './i18n/i18n';
 
+// TODO: rename to AuthorizeDialog
 class ShareDialog extends Component {
   constructor(props) {
     super(props);

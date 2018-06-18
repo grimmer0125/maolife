@@ -60,10 +60,10 @@ class PetDetail extends Component {
         style={{ marginRight: 5 }}
       >
         <SystemButton
-          onPress={() => navigation.navigate('Measure', {
-            petID: navigation.state.params.petID,
-          })}
-          title={I18n.t('Measure')}
+          onPress={() => {
+            navigation.setParams({ openShareDialog: true });
+          }}
+          title={I18n.t('Authorize')}
         />
       </View>
 
@@ -82,11 +82,11 @@ class PetDetail extends Component {
   onSave = (authID) => {
     this.props.actions.addNewOwner(this.props.navigation.state.params.petID, authID);
 
-    this.setState({ showShareDialog: false });
+    this.props.navigation.setParams({ openShareDialog: false });
   }
 
   onCancel = () => {
-    this.setState({ showShareDialog: false });
+    this.props.navigation.setParams({ openShareDialog: false });
   }
 
   eachRowItem = (pet, time) => {
@@ -217,10 +217,10 @@ class PetDetail extends Component {
 
   render() {
     const { pets, navigation } = this.props;
-    const { petID } = navigation.state.params;
+    const { petID, openShareDialog } = navigation.state.params;
     const pet = extractPetInfo(petID, pets);
 
-    if (this.state.showShareDialog) {
+    if (openShareDialog) {
       return <ShareDialog onSave={this.onSave} onCancel={this.onCancel} />;
     }
 
@@ -291,10 +291,12 @@ class PetDetail extends Component {
           position="bottomRight"
           onPress={() => {
             this.setState({ active: !this.state.active });
-            this.setState({ showShareDialog: true });
+            navigation.navigate('Measure', {
+              petID,
+            });
           }}
         >
-          <Icon name="share" />
+          <Icon name="add" />
         </Fab>
       </Container>
     );

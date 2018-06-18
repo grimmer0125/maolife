@@ -57,4 +57,5 @@ export default {
   'Email is not verified': 'Email is not verified',
   End: 'End',
   '(Optional) Tap here to add 1 count': '(Optional) Tap here to add 1 count',
+  Authorize: 'Authorize',
 };
