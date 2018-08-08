@@ -113,7 +113,7 @@ function exportRecords() {
 
     console.log('FILE WRITE TO!:', path);
 
-    const body = 'Something like 1480949880 is Unix time (from 1970) and the file lists the oldest to the newest';
+    const body = 'Use https://lifeoverflow.github.io/maolife-web/ to import data to view. In this data, something like 1480949880 is Unix time (from 1970) and the file lists the oldest to the newest';
 
     // write the file
     RNFS.writeFile(path, data, 'utf8')
