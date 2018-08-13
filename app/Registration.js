@@ -51,7 +51,7 @@ class Registration extends Component {
           />
         </Item>
         <View
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 15 }}
         >
           <Button
             onPress={this.registerButtonPress}
@@ -62,7 +62,7 @@ class Registration extends Component {
           </Button>
         </View>
         <View
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 20 }}
         >
           {inMainPage ? null : (
             <Button

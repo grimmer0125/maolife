@@ -175,7 +175,7 @@ class LoginScreen extends Component {
                 />
               </Item>
             </Form>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 15 }}>
               <Button
                 onPress={() => {
                 this.loginOrSignUpEmail();
@@ -187,7 +187,7 @@ class LoginScreen extends Component {
               </Button>
             </View>
             {loginMode ? (
-              <View style={{ marginTop: 10 }}>
+              <View style={{ marginTop: 15 }}>
                 <Button
                   small
                   transparent

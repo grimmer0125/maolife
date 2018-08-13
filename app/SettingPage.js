@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Linking } from 'react-native';
 
-import { Container, Text, Button, List, ListItem } from 'native-base';
+import { Container, Content, Text, Button, List, ListItem } from 'native-base';
 
 import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -72,56 +72,64 @@ class SettingsScreen extends Component {
           backgroundColor: '#F5FCFF',
          }}
       >
-        <ListItem onPress={() => this.props.navigation.navigate('TutorialLinks')}>
-          <Text style={{ color: 'blue', margin: 10 }}>
-            {I18n.t('Tutorial Video Links')}
-          </Text>
-        </ListItem>
+        <Content>
+          <View style={{ alignItems: 'center' }}>
+            <List>
+              <ListItem onPress={() => this.props.navigation.navigate('TutorialLinks')}>
+                <Text style={{ color: 'blue', margin: 10 }}>
+                  {I18n.t('Tutorial Video Links')}
+                </Text>
+              </ListItem>
+            </List>
+          </View>
 
-        {currentUser.KID === '' ? (<Registration />) : (
-          <List>
-            {currentUser.displayName ? (
+
+          {currentUser.KID === '' ? (<Registration />) : (
+            <List>
+              {currentUser.displayName ? (
+                <ListItem>
+                  <Text>
+                    {`${I18n.t('Name')}: ${currentUser.displayName}`}
+                  </Text>
+                </ListItem>) : null}
+              {currentUser.email ? (
+                <ListItem>
+                  <Text>
+                    {`${I18n.t('Email')}: ${currentUser.email}`}
+                  </Text>
+                </ListItem>) : null}
               <ListItem>
                 <Text>
-                  {`${I18n.t('Name')}: ${currentUser.displayName}`}
+                  {`KID: ${currentUser.KID}`}
                 </Text>
-              </ListItem>) : null}
-            {currentUser.email ? (
-              <ListItem>
+              </ListItem>
+            </List>
+          )}
+          <View style={{ alignItems: 'center' }}>
+            <View style={{ marginTop: 10 }}>
+              <Button onPress={this.handleEmail}>
                 <Text>
-                  {`${I18n.t('Email')}: ${currentUser.email}`}
+                  {I18n.t('Export data via Email')}
                 </Text>
-              </ListItem>) : null}
-            <ListItem>
-              <Text>
-                {`KID: ${currentUser.KID}`}
-              </Text>
-            </ListItem>
-          </List>
-        )}
+              </Button>
+            </View>
 
-        <View style={{ marginTop: 10 }}>
-          <Button onPress={this.handleEmail}>
-            <Text>
-              {I18n.t('Export data via Email')}
-            </Text>
-          </Button>
-        </View>
-
-        <View style={{ marginTop: 10 }}>
-          <Button
-            warning
-            onPress={() => {
+            <View style={{ marginTop: 20 }}>
+              <Button
+                warning
+                onPress={() => {
               LoginManager.logOut();
 
               this.props.userActions.logoutFirebase();
             }}
-          >
-            <Text>
-              {I18n.t('Log out')}
-            </Text>
-          </Button>
-        </View>
+              >
+                <Text>
+                  {I18n.t('Log out')}
+                </Text>
+              </Button>
+            </View>
+          </View>
+        </Content>
       </Container>
     );
   }
