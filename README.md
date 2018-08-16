@@ -8,9 +8,9 @@ See the wiki, https://github.com/grimmer0125/Kiteretsu/wiki
 
 ## app store link
 
-Android store beta link: https://play.google.com/store/apps/details?id=com.maolife
+Android store (beta): https://play.google.com/store/apps/details?id=com.maolife
 
-iOS TestFlight beta link: https://maolife.herokuapp.com/?token=38jvid8x.
+iOS: https://itunes.apple.com/us/app/maolife/id1397714182
 
 ## UI components
 
