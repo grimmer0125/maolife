@@ -1,14 +1,14 @@
 # maolife
 
-**It has only been developed on Mac. However Windows and Linux should work**
+It has only been developed on Mac. However Windows and Linux should work
 
-**Features, Possible feature backlog, Screenshots**
+## Features, Possible feature backlog, Screenshots 
 
-See the wiki, https://github.com/grimmer0125/Kiteretsu/wiki
+See the wiki, https://github.com/grimmer0125/maolife/wiki
 
 ## app store link
 
-Android store (beta): https://play.google.com/store/apps/details?id=com.maolife
+Android store (beta): https://play.google.com/store/apps/details?id=com.lifeoverflow.maolife
 
 iOS: https://itunes.apple.com/us/app/maolife/id1397714182
 
@@ -188,7 +188,7 @@ possible step: only extra run `npm run android-offline-jsbundle` before build st
 
 iOS:
 1. Choose maolife-release scheme.
-2. Prouct -> Archive
+2. Product -> Archive
 
 Android
 1. cd android
