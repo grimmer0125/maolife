@@ -1,3 +1,5 @@
+// @flow
+
 import color from "color";
 
 import { Platform, Dimensions, PixelRatio } from "react-native";
@@ -7,7 +9,7 @@ const deviceWidth = Dimensions.get("window").width;
 const platform = Platform.OS;
 const platformStyle = "material";
 const isIphoneX =
-  platform === "ios" && (deviceHeight === 812 || deviceWidth === 812);
+platform === "ios" && (deviceHeight === 812 || deviceWidth === 812 || deviceHeight === 896 || deviceWidth === 896);
 
 export default {
   platformStyle,
@@ -18,6 +20,7 @@ export default {
   iconStyle: "#000",
   contentStyle: "#f5f4f5",
   expandedIconStyle: "#000",
+  accordionBorderColor: "#d3d3d3",
 
   // Android
   androidRipple: true,
@@ -86,6 +89,8 @@ export default {
   // Card
   cardDefaultBg: "#fff",
   cardBorderColor: "#ccc",
+  cardBorderRadius: 2,
+  cardItemPadding: platform === "ios" ? 10 : 12,
 
   // CheckBox
   CheckboxRadius: 0,
@@ -107,6 +112,9 @@ export default {
   brandWarning: "#f0ad4e",
   brandDark: "#000",
   brandLight: "#f4f4f4",
+
+  //Container
+  containerBgColor: "#fff",
 
   //Date Picker
   datePickerTextColor: "#000",

@@ -1,8 +1,10 @@
+// @flow
+
 import { PixelRatio, StatusBar } from "react-native";
 
 import variable from "./../variables/platform";
 
-export default (variables = variable) => {
+export default (variables /*: * */ = variable) => {
   const platformStyle = variables.platformStyle;
   const platform = variables.platform;
 
@@ -38,6 +40,17 @@ export default (variables = variable) => {
           textAlign: "center"
         }
       }
+    },
+    ".transparent": {
+      backgroundColor: "transparent",
+      borderBottomColor: "transparent",
+      elevation: 0,
+      shadowColor: null,
+      shadowOffset: null,
+      shadowRadius: null,
+      shadowOpacity: null,
+      paddingTop: platform === "android" ? StatusBar.currentHeight : undefined,
+      height: platform === "android" ? variables.toolbarHeight + StatusBar.currentHeight : variables.toolbarHeight
     },
     ".noShadow": {
       elevation: 0,
@@ -305,10 +318,7 @@ export default (variables = variable) => {
           borderRadius: 50,
           "NativeBase.Icon": {
             color: variables.toolbarBtnColor,
-            fontSize:
-              platform === "ios" && variables.platformStyle !== "material"
-                ? variables.iconHeaderSize - 9
-                : variables.iconHeaderSize - 2,
+            fontSize: variables.iconHeaderSize - 2,
             marginTop: 0,
             marginLeft: 2,
             marginRight: 0
@@ -316,10 +326,7 @@ export default (variables = variable) => {
           },
           "NativeBase.IconNB": {
             color: variables.toolbarBtnColor,
-            fontSize:
-              platform === "ios" && variables.platformStyle !== "material"
-                ? variables.iconHeaderSize - 9
-                : variables.iconHeaderSize - 2,
+            fontSize: variables.iconHeaderSize - 2,
             marginTop: 0,
             marginLeft: 2,
             marginRight: 0
@@ -364,13 +371,13 @@ export default (variables = variable) => {
       platform === "ios" && variables.platformStyle !== "material" ? 6 : 10,
     paddingRight: 10,
     justifyContent: "center",
-    paddingTop: platform === "ios" ?  18 : 0,
+    paddingTop: platform === "ios" ? 18 : 0,
     borderBottomWidth:
       platform === "ios" ? 1 / PixelRatio.getPixelSizeForLayoutSize(1) : 0,
     borderBottomColor: variables.toolbarDefaultBorder,
     height:
       variables.platform === "ios" && variables.platformStyle === "material"
-        ? variables.toolbarHeight + StatusBar.height
+        ? variables.toolbarHeight + 10
         : variables.toolbarHeight,
     elevation: 3,
     shadowColor: platformStyle === "material" ? "#000" : undefined,

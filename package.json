@@ -16,14 +16,16 @@
     "android": "react-native run-android --appId com.lifeoverflow.maolife"
   },
   "dependencies": {
+    "adm-zip": "^0.4.13",
     "firebase": "^4.13.1",
     "immutability-helper": "^2.7.0",
     "lodash": "^4.17.10",
     "moment": "^2.19.3",
-    "native-base": "^2.4.5",
-    "react": "^16.3.1",
-    "react-native": "^0.55.4",
-    "react-native-fbsdk": "^0.7.0",
+    "native-base": "^2.12.1",
+    "plist": "^3.0.1",
+    "react": "^16.8.3",
+    "react-native": "^0.59.9",
+    "react-native-fbsdk": "0.8.0",
     "react-native-fs": "^2.10.14",
     "react-native-i18n": "^2.0.12",
     "react-native-mail": "^3.0.6",
@@ -34,19 +36,24 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.2",
     "redux-thunk": "^2.2.0",
-    "victory-native": "^0.17.4"
+    "schedule": "^0.4.0",
+    "victory-native": "^32.0.2",
+    "xcode": "^2.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
+    "babel-jest": "24.8.4",
+    "jest": "22.0.4",
+    "metro-react-native-babel-preset": "^0.45.6",
+    "react-test-renderer": "16.6.3",
+    "babel-eslint": "^8.1.2",
+    "babel-preset-react-native": "^5",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.5.1",
-    "babel-eslint": "^8.1.2",
-    "babel-jest": "22.0.4",
-    "babel-preset-react-native": "4.0.0",
-    "jest": "22.0.4",
-    "react-test-renderer": "16.2.0"
+    "eslint-plugin-react": "^7.5.1"
   },
   "jest": {
     "preset": "react-native"
