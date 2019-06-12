@@ -58,4 +58,5 @@ export default {
   End: 'End',
   '(Optional) Tap here to add 1 count': '(Optional) Tap here to add 1 count',
   Authorize: 'Authorize',
+  'Email is empty': 'Email is empty',
 };

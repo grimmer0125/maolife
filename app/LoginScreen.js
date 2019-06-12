@@ -64,6 +64,8 @@ class LoginScreen extends Component {
 
     if (email) {
       this.props.actions.resetEmailAccountPassword(email);
+    } else {
+      alert(I18n.t('Email is empty'));
     }
   }
 

@@ -58,4 +58,5 @@ export default {
   End: '結束',
   '(Optional) Tap here to add 1 count': '(選擇性的)點擊這裡增加一次計數',
   Authorize: '授權',
+  'Email is empty': '電子郵件是空的',
 };
