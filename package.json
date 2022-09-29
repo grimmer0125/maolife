@@ -34,7 +34,7 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.2",
     "redux-thunk": "^2.2.0",
-    "victory-native": "^0.17.4"
+    "victory-native": "^36.6.8"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",
